@@ -1,9 +1,9 @@
-## Nginx 中文文档
+# Nginx 中文文档
 Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译发表于博客上，为了方便翻阅，特意整理到 Github 上。
 
-### 索引
+## 索引
 
-#### 介绍
+### 介绍
 - 安装 nginx
 - 初学者指南
 - 管理指南
@@ -27,7 +27,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 
 - “开源应用程序架构” 中的 “nginx” 章节
 
-#### How-To
+### How-To
 - 源代码构建 nginx
 - 在 Win32 平台上使用 Visual C 构建 nginx
 - 设置 Amazon EC2 的 Nginx Plus 环境
@@ -36,11 +36,11 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - 转换重写规则
 - WebSocket 代理
 
-#### 开发
+### 开发
 - 贡献变化
 - 开发指南
 
-#### 模块参考
+### 模块参考
 - 指令字母索引
 - 变量字母索引
 
@@ -129,5 +129,5 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 
 - ngx_google_perftools_module
 
-### LICENSE
+## LICENSE
 MIT LICENSE

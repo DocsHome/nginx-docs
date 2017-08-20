@@ -1,22 +1,24 @@
 # Nginx 中文文档
+![Nginx logo](http://nginx.org/nginx.png)
+
 Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译发表于博客上，为了方便翻阅，特意整理到 Github 上。
 
 ## 索引
 
 ### 介绍
 - 安装 nginx
-- 初学者指南
+- [初学者指南](https://github.com/oopsguy/nginx-docs/blob/master/介绍/初学者指南.md)
 - 管理指南
-- 控制 nginx
-- 连接处理方式
+- [控制 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/控制nginx.md)
+- [连接处理方式](https://github.com/oopsguy/nginx-docs/blob/master/介绍/连接处理方式.md)
 - 设置哈希
-- 调试日志
-- 记录日志到 syslog
-- 配置文件大小单位
-- 命令行参数
-- Windows 下的 nginx
+- [调试日志](https://github.com/oopsguy/nginx-docs/blob/master/介绍/连接处理方式.md)
+- [记录日志到 syslog](https://github.com/oopsguy/nginx-docs/blob/master/介绍/记录日志到syslog.md)
+- [配置文件度量单位](https://github.com/oopsguy/nginx-docs/blob/master/介绍/配置文件度量单位.md)
+- [命令行参数](https://github.com/oopsguy/nginx-docs/blob/master/介绍/命令行参数.md)
+- [Windows 下的 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Windows下的Nginx.md)
 
-- nginx 如何处理请求
+- [nginx 如何处理请求](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Nginx如何处理请求.md)
 - 服务器名称
 - 使用 nginx 作为 HTTP 负载均衡器
 - 配置 HTTPS 服务器

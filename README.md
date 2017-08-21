@@ -19,7 +19,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - [Windows 下的 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Windows下的Nginx.md)
 
 - [nginx 如何处理请求](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Nginx如何处理请求.md)
-- [服务器名称]((https://github.com/oopsguy/nginx-docs/blob/master/介绍/服务器名称.md)
+- [服务器名称](https://github.com/oopsguy/nginx-docs/blob/master/介绍/服务器名称.md)
 - 使用 nginx 作为 HTTP 负载均衡器
 - 配置 HTTPS 服务器
 

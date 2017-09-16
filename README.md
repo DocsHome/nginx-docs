@@ -12,7 +12,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - [控制 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/控制nginx.md)
 - [连接处理方式](https://github.com/oopsguy/nginx-docs/blob/master/介绍/连接处理方式.md)
 - [设置哈希](https://github.com/oopsguy/nginx-docs/blob/master/介绍/设置哈希.md)
-- [调试日志](https://github.com/oopsguy/nginx-docs/blob/master/介绍/连接处理方式.md)
+- [调试日志](https://github.com/oopsguy/nginx-docs/blob/master/介绍/调试日志.md)
 - [记录日志到 syslog](https://github.com/oopsguy/nginx-docs/blob/master/介绍/记录日志到syslog.md)
 - [配置文件度量单位](https://github.com/oopsguy/nginx-docs/blob/master/介绍/配置文件度量单位.md)
 - [命令行参数](https://github.com/oopsguy/nginx-docs/blob/master/介绍/命令行参数.md)

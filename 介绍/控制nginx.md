@@ -1,13 +1,15 @@
-nginx可以用信号控制。默认情况下，主进程（Master）的pid是写在`/use/local/nginx/logs/nginx.pid`文件中。这个文件的位置可以在配置时或者在nginx.conf文件中指定`pid`指令更改。Master进程支持以下信号：
+# 控制 nginx
+
+nginx 可以用信号控制。默认情况下，主进程（Master）的 pid 是写在 `/use/local/nginx/logs/nginx.pid` 文件中。这个文件的位置可以在配置时或者在 nginx.conf 文件中指定 `pid` 指令更改。Master 进程支持以下信号：
 
 信号 | 作用
 ---|---
 TERM, INT | 快速关闭
 QUIT| 正常退出
-HUP	| 当改变配置文件时，将有一段过渡时间段（仅FreeBSD和Linux），<br/>新启动的Worker进程将应用新的配置，旧的Worker进程将被平滑退出
+HUP	| 当改变配置文件时，将有一段过渡时间段（仅 FreeBSD 和 Linux），<br/>新启动的Worker 进程将应用新的配置，旧的 Worker 进程将被平滑退出
 USR1| 重新打开日志文件
 USR2| 升级可执行文件
-WINCH| 平滑关闭Worker进程
+WINCH| 正常关闭 Worker 进程
 
 Worker进程也是可以用信号控制的，尽管这不是必须的。支持的信号如下：
 
@@ -16,13 +18,13 @@ Worker进程也是可以用信号控制的，尽管这不是必须的。支持�
 TERM, INT | 快速关闭
 QUIT | 正常关闭
 USR1 | 重新打开日志文件
-WINCH | 调试异常终止（需要开启`debug_points`）
+WINCH | 调试异常终止（需要开启 `debug_points`）
 
 ## 配置变更
 
-为了让nginx重新读取配置文件，应将`HUP`信号发送给Master进程。Master进程首先会检查配置文件的语法有效性，之后尝试应用新的配置，即打开日志文件和新的监听套接字。如果失败了，它会回滚更改并继续使用就的配置。如果成功，它将启动新的Worker进程并向旧的Worker进程发送消息请求它们正常关闭。旧的Worker进程关闭监听套接字并继续为旧的客户端服务，当所有就的客户端被处理完成，旧的Worker进程将被关闭。
+为了让 nginx 重新读取配置文件，应将 `HUP` 信号发送给 Master 进程。Master 进程首先会检查配置文件的语法有效性，之后尝试应用新的配置，即打开日志文件和新的监听套接字。如果失败了，它会回滚更改并继续使用就的配置。如果成功，它将启动新的 Worker 进程并向旧的 Worker 进程发送消息请求它们正常关闭。旧的 Worker 进程关闭监听套接字并继续为旧的客户端服务，当所有就的客户端被处理完成，旧的 Worker 进程将被关闭。
 
-我们来举例说明一下。 想象一下，nginx是在FreeBSD 4.x和命令行上运行的
+我们来举例说明一下。 想象一下，nginx 是在 FreeBSD 4.x 命令行上运行的
 
 ```
 ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'
@@ -49,7 +51,7 @@ ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'
 33136 33126 nobody   0.0  1368 kqread nginx: worker process (nginx)
 ```
 
-其中一个PID为33129的worker进程仍然在继续工作，过一段时间之后它退出了：
+其中一个 PID 为 33129 的 worker 进程仍然在继续工作，过一段时间之后它退出了：
 
 ```
 PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
@@ -61,11 +63,11 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 
 ## 轮转日志
 
-为了做轮转日志，首先需要重命名。之后应该发送`USR1`信号给master进程。Master进程将会重新打开当前所有的日志文件，并将其分配给一个正在运行未经授权的用户为所有者的worker进程。成功重新打开之后，Master进程将会关闭所有打开的文件并且发送消息给worker进程要求它们重新打开文件。Worker进程重新打开新文件和立即关闭旧文件。因此，旧的文件几乎可以立即用于后期处理，例如压缩。
+为了做轮转日志，首先需要重命名。之后应该发送 `USR1` 信号给 master 进程。Master 进程将会重新打开当前所有的日志文件，并将其分配给一个正在运行未经授权的用户为所有者的worker 进程。成功重新打开之后，Master 进程将会关闭所有打开的文件并且发送消息给worker 进程要求它们重新打开文件。Worker 进程重新打开新文件和立即关闭旧文件。因此，旧的文件几乎可以立即用于后期处理，例如压缩。
 
 ## 升级可执行文件
 
-为了升级服务器可执行文件，首先应该将新的可执行文件替换旧的可执行文件。之后发送`USR2`信号到master进程。Master进程首先将以进程ID文件重命名为以`.oldbin`为后缀的新文件，例如`/usr/local/nginx/logs/nginx.pid.oldbin`。之后启动新的二进制文件和依次期待能够新的worker进程：
+为了升级服务器可执行文件，首先应该将新的可执行文件替换旧的可执行文件。之后发送 `USR2` 信号到 master 进程。Master 进程首先将以进程 ID 文件重命名为以 `.oldbin` 为后缀的新文件，例如 `/usr/local/nginx/logs/nginx.pid.oldbin`。之后启动新的二进制文件和依次期待能够新的 worker 进程：
 
 ```
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
@@ -79,7 +81,7 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 36267 36264 nobody   0.0  1364 kqread nginx: worker process (nginx)
 ```
 
-之后所有的worker进程（旧的和新的）继续接收请求，如果`WINCH`信号被发送给了第一个master进程，它将向其worker进程发送消息要求它们正常关闭，之后它们开始退出：
+之后所有的 worker 进程（旧的和新的）继续接收请求，如果 `WINCH` 信号被发送给了第一个 master 进程，它将向其 worker 进程发送消息要求它们正常关闭，之后它们开始退出：
 
 ```
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
@@ -91,7 +93,7 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 36267 36264 nobody   0.0  1364 kqread nginx: worker process (nginx)
 ```
 
-过一段时间，仅有新的worker进程处理请求：
+过一段时间，仅有新的 worker 进程处理请求：
 
 ```
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
@@ -102,14 +104,14 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 36267 36264 nobody   0.0  1364 kqread nginx: worker process (nginx)
 ```
 
-需要注意的是旧的master进程不会关闭它的监听套接字，并且如果需要的话，可以管理它来启动worker进程。如果出于某些原因不能接受新的可执行文件工作方式，可以执行以下操作之一：
+需要注意的是旧的 master 进程不会关闭它的监听套接字，并且如果需要的话，可以管理它来启动 worker 进程。如果出于某些原因不能接受新的可执行文件工作方式，可以执行以下操作之一：
 
-- 发送`HUP`信号给就的master进程，旧的master进程将会启动不会重新读取配置文件的worker进程。之后，通过将`QUIT`信号发送到新的主进程就可以正常关闭所有的新进程。
-- 发送`TERM`信号到新的master进程，它将会发送一个消息给worker进程要求它们立即关闭，并且它们立即退出（如果由于某些原因新的进程没有退出，应该发送`KILL`信号让它们强制退出）。当新的master进程退出时，旧master将会自动启动新的worker进程。
+- 发送 `HUP` 信号给就的 master 进程，旧的 master 进程将会启动不会重新读取配置文件的 worker 进程。之后，通过将 `QUIT` 信号发送到新的主进程就可以正常关闭所有的新进程。
+- 发送`TERM`信号到新的master进程，它将会发送一个消息给 worker 进程要求它们立即关闭，并且它们立即退出（如果由于某些原因新的进程没有退出，应该发送 `KILL` 信号让它们强制退出）。当新的 master 进程退出时，旧 master 将会自动启动新的 worker 进程。
 
-新master进程退出之后旧的master进程会从以进程ID命名的文件中忽略掉`.oldbin`后缀的文件。
+新 master 进程退出之后旧的 master 进程会从以进程 ID 命名的文件中忽略掉 `.oldbin` 后缀的文件。
 
-如果升级成功，应该发送`QUIT`信号给旧的master进程，仅仅新的进程驻留：
+如果升级成功，应该发送 `QUIT` 信号给旧的 master 进程，仅仅新的进程驻留：
 
 ```
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND

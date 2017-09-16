@@ -1,3 +1,5 @@
+# 记录日志到 syslog
+
 `error_log`和`access_log`指令支持把日志记录到syslog。以下参数配置日志记录到syslog：
 ```
 server=address

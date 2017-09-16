@@ -7,25 +7,25 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 
 ### 介绍
 - 安装 nginx
-- [初学者指南](https://github.com/oopsguy/nginx-docs/blob/master/介绍/初学者指南.md)
+- [初学者指南](介绍/初学者指南.md)
 - 管理指南
-- [控制 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/控制nginx.md)
-- [连接处理方式](https://github.com/oopsguy/nginx-docs/blob/master/介绍/连接处理方式.md)
-- [设置哈希](https://github.com/oopsguy/nginx-docs/blob/master/介绍/设置哈希.md)
-- [调试日志](https://github.com/oopsguy/nginx-docs/blob/master/介绍/调试日志.md)
-- [记录日志到 syslog](https://github.com/oopsguy/nginx-docs/blob/master/介绍/记录日志到syslog.md)
-- [配置文件度量单位](https://github.com/oopsguy/nginx-docs/blob/master/介绍/配置文件度量单位.md)
-- [命令行参数](https://github.com/oopsguy/nginx-docs/blob/master/介绍/命令行参数.md)
-- [Windows 下的 nginx](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Windows下的Nginx.md)
+- [控制 nginx](介绍/控制nginx.md)
+- [连接处理方式](介绍/连接处理方式.md)
+- [设置哈希](介绍/设置哈希.md)
+- [调试日志](介绍/调试日志.md)
+- [记录日志到 syslog](介绍/记录日志到syslog.md)
+- [配置文件度量单位](介绍/配置文件度量单位.md)
+- [命令行参数](介绍/命令行参数.md)
+- [Windows 下的 nginx](介绍/Windows下的Nginx.md)
 
-- [nginx 如何处理请求](https://github.com/oopsguy/nginx-docs/blob/master/介绍/Nginx如何处理请求.md)
-- [服务器名称](https://github.com/oopsguy/nginx-docs/blob/master/介绍/服务器名称.md)
-- [使用 nginx 作为 HTTP 负载均衡器](https://github.com/oopsguy/nginx-docs/blob/master/介绍/使用Nginx作为HTTP负载均衡器.md)
-- [配置 HTTPS 服务器](https://github.com/oopsguy/nginx-docs/blob/master/介绍/配置HTTPS服务器.md)
+- [nginx 如何处理请求](介绍/Nginx如何处理请求.md)
+- [服务器名称](介绍/服务器名称.md)
+- [使用 nginx 作为 HTTP 负载均衡器](介绍/使用Nginx作为HTTP负载均衡器.md)
+- [配置 HTTPS 服务器](介绍/配置HTTPS服务器.md)
 
-- nginx 如何处理 TCP/UDP 会话
+- [nginx 如何处理 TCP/UDP 会话](介绍/Nginx如何处理TCP_UDP会话.md)
 
-- 关于 nginScript
+- [关于 nginScript](介绍/关于nginScript.md)
 
 - “开源应用程序架构” 中的 “nginx” 章节
 

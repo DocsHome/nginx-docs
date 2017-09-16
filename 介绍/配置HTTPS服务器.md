@@ -1,3 +1,5 @@
+# 配置 HTTPS 服务器
+
 要配置 HTTPS 服务器，必须在 [server](http://nginx.org/en/docs/http/ngx_http_core_module.html#server) 块中的[监听套接字](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen)上启用 `ssl` 参数，并且指定[服务器证书](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate)和[私钥文件](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key)的位置：
 
 ```

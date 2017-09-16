@@ -1,3 +1,5 @@
+# Windows 下的 nginx
+
 Nginx 的 Windows 版本使用了本地的 Win32 API（而不是 Cygwin 模拟层）。目前仅使用 `select()` 连接处理方式。由于此版本和其他存在已知的问题的 Nginx Windows 版本都被认为是 beta 版本，因此您不应该期望它具有高性能和可扩展性。现在，它提供了与 Unix 版本的 nginx 几乎相同的功能，除了 XSLT 过滤器、图像过滤器、GeoIP 模块和嵌入式 Perl 语言。
 
 <!-- more -->

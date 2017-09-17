@@ -24,7 +24,7 @@ ssl_certificate_key www.example.com.cert;
 
 这种情况下，文件的访问也应该被限制。虽然证书和密钥存储在一个文件中，但只有证书能被发送给客户端。
 
-可以使用 [ssl_protocols](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_protocols) 和 [ssl_ciphers](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers) 指令来限制连接，使其仅包括 SSL/TLS 的版本和密码。默认情况下，nginx 使用版本为 `ssl_protocols TLSv1 TLSv1.1 TLSv1.2`，密码为 `ssl_ciphers HIGH：！aNULL：！MD5`，因此通常不需要配置它们。请注意，这些指令的默认值已经被[更改](#兼容性)多次。
+可以使用 [ssl_protocols](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_protocols) 和 [ssl_ciphers](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers) 指令来限制连接，使其仅包括 SSL/TLS 的版本和密码。默认情况下，nginx 使用版本为 `ssl_protocols TLSv1 TLSv1.1 TLSv1.2`，密码为 `ssl_ciphers HIGH:!aNULL:!MD5`，因此通常不需要配置它们。请注意，这些指令的默认值已经被[更改](#兼容性)多次。
 
 ## HTTPS 服务器优化
 SSL 操作会消耗额外的 CPU 资源。在多处理器系统上，应该运行多个[工作进程（worker process）](http://nginx.org/en/docs/ngx_core_module.html#worker_processes)，不得少于可用 CPU 核心的数量。大多数 CPU 密集型操作是发生在 SSL 握手时。有两种方法可以最大程度地减少每个客户端执行这些操作的次数。首先，启用 [keepalive](http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout) 连接，通过一个连接来发送多个请求，第二个是复用 SSL 会话参数，避免相同的和后续的连接发生 SSL 握手。会话存储在工作进程间共享的 SSL 会话缓存中，由 [ssl_session_cache](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache) 指令配置。1MB 缓存包含约 4000 个会话。默认缓存超时时间为 5 分钟，可以用 [ssl_session_timeout](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_timeout) 指令来增加。以下是一个优化具有 10MB 共享会话缓存的多核系统的配置示例：

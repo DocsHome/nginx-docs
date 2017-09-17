@@ -30,13 +30,13 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - “开源应用程序架构” 中的 “nginx” 章节
 
 ### How-To
-- 源代码构建 nginx
-- 在 Win32 平台上使用 Visual C 构建 nginx
+- [从源码构建 nginx](How-To/从源码构建nginx.md)
+- [在 Win32 平台上使用 Visual C 构建 nginx](How-To/在Win32平台上使用VisualC构建nginx.md)
 - 设置 Amazon EC2 的 Nginx Plus 环境
-- 使用 DTrace pid provider 调试 nginx
+- [使用 DTrace pid 提供程序调试 nginx](How-To/使用DTrace_pid提供程序调试nginx.md)
 
-- 转换重写规则
-- WebSocket 代理
+- [转换重写规则](How-To/转换重写规则.md)
+- [WebSocket 代理](How-To/WebSocket代理.md)
 
 ### 开发
 - 贡献变化

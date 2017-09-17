@@ -20,7 +20,7 @@
 - **--with-pcre=path** 设置 PCRE 库的源路径。发行版（4.4 至 8.40 版本）需要从 [PCRE](http://www.pcre.org/) 站点下载并提取。其余工作由 nginx 的 `./configure` 和 `make` 完成。该库是 [location](http://nginx.org/en/docs/http/ngx_http_core_module.html#location) 指令和 [ngx_http_rewrite_module](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html) 模块中正则表达式支持所必需的。
 - **--with-pcre-jit** 使用“即时编译（just-in-time compilation）”支持（1.1.12版本的 [pcre_jit](http://nginx.org/en/docs/ngx_core_module.html#pcre_jit) 指令）构建 PCRE 库。
 - **--with-zlib=path** 设置 zlib 库的源路径。发行版（1.1.3 至 1.2.11 版本）需要从 [zlib](http://zlib.net/) 站点下载并提取。其余工作由 nginx 的 `./configure` 和 `make` 完成。该库是 [ngx_http_gzip_module](http://nginx.org/en/docs/http/ngx_http_gzip_module.html) 模块所必需的。
-**--with-cc-opt=parameters** 设置添加到 CFLAGS 变量的额外参数。当在 FreeBSD 下使用系统的 PCRE 库时，应指定 `--with-cc-opt="-I /usr/local/include"`。如果需要增加 `select()` 所支持的文件数量，也可以在这里指定，如：`--with-cc-opt="-D FD_SETSIZE=2048"`。
+- **--with-cc-opt=parameters** 设置添加到 CFLAGS 变量的额外参数。当在 FreeBSD 下使用系统的 PCRE 库时，应指定 `--with-cc-opt="-I /usr/local/include"`。如果需要增加 `select()` 所支持的文件数量，也可以在这里指定，如：`--with-cc-opt="-D FD_SETSIZE=2048"`。
 - **--with-ld-opt=parameters** 设置链接期间使用的其他参数。在 FreeBSD 下使用系统 PCRE 库时，应指定--with-ld-opt="-L /usr/local/lib"`。
 
 参数使用示例（所有这些参数都要输入在同一行上）：

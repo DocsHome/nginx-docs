@@ -219,10 +219,10 @@ therefore SNI is not available
 - 1.9.1 及更高版本：默认 SSL 协议为 TLSv1、TLSv1.1 和 TLSv1.2（如果 OpenSSL 库支持）。
 - 0.7.65、0.8.19 及更高版本：默认 SSL 协议为 SSLv3、TLSv1、TLSv1.1 和 TLSv1.2（如果 OpenSSL 库支持）。
 - 0.7.64、0.8.18 及更早版本：默认 SSL 协议为 SSLv2、SSLv3 和 TLSv1。
-- 1.0.5及更高版本：默认 SSL 密码为 `HIGH：！aNULL：！MD5`。
-- 0.7.65、0.8.20 及更高版本：默认 SSL 密码为 `HIGH：！ADH：！MD5`。
-- 0.8.19 版本：默认 SSL 密码为 `ALL：！ADH：RC4 + RSA：+ HIGH：+ MEDIUM`。
-- 0.7.64、0.8.18 及更早版本：默认SSL密码为 `ALL：！ADH：RC4 + RSA：+ HIGH：+ MEDIUM：+ LOW：+的SSLv2：+ EXP`。
+- 1.0.5及更高版本：默认 SSL 密码为 `HIGH:!aNULL:!MD5`。
+- 0.7.65、0.8.20 及更高版本：默认 SSL 密码为 `HIGH:!ADH:!MD5`。
+- 0.8.19 版本：默认 SSL 密码为 `ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM`。
+- 0.7.64、0.8.18 及更早版本：默认SSL密码为 `ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP`。
 
 由 **Igor Sysoev** 撰写，**Brian Mercer** 编辑
 

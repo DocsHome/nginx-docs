@@ -1,9 +1,9 @@
 # nginx 如何处理请求
 
 ## 基于名称的虚拟服务器
-nginx 首先决定哪个 `server` 应该处理请求，让我们从一个简单的配置开始，三个虚拟服务器都监听了 *:80 端口：
+nginx 首先决定哪个 `server` 应该处理请求，让我们从一个简单的配置开始，三个虚拟服务器都监听了 `*:80` 端口：
 
-```conf
+```nginx
 server {
     listen      80;
     server_name example.org www.example.org;
@@ -25,7 +25,7 @@ server {
 
 在此配置中，nginx 仅检验请求的 header 域中的 “Host”，以确定请求应该被路由到哪一个 `server`。如果其值与任何的 `server` 名称不匹配，或者该请求根本不包含此 header 域，nginx 将将请求路由到该端口的默认 `server`。在上面的配置中，默认 `server` 是第一个——这是 nginx 的标准默认行为。它可以明确地设置哪一个 `server` 应该是默认的，在 `listen` 指令中使用 `default_server` 参数：
 
-```
+```nginx
 server {
     listen      80 default_server;
     server_name example.net www.example.net;
@@ -39,7 +39,7 @@ server {
 ## 如何使用未定义的 server 名称来阻止处理请求
 如果不允许没有“Host” header 字段的请求，可以定义一个丢弃请求的 server：
 
-```
+```nginx
 server {
     listen      80;
     server_name "";
@@ -50,10 +50,10 @@ server {
 
 > 自 0.8.48 版本开始，这是 `server` 名称的默认设置，因此可以省略 `server name ""`。在早期版本中，机器的主机名被作为 `server` 的默认名称。
 
-## 基于名称和 IP 混合的虚拟服务器 
+## 基于名称和 IP 混合的虚拟服务器
 让我们看看更加复杂的配置，其中一些虚拟服务器在不同的地址上监听：
 
-```
+```nginx
 server {
     listen      192.168.1.1:80;
     server_name example.org www.example.org;
@@ -77,7 +77,7 @@ server {
 
 如上所述，默认 `server` 是 `listen port` 的属性，可以为不同的端口定义不同的 `default_server`：
 
-```
+```nginx
 server {
     listen      192.168.1.1:80;
     server_name example.org www.example.org;
@@ -100,7 +100,7 @@ server {
 ## 一个简单的 PHP 站点配置
 现在让我们来看看 nginx 是如何选择一个 `location` 来处理典型的简单 PHP 站点的请求：
 
-```
+```nginx
 server {
     listen      80;
     server_name example.org www.example.org;

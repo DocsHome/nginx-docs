@@ -6,7 +6,7 @@ Nginx 的 Windows 版本使用了本地的 Win32 API（而不是 Cygwin 模拟�
 
 要安装 nginx的 Windows 版本，请[下载](http://nginx.org/en/download.html)最新的主线发行版（1.13.4），因为 nginx 的 主线分支包含了所有已知的补丁。之后解压文件，到 `nginx-1.13.4` 目录下，然后运行 `nginx`。以下是驱动器 C: 的根目录：
 
-```
+```bash
 cd c:\
 unzip nginx-1.13.4.zip
 cd nginx-1.13.4
@@ -15,7 +15,7 @@ start nginx
 
 运行 `tasklist` 命令行工具查看 nginx 进程：
 
-```
+```bash
 C:\nginx-1.13.4>tasklist /fi "imagename eq nginx.exe"
 
 Image Name           PID Session Name     Session#    Mem Usage
@@ -27,7 +27,7 @@ nginx.exe           1332 Console                 0      3 112 K
 
 nginx/Windows 使用运行目录作为配置文件中的相对路径前缀。在上面的例子中，前缀是 `C:\nginx-1.13.4\`。在配置文件中的路径必须使类 Unix 风格的正斜杠：
 
-```
+```nginx
 access_log   logs/site.log;
 root         C:/web/html;
 ```
@@ -51,4 +51,3 @@ nginx/Windows 作为标准的控制台应用程序（而不是服务）运行，
 ## 原文档
 
 [http://nginx.org/en/docs/windows.html](http://nginx.org/en/docs/windows.html)
- 

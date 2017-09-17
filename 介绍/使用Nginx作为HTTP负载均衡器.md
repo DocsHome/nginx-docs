@@ -14,7 +14,7 @@ nginx 支持以下负载均衡机制（或方法）：
 ## 默认负载均衡配置
 使用 nginx 进行负载均衡的最简单配置如下所示：
 
-```
+```nginx
 http {
     upstream myapp1 {
         server srv1.example.com;
@@ -46,7 +46,7 @@ nginx 中的反向代理实现包括HTTP、HTTPS、FastCGI、uwsgi、SCGI 和 me
 
 当使用 [least_conn](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#least_conn) 指令作为服务组配置的一部分时，将激活 nginx 中的最少连接负载均衡：
 
-```
+```nginx
 upstream myapp1 {
         least_conn;
         server srv1.example.com;
@@ -64,7 +64,7 @@ upstream myapp1 {
 
 要配置 IP 哈希负载均衡，只需要将 [ip_hash](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#ip_hash) 指令添加到服务器（upstream）组配置即可：
 
-```
+```nginx
 upstream myapp1 {
     ip_hash;
     server srv1.example.com;
@@ -82,7 +82,7 @@ upstream myapp1 {
 
 当服务器指定 [weight](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 参数时，权重将作为负载均衡决策的一部分进行核算。
 
-```
+```nginx
  upstream myapp1 {
         server srv1.example.com weight=3;
         server srv2.example.com;

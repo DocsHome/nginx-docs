@@ -49,19 +49,19 @@ nginScript 可用于以下两个模块：
 ## 源码构建方式
 可以使用以下命令克隆 nginScript 的源码[仓库](http://hg.nginx.org/njs?_ga=2.71762323.1468443122.1505551652-1890203964.1497190280)：（需要 [Mercurial](https://www.mercurial-scm.org/) 客户端）：
 
-```
+```bash
 hg clone http://hg.nginx.org/njs
 ```
 
 然后使用 `--add-module` 配置参数进行编译模块：
 
-```
+```bash
 ./configure --add-module=path-to-njs/nginx
 ```
 
 该模块也可以构建为[动态的](http://nginx.org/en/docs/ngx_core_module.html#load_module)：
 
-```
+```bash
 ./configure --add-dynamic-module=path-to-njs/nginx
 ```
 

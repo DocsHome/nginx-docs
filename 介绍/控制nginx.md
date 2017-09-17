@@ -26,13 +26,13 @@ WINCH | 调试异常终止（需要开启 `debug_points`）
 
 我们来举例说明一下。 想象一下，nginx 是在 FreeBSD 4.x 命令行上运行的
 
-```
+```bash
 ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'
 ```
 
 得到以下输出结果：
 
-```
+```bash
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 33126     1 root     0.0  1148 pause  nginx: master process /usr/local/nginx/sbin/nginx
 33127 33126 nobody   0.0  1380 kqread nginx: worker process (nginx)
@@ -42,7 +42,7 @@ ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'
 
 如果把`HUP`信号发送到master进程，输出的结果将会是：
 
-```
+```bash
  PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 33126     1 root     0.0  1164 pause  nginx: master process /usr/local/nginx/sbin/nginx
 33129 33126 nobody   0.0  1380 kqread nginx: worker process is shutting down (nginx)
@@ -53,7 +53,7 @@ ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'
 
 其中一个 PID 为 33129 的 worker 进程仍然在继续工作，过一段时间之后它退出了：
 
-```
+```bash
 PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 33126     1 root     0.0  1164 pause  nginx: master process /usr/local/nginx/sbin/nginx
 33134 33126 nobody   0.0  1368 kqread nginx: worker process (nginx)
@@ -69,7 +69,7 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 
 为了升级服务器可执行文件，首先应该将新的可执行文件替换旧的可执行文件。之后发送 `USR2` 信号到 master 进程。Master 进程首先将以进程 ID 文件重命名为以 `.oldbin` 为后缀的新文件，例如 `/usr/local/nginx/logs/nginx.pid.oldbin`。之后启动新的二进制文件和依次期待能够新的 worker 进程：
 
-```
+```bash
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 33126     1 root     0.0  1164 pause  nginx: master process /usr/local/nginx/sbin/nginx
 33134 33126 nobody   0.0  1368 kqread nginx: worker process (nginx)
@@ -95,7 +95,7 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 
 过一段时间，仅有新的 worker 进程处理请求：
 
-```
+```bash
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 33126     1 root     0.0  1164 pause  nginx: master process /usr/local/nginx/sbin/nginx
 36264 33126 root     0.0  1148 pause  nginx: master process /usr/local/nginx/sbin/nginx
@@ -113,7 +113,7 @@ PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 
 如果升级成功，应该发送 `QUIT` 信号给旧的 master 进程，仅仅新的进程驻留：
 
-```
+```bash
   PID  PPID USER    %CPU   VSZ WCHAN  COMMAND
 36264     1 root     0.0  1148 pause  nginx: master process /usr/local/nginx/sbin/nginx
 36265 36264 nobody   0.0  1364 kqread nginx: worker process (nginx)

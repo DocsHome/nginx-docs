@@ -30,7 +30,7 @@ nohostname
 
 syslog配置示例：
 
-```
+```nginx
 error_log syslog:server=192.168.1.1 debug;
 
 access_log syslog:server=unix:/var/log/nginx.sock,nohostname;

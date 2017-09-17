@@ -2,7 +2,7 @@
 
 要配置 HTTPS 服务器，必须在 [server](http://nginx.org/en/docs/http/ngx_http_core_module.html#server) 块中的[监听套接字](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen)上启用 `ssl` 参数，并且指定[服务器证书](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate)和[私钥文件](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key)的位置：
 
-```
+```nginx
 server {
     listen              443 ssl;
     server_name         www.example.com;
@@ -17,7 +17,7 @@ server {
 <!-- more -->
 
 服务器证书是一个公共实体。它被发送到每个连接到服务器的客户端。私钥是一个安全实体，存储在一个访问受限的文件中，但是它对 nginx 的主进程必须是可读的。私钥也可以存储在与证书相同的文件中：
-```
+```nginx
 ssl_certificate     www.example.com.cert;
 ssl_certificate_key www.example.com.cert;
 ```
@@ -29,7 +29,7 @@ ssl_certificate_key www.example.com.cert;
 ## HTTPS 服务器优化
 SSL 操作会消耗额外的 CPU 资源。在多处理器系统上，应该运行多个[工作进程（worker process）](http://nginx.org/en/docs/ngx_core_module.html#worker_processes)，不得少于可用 CPU 核心的数量。大多数 CPU 密集型操作是发生在 SSL 握手时。有两种方法可以最大程度地减少每个客户端执行这些操作的次数。首先，启用 [keepalive](http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout) 连接，通过一个连接来发送多个请求，第二个是复用 SSL 会话参数，避免相同的和后续的连接发生 SSL 握手。会话存储在工作进程间共享的 SSL 会话缓存中，由 [ssl_session_cache](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache) 指令配置。1MB 缓存包含约 4000 个会话。默认缓存超时时间为 5 分钟，可以用 [ssl_session_timeout](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_timeout) 指令来增加。以下是一个优化具有 10MB 共享会话缓存的多核系统的配置示例：
 
-```
+```nginx
 worker_processes auto;
 
 http {
@@ -56,7 +56,7 @@ $ cat www.example.com.crt bundle.crt > www.example.com.chained.crt
 
 在 [ssl_certificate](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate) 指令中使用生成的文件：
 
-```
+```nginx
 server {
     listen              443 ssl;
     server_name         www.example.com;
@@ -66,7 +66,7 @@ server {
 }
 ```
 如果服务器证书与捆绑的链式证书的相连顺序错误，nginx 将无法启动并显示错误消息：
-```
+```bash
 SSL_CTX_use_PrivateKey_file(" ... /www.example.com.key") failed
    (SSL: error:0B080074:x509 certificate routines:
     X509_check_private_key:key values mismatch)
@@ -76,7 +76,7 @@ SSL_CTX_use_PrivateKey_file(" ... /www.example.com.key") failed
 
 浏览器通常会存储他们收到的中间证书，这些证书由受信任的机构签名，因此积极使用这些存储证书的浏览器可能已经具有所需的中间证书，不会发生不承认没有链接捆绑发送的证书的情况。可以使用 openssl 命令行工具来确保服务器发送完整的证书链，例如：
 
-```
+```bash
 $ openssl s_client -connect www.godaddy.com:443
 ...
 Certificate chain
@@ -109,7 +109,7 @@ Certificate chain
 ## HTTP/HTTPS 服务器
 可以配置单个服务器来处理 HTTP 和 HTTPS 请求：
 
-```
+```nginx
 server {
     listen              80;
     listen              443 ssl;
@@ -125,7 +125,7 @@ server {
 ## 基于名称的 HTTPS 服务器
 当配置两个或多个 HTTPS 服务器监听单个IP地址时，会出现一个常见问题：
 
-```
+```nginx
 server {
     listen          443 ssl;
     server_name     www.example.com;
@@ -144,7 +144,7 @@ server {
 
 最古老、最强大的解决方法是为每个 HTTPS 服务器分配一个单独的 IP 地址：
 
-```
+```nginx
 server {
     listen          192.168.1.1:443 ssl;
     server_name     www.example.com;
@@ -167,7 +167,7 @@ server {
 
 最好是将证书文件与名称、私钥文件放置在 http 级配置，以便在所有服务器中继承其单个内存副本：
 
-```
+```nginx
 ssl_certificate     common.crt;
 ssl_certificate_key common.key;
 
@@ -196,7 +196,7 @@ server {
 
 要在 nginx 中使用 SNI，其必须支持构建后的 nginx 二进制的 OpenSSL 库以及在可在运行时动态链接的库。自 0.9.8f 版本起（OpenSSL），如果 OpenSSL 使用了配置选项 `--enable-tlsext` 构建，是支持 SNI 的。自 OpenSSL 0.9.8j 起，此选项是默认启用。如果 nginx 是用 SNI 支持构建的，那么当使用 `-V` 开关运行时，nginx会显示这个：
 
-```
+```bash
 $ nginx -V
 ...
 TLS SNI support enabled
@@ -205,7 +205,7 @@ TLS SNI support enabled
 
 但是，如果启用了 SNI 的 nginx 在没有 SNI 支持的情况下动态链接到 OpenSSL 库，那么 nginx 将会显示警告：
 
-```
+```bash
 nginx was built with SNI support, however, now it is linked
 dynamically to an OpenSSL library which has no tlsext support,
 therefore SNI is not available

@@ -46,7 +46,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - 指令字母索引
 - 变量字母索引
 
-- 核心功能
+- [核心功能](模块参考/核心功能.md)
 
 - ngx_http_core_module
 - ngx_http_access_module

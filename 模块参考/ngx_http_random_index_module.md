@@ -7,7 +7,7 @@
 ## 配置示例
 ```nginx
 location / {
-    reandom_index on;
+    random_index on;
 }
 ```
 ## 原文档

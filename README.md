@@ -81,7 +81,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - ngx_http_mp4_module
 - ngx_http_perl_module
 - ngx_http_proxy_module
-- ngx_http_random_index_module
+- [ngx_http_random_index_module](模块参考/ngx_http_random_index_module.md)
 - ngx_http_realip_module
 - ngx_http_referer_module
 - ngx_http_rewrite_module

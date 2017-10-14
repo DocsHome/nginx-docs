@@ -51,8 +51,8 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)（翻译中）
 - [ngx_http_access_module](模块参考/http/ngx_http_access_module.md)
 - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
-- ngx_http_auth_basic_module
-- ngx_http_auth_jwt_module
+- [ngx_http_auth_basic_module](模块参考/http/ngx_http_auth_basic_module.md)
+- [ngx_http_auth_jwt_module](模块参考/http/ngx_http_auth_jwt_module.md)
 - ngx_http_auth_request_module
 - ngx_http_autoindex_module
 - ngx_http_browser_module

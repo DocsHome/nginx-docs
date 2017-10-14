@@ -49,7 +49,7 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - [核心功能](模块参考/核心功能.md)
 
 - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)（翻译中）
-- [ngx_http_access_module](模块参考/http/ngx_http_access_module)
+- [ngx_http_access_module](模块参考/http/ngx_http_access_module.md)
 - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
 - ngx_http_auth_basic_module
 - ngx_http_auth_jwt_module

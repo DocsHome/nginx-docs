@@ -1,7 +1,7 @@
 # Nginx 中文文档
 ![Nginx logo](http://nginx.org/nginx.png)
 
-Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译发表于博客上，为了方便翻阅，特意整理到 Github 上。
+Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。由于部分章节涉及到 Nginx Plus 或者其他内容，将忽略这部分章节的内容。如果您发现内容存在错误或者不当之处，欢迎指出或者 PR，同时也欢迎您的加入。
 
 ## 索引
 
@@ -53,8 +53,8 @@ Nginx 官方文档的中文翻译版，由本人在学习 nginx 时顺带翻译�
 - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
 - [ngx_http_auth_basic_module](模块参考/http/ngx_http_auth_basic_module.md)
 - [ngx_http_auth_jwt_module](模块参考/http/ngx_http_auth_jwt_module.md)
-- ngx_http_auth_request_module
-- ngx_http_autoindex_module
+- [ngx_http_auth_request_module](模块参考/http/ngx_http_auth_request_module.md)
+- [ngx_http_autoindex_module](模块参考/http/ngx_http_autoindex_module.md)
 - ngx_http_browser_module
 - ngx_http_charset_module
 - ngx_http_dav_module

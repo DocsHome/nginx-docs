@@ -113,7 +113,7 @@ application/javascript application/rss+xml;|
 |**默认**|override_charset off;|
 |**上下文**|http、server、location、location 中的 if|
 
-确定当答案已经在 **Content-Type** 响应头字段中携带字符集时，是否应该对从代理或 FastCGI/uwsgi/SCGI 服务器接收的答案执行转换。如果启用转换，则在接收到的响应中指定的字符集将用作源字符集。
+当应答已经在 **Content-Type** 响应头域中携带字符集时，确定是否应该对从代理或 FastCGI/uwsgi/SCGI 服务器接收的应答执行转换。如果启用转换，则在接收到的响应中指定的字符集将用作源字符集。
 
 > 应该注意的是，如果在子请求中接收到响应，则始终执行从响应字符集到主请求字符集的转换，而不管 `override_charset` 指令如何设置。
 

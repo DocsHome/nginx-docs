@@ -56,7 +56,7 @@ Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。�
 - [ngx_http_auth_request_module](模块参考/http/ngx_http_auth_request_module.md)
 - [ngx_http_autoindex_module](模块参考/http/ngx_http_autoindex_module.md)
 - ngx_http_browser_module
-- ngx_http_charset_module
+- [ngx_http_charset_module](模块参考/http/ngx_http_charset_module.md)
 - ngx_http_dav_module
 - ngx_http_empty_gif_module
 - ngx_http_f4f_module

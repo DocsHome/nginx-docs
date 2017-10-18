@@ -66,7 +66,7 @@ Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。�
 - ngx_http_geoip_module
 - ngx_http_gunzip_module
 - ngx_http_gzip_module
-- ngx_http_gzip_static_module
+- [ngx_http_gzip_static_module](模块参考/http/ngx_http_gzip_static_module.md)
 - ngx_http_headers_module
 - ngx_http_hls_module
 - ngx_http_image_filter_module

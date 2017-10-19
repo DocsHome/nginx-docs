@@ -1,6 +1,6 @@
 # 从源码构建 nginx
 
-构建使用 `configure` 命令进行配置。它定义了系统的各个方面，包括了 nginx 进行连接处理使用的方法。最终它创建出一个 `Makefile`。`configure` 命令支持以下参数：
+编译时使用 `configure` 命令进行配置。它定义了系统的各个方面，包括了 nginx 进行连接处理使用的方法。最终它会创建出一个 `Makefile`。`configure` 命令支持以下参数：
 
 - **--prefix=path**
 
@@ -63,19 +63,19 @@
 
     设置链接期间使用的其他参数。在 FreeBSD 下使用系统 PCRE 库时，应指定--with-ld-opt="-L /usr/local/lib"`。
 
-参数使用示例（所有这些参数都要输入在同一行上）：
+参数使用示例：
 
 ```bash
-./configure
-    --sbin-path=/usr/local/nginx/nginx
-    --conf-path=/usr/local/nginx/nginx.conf
-    --pid-path=/usr/local/nginx/nginx.pid
-    --with-http_ssl_module
-    --with-pcre=../pcre-8.40
+./configure \
+    --sbin-path=/usr/local/nginx/nginx \
+    --conf-path=/usr/local/nginx/nginx.conf \
+    --pid-path=/usr/local/nginx/nginx.pid \
+    --with-http_ssl_module \
+    --with-pcre=../pcre-8.40 \
     --with-zlib=../zlib-1.2.11
 ```
 
-配置完成之后，使用 `make` 编译和安装 nginx。
+配置完成之后，使用 `make` 和 `make install` 编译和安装 nginx。
 
 ## 原文档
 

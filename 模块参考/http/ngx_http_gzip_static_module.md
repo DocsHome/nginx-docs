@@ -8,7 +8,9 @@
 该模块默认不会被构建到 nginx 中，需要在编译时加入 `--with-http_gzip_static_module` 配置参数启用。
 
 <a id="example_configuration"></a>
+
 ## 配置示例
+
 ```nginx
 gzip_static on;
 gzip_proxied expired no-cache no-store private auth;
@@ -20,8 +22,8 @@ gzip_proxied expired no-cache no-store private auth;
 ### gzip_static
 
 |\-|说明|
-|------:|------|
-|**语法**|**gzip_static** `on` \| `off` \| `always`; |
+|:------|:------|
+|**语法**|**gzip_static** `on` &#124; `off` &#124; `always`; |
 |**默认**|gzip_static off;|
 |**上下文**|http、server、location|
 

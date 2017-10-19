@@ -46,7 +46,7 @@ typedef ngx_http_request_body_t void;
 
 最后但同样重要的是，需要添加两个成员结构的定义（`ngx_http_headers_in_t`，`ngx_http_headers_out_t`）、回调函数声明和常量定义。
 
-最后，DTrace 脚本可以从[这里](http://nginx.org/download/trace_process_request.d)下载。
+最后，DTrace 脚本可以从 [这里](http://nginx.org/download/trace_process_request.d) 下载。
 
 以下示例是运行此脚本的输出：
 

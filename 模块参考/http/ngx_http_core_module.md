@@ -84,8 +84,8 @@
 ### absolute_redirect
 
 |\-|说明|
-|------:|------|
-|**语法**|**absolute_redirect** `on` \| `off`;|
+|:------|:------|
+|**语法**|**absolute_redirect** `on` &#124; `off`;|
 |**默认**|absolute_redirect on;|
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.11.8 版本中出现|
@@ -97,8 +97,8 @@
 ### aio
 
 |\-|说明|
-|------:|------|
-|**语法**|**aio** `on` \| `off` \| `threads[=pool]`;|
+|:------|:------|
+|**语法**|**aio** `on` &#124; `off` &#124; `threads[=pool]`;|
 |**默认**|aio off;|
 |**上下文**|http、server、location|
 |**提示**|该指令在 0.8.11 版本中出现|
@@ -167,8 +167,8 @@ aio threads=pool$disk;
 ### aio_write
 
 |\-|说明|
-|------:|------|
-|**语法**|**aio_write** `on` \| `off`;|
+|:------|:------|
+|**语法**|**aio_write** `on` &#124; `off`;|
 |**默认**|aio_write off;|
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.9.13 版本中出现|

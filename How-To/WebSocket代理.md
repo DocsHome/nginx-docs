@@ -1,6 +1,6 @@
 # WebSocket 代理
 
-要将客户端与服务器之间的连接从 HTTP/1.1 转换为 WebSocket，可是使用 HTTP/1.1 中的[协议切换](https://tools.ietf.org/html/rfc2616#section-14.42)机制。
+要将客户端与服务器之间的连接从 HTTP/1.1 转换为 WebSocket，可是使用 HTTP/1.1 中的 [协议切换](https://tools.ietf.org/html/rfc2616#section-14.42) 机制。
 
 然而，有一个微妙的地方：由于 `Upgrade` 是一个[逐跳](https://tools.ietf.org/html/rfc2616#section-13.5.1)（hop-by-hop）头，它不会从客户端传递到代理服务器。当使用转发代理时，客户端可以使用 `CONNECT` 方法来规避此问题。然而，这不适用于反向代理，因为客户端不知道任何代理服务器，这需要在代理服务器上进行特殊处理。
 

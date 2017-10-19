@@ -39,8 +39,8 @@ location = /auth {
 ### auth_request
 
 |\-|说明|
-|------:|------|
-|**语法**|**auth_request** `uri` \| `off`;|
+|:------|:------|
+|**语法**|**auth_request** `uri` &#124; `off`;|
 |**默认**|auth_request off;|
 |**上下文**|http、server、location|
 
@@ -49,7 +49,7 @@ location = /auth {
 ### auth_request_set
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**auth_request_set** `$variable value;`;|
 |**默认**|——|
 |**上下文**|http|

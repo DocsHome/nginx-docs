@@ -1,6 +1,6 @@
 # 配置 HTTPS 服务器
 
-要配置 HTTPS 服务器，必须在 [server](http://nginx.org/en/docs/http/ngx_http_core_module.html#server) 块中的[监听套接字](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen)上启用 `ssl` 参数，并且指定[服务器证书](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate)和[私钥文件](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key)的位置：
+要配置 HTTPS 服务器，必须在 [server](http://nginx.org/en/docs/http/ngx_http_core_module.html#server) 块中的 [监听套接字](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen) 上启用 `ssl` 参数，并且指定[服务器证书](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate) 和 [私钥文件](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key) 的位置：
 
 ```nginx
 server {
@@ -24,10 +24,10 @@ ssl_certificate_key www.example.com.cert;
 
 这种情况下，文件的访问也应该被限制。虽然证书和密钥存储在一个文件中，但只有证书能被发送给客户端。
 
-可以使用 [ssl_protocols](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_protocols) 和 [ssl_ciphers](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers) 指令来限制连接，使其仅包括 SSL/TLS 的版本和密码。默认情况下，nginx 使用版本为 `ssl_protocols TLSv1 TLSv1.1 TLSv1.2`，密码为 `ssl_ciphers HIGH:!aNULL:!MD5`，因此通常不需要配置它们。请注意，这些指令的默认值已经被[更改](#兼容性)多次。
+可以使用 [ssl_protocols](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_protocols) 和 [ssl_ciphers](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers) 指令来限制连接，使其仅包括 SSL/TLS 的版本和密码。默认情况下，nginx 使用版本为 `ssl_protocols TLSv1 TLSv1.1 TLSv1.2`，密码为 `ssl_ciphers HIGH:!aNULL:!MD5`，因此通常不需要配置它们。请注意，这些指令的默认值已经被 [更改](#兼容性) 多次。
 
 ## HTTPS 服务器优化
-SSL 操作会消耗额外的 CPU 资源。在多处理器系统上，应该运行多个[工作进程（worker process）](http://nginx.org/en/docs/ngx_core_module.html#worker_processes)，不得少于可用 CPU 核心的数量。大多数 CPU 密集型操作是发生在 SSL 握手时。有两种方法可以最大程度地减少每个客户端执行这些操作的次数。首先，启用 [keepalive](http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout) 连接，通过一个连接来发送多个请求，第二个是复用 SSL 会话参数，避免相同的和后续的连接发生 SSL 握手。会话存储在工作进程间共享的 SSL 会话缓存中，由 [ssl_session_cache](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache) 指令配置。1MB 缓存包含约 4000 个会话。默认缓存超时时间为 5 分钟，可以用 [ssl_session_timeout](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_timeout) 指令来增加。以下是一个优化具有 10MB 共享会话缓存的多核系统的配置示例：
+SSL 操作会消耗额外的 CPU 资源。在多处理器系统上，应该运行多个 [工作进程（worker process）](http://nginx.org/en/docs/ngx_core_module.html#worker_processes)，不得少于可用 CPU 核心的数量。大多数 CPU 密集型操作是发生在 SSL 握手时。有两种方法可以最大程度地减少每个客户端执行这些操作的次数。首先，启用 [keepalive](http://nginx.org/en/docs/http/ngx_http_core_module.html#keepalive_timeout) 连接，通过一个连接来发送多个请求，第二个是复用 SSL 会话参数，避免相同的和后续的连接发生 SSL 握手。会话存储在工作进程间共享的 SSL 会话缓存中，由 [ssl_session_cache](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache) 指令配置。1MB 缓存包含约 4000 个会话。默认缓存超时时间为 5 分钟，可以用 [ssl_session_timeout](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_timeout) 指令来增加。以下是一个优化具有 10MB 共享会话缓存的多核系统的配置示例：
 
 ```nginx
 worker_processes auto;
@@ -50,6 +50,7 @@ http {
 
 ## SSL 证书链
 某些浏览器可能会不承认由知名证书颁发机构签发的证书，而其他浏览器可能会接受该证书。之所以发生这种情况，是因为颁发机构已经在特定浏览器分发了一个中间证书，该证书不存在于知名可信证书颁发机构的证书库中。在这种情况下，权威机构提供了一系列链式证书，这些证书应该与已签名的服务器证书相连。服务器证书必须出现在组合文件中的链式证书之前：
+
 ```
 $ cat www.example.com.crt bundle.crt > www.example.com.chained.crt
 ```
@@ -65,7 +66,9 @@ server {
     ...
 }
 ```
+
 如果服务器证书与捆绑的链式证书的相连顺序错误，nginx 将无法启动并显示错误消息：
+
 ```bash
 SSL_CTX_use_PrivateKey_file(" ... /www.example.com.key") failed
    (SSL: error:0B080074:x509 certificate routines:
@@ -120,10 +123,10 @@ server {
 }
 ```
 
-> 在 0.7.14 之前，无法为各个监听套接字选择性地启用 SSL，如上所示。只能使用 [ssl](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl) 指令为整个服务器启用 SSL，从而无法设置单个 HTTP/HTTPS 服务器。可以通过添加 [listen](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen) 指令的 ssl 参数来解决这个问题。因此，不建议在现在的版本中使用 [ssl](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl) 指令。
+> 在 0.7.14 之前，无法为各个 socket 选择性地启用 SSL，如上所示。只能使用 [ssl](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl) 指令为整个服务器启用 SSL，从而无法设置单个 HTTP/HTTPS 服务器。可以通过添加 [listen](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen) 指令的 ssl 参数来解决这个问题。因此，不建议在现在的版本中使用 [ssl](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl) 指令。
 
 ## 基于名称的 HTTPS 服务器
-当配置两个或多个 HTTPS 服务器监听单个IP地址时，会出现一个常见问题：
+当配置两个或多个 HTTPS 服务器监听单个 IP 地址时，会出现一个常见问题：
 
 ```nginx
 server {
@@ -140,7 +143,8 @@ server {
     ...
 }
 ```
-使用了此配置，浏览器会接收默认服务器的证书，即 www.example.com，而无视所请求的服务器名称。这是由SSL 协议行为引起的。SSL连接在浏览器发送 HTTP 请求之前建立，nginx 并不知道请求的服务器名称。因此，它只能提供默认服务器的证书。
+
+使用了此配置，浏览器会接收默认服务器的证书，即 www.example.com，而无视所请求的服务器名称。这是由 SSL 协议行为引起的。SSL连接在浏览器发送 HTTP 请求之前建立，nginx 并不知道请求的服务器名称。因此，它只能提供默认服务器的证书。
 
 最古老、最强大的解决方法是为每个 HTTPS 服务器分配一个单独的 IP 地址：
 
@@ -184,7 +188,7 @@ server {
 ```
 
 ## 服务器名称指示
-在单个 IP 地址上运行多个 HTTPS 服务器的更通用的解决方案是[TLS 服务器名称指示扩展](http://en.wikipedia.org/wiki/Server_Name_Indication)（SNI，RFC 6066），其允许浏览器在SSL 握手期间传递所请求的服务器名称，因此，服务器将知道应该为此连接使用哪个证书。然而，SNI 对浏览器的支持是有限的。目前，它仅支持以下版本开始的浏览器：
+在单个 IP 地址上运行多个 HTTPS 服务器的更通用的解决方案是 [TLS 服务器名称指示扩展](http://en.wikipedia.org/wiki/Server_Name_Indication)（SNI，RFC 6066），其允许浏览器在 SSL 握手期间传递所请求的服务器名称，因此，服务器将知道应该为此连接使用哪个证书。然而，SNI 对浏览器的支持是有限的。目前，它仅支持以下版本开始的浏览器：
 
 - Opera 8.0
 - MSIE 7.0（但仅在 Windows Vista 或更高版本）
@@ -194,7 +198,7 @@ server {
 
 > 只有域名可以在 SNI 中传递，然而，如果请求包含 IP 地址，某些浏览器可能会错误地将服务器的 IP 地址作为名称传递。不应该依靠这个。
 
-要在 nginx 中使用 SNI，其必须支持构建后的 nginx 二进制的 OpenSSL 库以及在可在运行时动态链接的库。自 0.9.8f 版本起（OpenSSL），如果 OpenSSL 使用了配置选项 `--enable-tlsext` 构建，是支持 SNI 的。自 OpenSSL 0.9.8j 起，此选项是默认启用。如果 nginx 是用 SNI 支持构建的，那么当使用 `-V` 开关运行时，nginx会显示这个：
+要在 nginx 中使用 SNI，其必须支持构建后的 nginx 二进制的 OpenSSL 库以及在可在运行时动态链接的库。自 0.9.8f 版本起（OpenSSL），如果 OpenSSL 使用了配置选项 `--enable-tlsext` 构建，是支持 SNI 的。自 OpenSSL 0.9.8j 起，此选项是默认启用。如果 nginx 是用 SNI 支持构建的，那么当使用 `nginx -V` 命令时 ，nginx 会显示：
 
 ```bash
 $ nginx -V

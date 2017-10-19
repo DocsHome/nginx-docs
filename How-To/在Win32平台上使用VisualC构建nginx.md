@@ -12,7 +12,7 @@
 
 ## 构建步骤
 
-在开始构建之前，确保将 Perl、Mercurial 和 MSYS 的 bin 目录路径添加到 PATH 环境变量中。从 Visual C 目录运行vcvarsall.bat 脚本设置 Visual C 环境。
+在开始构建之前，确保将 Perl、Mercurial 和 MSYS 的 bin 目录路径添加到 PATH 环境变量中。从 Visual C 目录运行 vcvarsall.bat 脚本设置 Visual C 环境。
 
 构建 nginx：
 

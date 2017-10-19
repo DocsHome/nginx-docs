@@ -26,8 +26,8 @@ location / {
 ### auth_basic
 
 |\-|说明|
-|------:|------|
-|**语法**|**auth_basic** `string` \| `off`;|
+|:------|:------|
+|**语法**|**auth_basic** `string` &#124; `off`;|
 |**默认**|auth_basic off;|
 |**上下文**|http、server、location、limit_except|
 
@@ -36,7 +36,7 @@ location / {
 ### auth_basic_user_file
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**auth_basic_user_file** `file`;|
 |**默认**|——|
 |**上下文**|http、server、location、limit_except|

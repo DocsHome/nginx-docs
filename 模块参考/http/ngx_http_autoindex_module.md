@@ -26,8 +26,8 @@ location / {
 ### autoindex
 
 |\-|说明|
-|------:|------|
-|**语法**|**autoindex** `on` \| `off`;|
+|:------|:------|
+|**语法**|**autoindex** `on` &#124; `off`;|
 |**默认**|autoindex off;|
 |**上下文**|http、server、location|
 
@@ -36,8 +36,8 @@ location / {
 ### autoindex_exact_size
 
 |\-|说明|
-|------:|------|
-|**语法**|**autoindex_exact_size** `on` \| `off`;|
+|:------|:------|
+|**语法**|**autoindex_exact_size** `on` &#124; `off`;|
 |**默认**|autoindex_exact_size on;|
 |**上下文**|http、server、location|
 
@@ -46,8 +46,8 @@ location / {
 ### autoindex_format
 
 |\-|说明|
-|------:|------|
-|**语法**|**autoindex_format** `html` \| `xml` \| `json` \| `jsonp`;|
+|:------|:------|
+|**语法**|**autoindex_format** `html` &#124; `xml` &#124; `json` &#124; `jsonp`;|
 |**默认**|autoindex_format html;|
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.7.9 版本中出现|
@@ -61,8 +61,8 @@ XML 输出可以使用 [ngx_http_xslt_module](ngx_http_xslt_module.md) 模块进
 ### autoindex_localtime
 
 |\-|说明|
-|------:|------|
-|**语法**|**autoindex_localtime** `on` \| `off`;|
+|:------|:------|
+|**语法**|**autoindex_localtime** `on` &#124; `off`;|
 |**默认**|autoindex_localtime off;|
 |**上下文**|http、server、location|
 

@@ -25,7 +25,7 @@ location / {
 ### add_before_body
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**add_before_body** `uri`;|
 |**默认**|——|
 |**上下文**|http、server、location|
@@ -35,7 +35,7 @@ location / {
 ### add_after_body
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**add_after_body** `uri`;|
 |**默认**|——|
 |**上下文**|http、server、location|
@@ -45,7 +45,7 @@ location / {
 ### addition_types
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**addition_types** `mime-type ...`;|
 |**默认**|addition_types text/html;|
 |**上下文**|http、server、location|

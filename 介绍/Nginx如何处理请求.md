@@ -23,7 +23,7 @@ server {
 }
 ```
 
-在此配置中，nginx 仅检验请求的 header 域中的 “Host”，以确定请求应该被路由到哪一个 `server`。如果其值与任何的 `server` 名称不匹配，或者该请求根本不包含此 header 域，nginx 将将请求路由到该端口的默认 `server`。在上面的配置中，默认 `server` 是第一个——这是 nginx 的标准默认行为。它可以明确地设置哪一个 `server` 应该是默认的，在 `listen` 指令中使用 `default_server` 参数：
+在此配置中，nginx 仅检验请求的 header 域中的 `Host`，以确定请求应该被路由到哪一个 `server`。如果其值与任何的 `server` 名称不匹配，或者该请求根本不包含此 header 域，nginx 会将请求路由到该端口的默认 `server` 中。在上面的配置中，默认 `server` 是第一个（这是 nginx 的标准默认行为）。你也可以在 `listen` 指令中使用 `default_server` 参数，明确地设置默认的 `server`。
 
 ```nginx
 server {
@@ -32,12 +32,13 @@ server {
     ...
 }
 ```
-> `default_server` 参数自 0.8.21 版本起可用。在早期版本中，应该使用 `default` 参数代替。
+
+> `default_server` 参数自 0.8.21 版本起可用。在早期版本中，应该使用 `default` 参数。
 
 请注意，默认 server 是 `listen port` 的属性，而不是 `server_name` 的。之后会有更多关于这方面的内容。
 
 ## 如何使用未定义的 server 名称来阻止处理请求
-如果不允许没有“Host” header 字段的请求，可以定义一个丢弃请求的 server：
+如果不允许没有 “Host” header 字段的请求，可以定义一个丢弃请求的 server：
 
 ```nginx
 server {
@@ -46,12 +47,13 @@ server {
     return      444;
 }
 ```
-这里的 `server` 名称设置为一个空字符串，匹配不带“Host” header 域的请求，返回一个表示表示关闭连接的 nginx 非标准代码 444。
+
+这里的 `server` 名称设置为一个空字符串，会匹配不带 `Host` 的 header 域请求，nginx 会返回一个表示关闭连接的非标准代码 444。
 
 > 自 0.8.48 版本开始，这是 `server` 名称的默认设置，因此可以省略 `server name ""`。在早期版本中，机器的主机名被作为 `server` 的默认名称。
 
 ## 基于名称和 IP 混合的虚拟服务器
-让我们看看更加复杂的配置，其中一些虚拟服务器在不同的地址上监听：
+让我们看看更加复杂的配置，其中一些虚拟服务器监听在不同的 IP 地址上监听：
 
 ```nginx
 server {
@@ -73,7 +75,7 @@ server {
 }
 ```
 
-此配置中，nginx 首先根据 `server` 块的 `listen` 指令检验请求的 IP 和 端口。之后，根据与 IP 和 端口相匹配的 `server` 块的 `server_name` 项对请求的“Host” header 域进行检验。如果找不到服务器的名称（server_name），请求将由 `default_server` 处理。例如，在 `192.168.1.1:80` 上收到的对 `www.example.com` 的请求将由 `192.168.1.1:80` 端口的 `default_server` （即第一个 server）处理，因为没有 `www.example.com` 没有在此端口上定义。
+此配置中，nginx 首先根据 `server` 块的 `listen` 指令检验请求的 IP 和端口。之后，根据与 IP 和端口相匹配的 `server` 块的 `server_name` 项对请求的“Host” header 域进行检验。如果找不到服务器的名称（server_name），请求将由 `default_server` 处理。例如，在 `192.168.1.1:80` 上收到的对 `www.example.com` 的请求将由 `192.168.1.1:80` 端口的 `default_server` （即第一个 server）处理，因为没有 `www.example.com` 在此端口上定义。
 
 如上所述，默认 `server` 是 `listen port` 的属性，可以为不同的端口定义不同的 `default_server`：
 
@@ -122,6 +124,7 @@ server {
     }
 }
 ```
+
 nginx 首先忽略排序搜索具有最明确字符串的前缀 `location`。在上面的配置中，唯一有符合的是前缀 `location` 为 `/`，因为它匹配任何请求，它将被用作最后的手段。之后，nginx 按照配置文件中列出的顺序检查由 `location` 的正则表达式。第一个匹配表达式停止搜索，nginx 将使用此 `location`。如果没有正则表达式匹配请求，那么 nginx 将使用前面找到的最明确的前缀 `location`。
 
 请注意，所有类型的 `location` 仅仅是检验请求的 URI 部分，不带参数。这样做是因为查询字符串中的参数可以有多种形式，例如：
@@ -130,6 +133,7 @@ nginx 首先忽略排序搜索具有最明确字符串的前缀 `location`。在
 /index.php?user=john&page=1
 /index.php?page=1&user=john
 ```
+
 此外，任何人都可以在查询字符串中请求任何内容：
 
 ```

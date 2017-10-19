@@ -32,8 +32,8 @@ source_charset koi8-r;
 ### charset
 
 |\-|说明|
-|------:|------|
-|**语法**|**charset** `charset` \| `off`;|
+|:------|:------|
+|**语法**|**charset** `charset` &#124; `off`;|
 |**默认**|charset off;|
 |**上下文**|http、server、location、location 中的 if|
 
@@ -58,7 +58,7 @@ charset_map iso-8859-5 _ { }
 ### charset_map
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**charset_map** `charset1 charset2 { ... }`;|
 |**默认**|——|
 |**上下文**|http|
@@ -94,7 +94,7 @@ charset_map koi8-r utf-8 {
 ### charset_types
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**charset_types** `mime-type ...`;|
 |**默认**|charset_types text/html text/xml text/plain text/vnd.wap.wml
 application/javascript application/rss+xml;|
@@ -108,8 +108,8 @@ application/javascript application/rss+xml;|
 ### override_charset
 
 |\-|说明|
-|------:|------|
-|**语法**|**override_charset** `on` \| `off`;|
+|:------|:------|
+|**语法**|**override_charset** `on` &#124; `off`;|
 |**默认**|override_charset off;|
 |**上下文**|http、server、location、location 中的 if|
 
@@ -120,7 +120,7 @@ application/javascript application/rss+xml;|
 ### source_charset
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**source_charset** `charset`;|
 |**默认**|——|
 |**上下文**|http、server、location、location 中的 if|

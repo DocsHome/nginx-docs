@@ -31,8 +31,8 @@ location / {
 ### auth_jwt
 
 |\-|说明|
-|------:|------|
-|**语法**|**auth_jwt** `string [token=$variable]` \| `off`;|
+|:------|:------|
+|**语法**|**auth_jwt** `string [token=$variable]` &#124; `off`;|
 |**默认**|auth_jwt off;|
 |**上下文**|http、server、location|
 
@@ -49,7 +49,7 @@ auth_jwt "closed site" token=$cookie_auth_token;
 ### auth_basic_user_file
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**auth_jwt_header_set** `$variable name`;|
 |**默认**|——|
 |**上下文**|http|
@@ -60,7 +60,7 @@ auth_jwt "closed site" token=$cookie_auth_token;
 ### auth_jwt_claim_set
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**auth_jwt_claim_set** `$variable name`;|
 |**默认**|——|
 |**上下文**|http|
@@ -71,7 +71,7 @@ auth_jwt "closed site" token=$cookie_auth_token;
 ### auth_jwt_key_file
 
 |\-|说明|
-|------:|------|
+|:------|:------|
 |**语法**|**auth_jwt_key_file** `file`;|
 |**默认**|——|
 |**上下文**|http、server、location|

@@ -1,0 +1,33 @@
+{
+  "author": "DocsHome",
+  "description": "Nginx 文档中文译版",
+  "language": "zh-hans",
+  "links": {
+    "sidebar": {
+      "Home": "https://github.com/DocsHome"
+    }
+  },
+  "plugins": [
+    "-sharing",
+    "-highlight",
+    "-livereload",
+    "prism",
+    "favicon"
+  ],
+  "pluginsConfig": {
+    "prism": {
+      "css": [
+        "prismjs/themes/prism-solarizedlight.css"
+      ]
+    },
+    "favicon": {
+      "shortcut": "favicon.ico",
+      "bookmark": "favicon.ico",
+      "appleTouch": "favicon.ico",
+      "appleTouchMore": {
+        "120x120": "favicon.ico",
+        "180x180": "favicon.ico"
+      }
+    }
+  }
+}

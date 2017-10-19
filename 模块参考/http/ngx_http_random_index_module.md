@@ -14,12 +14,12 @@ location / {
 ### random_index
 
 |\-|说明|
-|------:|------|
-|**语法**|**random_index** `on` \| `off`;|
+|:------|:------|
+|**语法**|**random_index** `on` &#124; `off`;|
 |**默认**|random_index off;|
 |**上下文**|location|
 
-启用或禁用 `location`周边的模块处理。
+启用或禁用 `location` 周边的模块处理。
 
 ## 原文档
 

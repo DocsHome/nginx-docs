@@ -31,8 +31,8 @@ location / {
 ### allow
 
 |\-|说明|
-|------:|------|
-|**语法**|**allow** `address` \| `CIDR` \| `unix:` \| `all`;|
+|:------|:------|
+|**语法**|**allow** `address` &#124; `CIDR` &#124; `unix:` &#124; `all`;|
 |**默认**|——|
 |**上下文**|http、server、location、limit_except|
 
@@ -41,8 +41,8 @@ location / {
 ### deny
 
 |\-|说明|
-|------:|------|
-|**语法**|**deny** `address` \| `CIDR` \| `unix:` \| `all`;|
+|:------|:------|
+|**语法**|**deny** `address` &#124; `CIDR` &#124; `unix:` &#124; `all`;|
 |**默认**|——|
 |**上下文**|http、server、location、limit_except|
 

@@ -4,7 +4,7 @@ Nginx 的 Windows 版本使用了本地的 Win32 API（而不是 Cygwin 模拟�
 
 <!-- more -->
 
-要安装 nginx的 Windows 版本，请[下载](http://nginx.org/en/download.html)最新的主线发行版（1.13.4），因为 nginx 的 主线分支包含了所有已知的补丁。之后解压文件，到 `nginx-1.13.4` 目录下，然后运行 `nginx`。以下是驱动器 C: 的根目录：
+要安装 nginx 的 Windows 版本，请 [下载](http://nginx.org/en/download.html) 最新的主线发行版（1.13.4），因为 nginx 的主线分支包含了所有已知的补丁。之后解压文件到 `nginx-1.13.4` 目录下，然后运行 `nginx`。以下是 `C盘` 的根目录：
 
 ```bash
 cd c:\
@@ -25,13 +25,13 @@ nginx.exe           1332 Console                 0      3 112 K
 ```
 其中有一个是主进程（master），另一个是工作进程（worker）。如果 nginx 未能启动，请在错误日志 `logs\error.log` 中查找原因。如果日志文件尚未创建，可以在 Windows 事件日志中查找原因。如果显示的页面为错误页面，而不是预期结果，也可以在 `logs\error.log` 中查找原因。
 
-nginx/Windows 使用运行目录作为配置文件中的相对路径前缀。在上面的例子中，前缀是 `C:\nginx-1.13.4\`。在配置文件中的路径必须使类 Unix 风格的正斜杠：
+Nginx 的 Windows 版本使用运行目录作为配置文件中的相对路径前缀。在上面的例子中，前缀是 `C:\nginx-1.13.4\`。在配置文件中的路径必须使类 Unix 风格的正斜杠：
 
 ```nginx
 access_log   logs/site.log;
 root         C:/web/html;
 ```
-nginx/Windows 作为标准的控制台应用程序（而不是服务）运行，可以使用以下命令进行管理：
+Nginx 的 Windows 版本作为标准的控制台应用程序（而不是服务）运行，可以使用以下命令进行管理：
 
 - `nginx -s stop` 快速退出
 - `nginx -s quit` 正常退出

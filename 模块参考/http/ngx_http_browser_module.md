@@ -1,4 +1,4 @@
-# ngx_http_autoindex_module
+# ngx_http_browser_module
 
 - [示例配置](#example_configuration)
 - [指令](#directives)

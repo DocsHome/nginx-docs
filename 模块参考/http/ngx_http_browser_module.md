@@ -8,7 +8,7 @@
     - [modern_browser_value](#modern_browser_value)
 
 
-`ngx_http_browser_module` 模块创建值由 **User-Agent** 0请求头域决定的变量：
+`ngx_http_browser_module` 模块创建值由 **User-Agent** 请求头域决定的变量：
 
 - `$modern_browser`
 
@@ -84,8 +84,7 @@ if ($ancient_browser) {
 
 |\-|说明|
 |------:|------|
-|**语法**|**modern_browser** `browser version`; <br />
-**modern_browser** `unlisted`;|
+|**语法**|**modern_browser** `browser version`; <br /> **modern_browser** `unlisted`;|
 |**默认**|——|
 |**上下文**|http、server、location|
 

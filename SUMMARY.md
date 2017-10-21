@@ -40,7 +40,7 @@
   - [ngx_http_auth_jwt_module](模块参考/http/ngx_http_auth_jwt_module.md)
   - [ngx_http_auth_request_module](模块参考/http/ngx_http_auth_request_module.md)
   - [ngx_http_autoindex_module](模块参考/http/ngx_http_autoindex_module.md)
-  - ngx_http_browser_module
+  - [ngx_http_browser_module](模块参考/http/ngx_http_browser_module.md)
   - [ngx_http_charset_module](模块参考/http/ngx_http_charset_module.md)
   - ngx_http_dav_module
   - ngx_http_empty_gif_module

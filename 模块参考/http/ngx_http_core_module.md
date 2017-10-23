@@ -175,6 +175,192 @@ aio threads=pool$disk;
 
 如果启用 [aio](#aio)，则指定是否写入文件。目前，这仅在使用 aio 线程时有效，并且仅限于将从代理服务器接收的数据写入临时文件。
 
+### alias
+
+|\-|说明|
+|:------|:------|
+|**语法**|**alias** `path`;|
+|**默认**|——|
+|**上下文**|location|
+
+定义指定 location 的替换。例如，使用以下配置
+
+```nginx
+location /i/ {
+    alias /data/w3/images/;
+}
+```
+
+`/i/top.gif` 的请求，将发送 `/data/w3/images/top.gif` 文件。
+
+`path` 值可以包含变量，除 `$document_root` 和 `$realpath_root` 外。
+
+如果在使用正则表达式定义的 location 内使用了别名，那么这种正则表达式应该包含捕获，并且别名应该引用这些捕获（0.7.40），例如：
+
+```nginx
+location ~ ^/users/(.+\.(?:gif|jpe?g|png))$ {
+    alias /data/w3/images/$1;
+}
+```
+
+当 location 与指令值的最后一部分匹配时：
+
+```nginx
+location /images/ {
+    alias /data/w3/images/;
+}
+```
+
+更好的方式是使用 [root](#root) 指令：
+
+```nginx
+location /images/ {
+    root /data/w3;
+}
+```
+
+### chunked_transfer_encoding
+
+|\-|说明|
+|:------|:------|
+|**语法**|**chunked_transfer_encoding** `on` &#124; `off`;|
+|**默认**|chunked_transfer_encoding on;|
+|**上下文**|http、server、location|
+
+允许在 HTTP/1.1 中禁用分块传输编码。在使用的软件未能支持分块编码时它可能会派上用场。
+
+### client_body_buffer_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_body_buffer_size** `size`;|
+|**默认**|client_body_buffer_size 8k|16k;|
+|**上下文**|http、server、location|
+
+设置读取客户端请求体的缓冲区大小。如果请求体大于缓冲区，则整个体或仅将其部分写入[临时文件](#client_body_temp_path)。默认情况下，缓冲区大小等于两个内存页。在 x86、其他 32 位平台和 x86-64 上是 8K。在其他 64 位平台上通常为 16K。
+
+### client_body_in_file_only
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_body_in_file_only** `on` &#124; `clean` &#124; `off`;|
+|**默认**|client_body_in_file_only off;|
+|**上下文**|http、server、location|
+
+确定 nginx 是否应将整个客户端请求体保存到文件中。可以在调试期间或使用 `$request_body_file` 变量或模块 [ngx_http_perl_module](ngx_http_perl_module.md) 的 [$r->request_body_file](ngx_http_perl_module.md#methods) 方法时使用此指令。
+
+当设置为 `on` 值时，临时文件在请求处理后不会被删除。
+
+值 `clean` 会将请求处理后剩下的临时文件删除。
+
+### client_body_in_single_buffer
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_body_in_single_buffer** `on` &#124; `off`;|
+|**默认**|client_body_in_single_buffer off;|
+|**上下文**|http、server、location|
+
+确定 nginx 是否应将整个客户端请求体保存在单个缓冲区中。在使用 `$request_body` 变量时，建议使用该指令，用来保存涉及的复制操作次数。
+
+### client_body_temp_path
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_body_temp_path** `path [level1 [level2 [level3]]]`;|
+|**默认**|client_body_temp_path client_body_temp;|
+|**上下文**|http、server、location|
+
+定义用于存储持有客户端请求主体的临时文件的目录。最多可以在指定目录下使用三级子目录层次结构。例如以下配置
+
+```nginx
+client_body_temp_path /spool/nginx/client_temp 1 2;
+```
+
+临时文件的路径可以如下：
+
+```nginx
+/spool/nginx/client_temp/7/45/00000123457
+```
+
+### client_body_timeout
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_body_timeout** `time`;|
+|**默认**|client_body_timeout 60s;|
+|**上下文**|http、server、location|
+
+定义读取客户端请求正文的超时时间。超时设置仅是在两个连续读操作之间的时间间隔，而不是整个请求体的传输过程。如果客户端在此时间内没有发送任何内容，则会将 408（请求超时）错误返回给客户端。
+
+### client_header_buffer_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_header_buffer_size** `size`;|
+|**默认**|client_header_buffer_size 1k;|
+|**上下文**|http、server|
+
+设置读取客户端请求头的缓冲区大小。对于大多数请求，1K 字节的缓冲区就足够了。但是，如果请求中包含长 cookie，或者来自 WAP 客户端，则可能 1K 是不适用的。如果请求行或请求头域不适合此缓冲区，则会分配由 [large_client_header_buffers](#large_client_header_buffers) 指令配置的较大缓冲区。
+
+### client_header_timeout
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_header_timeout** `time`;|
+|**默认**|client_header_timeout 60s;|
+|**上下文**|http、server|
+
+定义读取客户端请求头的超时时间。如果客户端在这段时间内没有传输整个报头，则将 408（请求超时）错误返回给客户端。
+
+### client_max_body_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**client_header_timeout** `size`;|
+|**默认**|client_max_body_size 1m;|
+|**上下文**|http、server、location|
+
+在 **Content-Length** 请求头域中指定客户端请求体的最大允许大小。如果请求的大小超过配置值，则将 413 （请求实体过大）错误返回给客户端。请注意，浏览器无法正确显示此错误。将  `size` 设置为 0 将禁用检查客户端请求正文大小。
+
+### connection_pool_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**connection_pool_size** `size`;|
+|**默认**|connection_pool_size 256|512;|
+|**上下文**|http、server|
+
+允许精确调整每个连接的内存分配。该指令对性能影响最小，一般不建议使用。默认情况下，32 位平台上的大小为 256 字节，64 位平台上为 512 字节。
+
+> 在 1.9.8 版本之前，所有平台上的默认值都为 256。
+
+### default_type
+
+|\-|说明|
+|:------|:------|
+|**语法**|**default_type** `mime-type`;|
+|**默认**|default_type text/plain;|
+|**上下文**|http、server、location|
+
+定义响应的默认 MIME 类型。可以使用 [types](#types) 指令对 MIME 类型的文件扩展名进行映射。
+
+### directio
+
+|\-|说明|
+|:------|:------|
+|**语法**|**directio** `size` \| `off`;|
+|**默认**|directio off;|
+|**上下文**|http、server、location|
+
+开启当读取大于或等于指定大小的文件时，使用 `O_DIRECT` 标志（FreeBSD、Linux）、`F_NOCACHE` 标志（macOS）或 `directio()` 函数（Solaris）。该指令自动禁用（0.7.15）给定请求使用的 [sendfile](#sendfile)。它可以用于服务大文件：
+
+```nginx
+directio 4m;
+```
+
+或当 Linux 上使用 [aio](#aio) 时。
+
 **待续……**
 
 ## 原文档

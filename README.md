@@ -3,7 +3,7 @@
 
 ![Nginx logo](https://nginx.org/nginx.png)
 
-Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。由于部分章节涉及到 Nginx Plus 或者其他内容，将忽略这部分章节的内容。如果您发现内容存在错误或者不当之处，请提出 PR，期待您的加入。
+Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。因部分章节涉及到 Nginx Plus 或者其他内容，我将忽略该部分章节的内容。如果您发现内容存在错误或者不当之处，请提出 PR，期待您的加入。
 
 在线阅读：[Github](SUMMARY.md)
 

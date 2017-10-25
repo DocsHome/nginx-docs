@@ -359,7 +359,58 @@ client_body_temp_path /spool/nginx/client_temp 1 2;
 directio 4m;
 ```
 
-或当 Linux 上使用 [aio](#aio) 时。
+或当在 Linux 上使用 [aio](#aio) 时。
+
+### directio_alignment
+
+|\-|说明|
+|:------|:------|
+|**语法**|**directio_alignment** `size`;|
+|**默认**|directio_alignment 512;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 0.8.11 版本中出现|
+
+设置 [directio](#directio) 的对齐方式。在大多数情况下，512 字节的对齐就足够了。但是，在 Linux 下使用 XFS 时，需要增加到 4K。
+
+### disable_symlinks
+
+|\-|说明|
+|:------|:------|
+|**语法**|**disable_symlinks** `off`; <br/> **disable_symlinks on** \| `if_not_owner [from=part]`; |
+|**默认**|disable_symlinks off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.15 版本中出现|
+
+确定打开文件时应如何处理符号链接：
+
+- `off`
+
+    允许路径名中的符号链接的，不执行检查。这是默认行为。
+- `on`
+
+    如果路径名存在是符号链接的组件，则拒绝对文件的访问。
+
+- `if_not_owner`
+
+    如果路径名存在是符号链接的组件，并且链接指向的链接和对象为不同所有者，则拒绝访问文件。
+
+- `from=part`
+    
+    当检查符号链接（参数 `on` 和 `if_not_owner`）时，通常会检查路径名的所有组件。可以通过另外指定 `from=part` 参数来避免检查路径名的初始部分中的符号链接。在这种情况下，只能从指定的初始部分后面的路径名组件检查符号链接。如果该值不是检查的路径名的初始部分，则会检查整个路径名，相当于没有指定此参数。如果该值与整个文件名匹配，则不会检查符号链接。参数值可以包含变量。
+
+例如：
+
+```nginx
+disable_symlinks on from=$document_root;
+```
+
+此指令仅适用于具有 `openat()` 和 `fstatat()` 接口的系统。这样的系统包括现代版本的FreeBSD、Linux 和 Solaris。
+
+参数 `on` 和 `if_not_owner` 增加了处理开销。
+
+> 在不支持打开目录仅用于搜索的系统上，要使用这些参数，需要 worker 进程对所有正在检查的目录具有读取权限。
+
+> [ngx_http_autoindex_module](ngx_http_autoindex_module.md)、[ngx_http_random_index_module](ngx_http_random_index_module.md) 和 [ngx_http_dav_module](ngx_http_dav_module.md) 模块目前忽略此指令。
 
 **待续……**
 

@@ -412,6 +412,120 @@ disable_symlinks on from=$document_root;
 
 > [ngx_http_autoindex_module](ngx_http_autoindex_module.md)、[ngx_http_random_index_module](ngx_http_random_index_module.md) 和 [ngx_http_dav_module](ngx_http_dav_module.md) 模块目前忽略此指令。
 
+### error_page
+
+|\-|说明|
+|:------|:------|
+|**语法**|**error_page** `code ... [=[response]] uri`; |
+|**默认**|——|
+|**上下文**|http、server、location、location 中的 if|
+
+定义针对指定错误显示的 URI。`uri` 值可以包含变量。
+
+例如：
+
+```nginx
+error_page 404             /404.html;
+error_page 500 502 503 504 /50x.html;
+```
+
+这会导致客户端请求方法更改为 `GET`，内部重定向到指定的 `uri`（除 `GET` 和 `HEAD` 之外的所有方法）。
+
+此外，可以使用 `=response` 语法将修改响应代码，例如：
+
+```nginx
+error_page 404 =200 /empty.gif;
+```
+
+如果错误响应是由代理服务器或 FastCGI/uwsgi/SCGI 服务器处理，并且服务器可能返回不同的响应代码（例如，200、302、401 或 404），则可以使用其返回的代码进行响应：
+
+```nginx
+error_page 404 = /404.php;
+```
+
+如果在内部重定向时不需要更改 URI 和方法，则可以将错误处理传递给一个命名了的 location：
+
+```nginx
+location / {
+    error_page 404 = @fallback;
+}
+
+location @fallback {
+    proxy_pass http://backend;
+}
+```
+
+> 如果 `uri` 处理导致发生错误，最后发生错误的状态代码将返回给客户端。
+
+也可以使用 URL 重定向进行错误处理：
+
+```nginx
+error_page 403      http://example.com/forbidden.html;
+error_page 404 =301 http://example.com/notfound.html;
+```
+
+在这种情况下，默认将响应代码 302 返回给客户端。它只能是重定向状态代码其中之一（301、302、303、307 和 308）。
+
+> 在 1.1.16 和 1.0.13 版本之前，代码 307 没有被视为重定向。
+
+> 直到 1.13.0 版本，代码 308 才被视为重定向。
+
+当且仅当没有在当前级别上定义 error_page 指令时，指令才从上一级继承这些特性。
+
+### etag
+
+|\-|说明|
+|:------|:------|
+|**语法**|**etag** `on` \| `off`; |
+|**默认**|etag on;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.3.3 版本中出现|
+
+启用或禁用自动生成静态资源 **ETag** 响应头字段。
+
+### http
+
+|\-|说明|
+|:------|:------|
+|**语法**|**http** `{ ... }`; |
+|**默认**|——|
+|**上下文**|main|
+
+提供指定 HTTP server 指令的配置文件上下文。
+
+### if_modified_since
+
+|\-|说明|
+|:------|:------|
+|**语法**|**if_modified_since** `off` \| `exact` \| `before`; |
+|**默认**|if_modified_since exact;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 0.7.24 版本中出现|
+
+指定如何将响应的修改时间与 **If-Modified-Since** 请求头字段中的时间进行比较：
+
+- `off`
+
+    忽略 **If-Modified-Since** 请求头字段（0.7.34）
+- `exact`
+    
+    完全匹配
+- `before`
+
+    响应的修改时间小于或等于 **If-Modified-Since** 请求头字段中的时间
+
+### ignore_invalid_headers
+
+|\-|说明|
+|:------|:------|
+|**语法**|**ignore_invalid_headers** `on` \| `off`; |
+|**默认**|ignore_invalid_headers on;|
+|**上下文**|http、server|
+
+控制是否应忽略具有无效名称的头字段。有效名称由英文字母、数字、连字符或下划线组成（由 [underscores_in_headers](#underscores_in_headers) 指令控制）。
+
+如果在 [server](#server) 级别指定了该指令，则其值仅在 server 为默认 server 时使用。指定的值也适用于监听相同地址和端口的所有虚拟服务器。
+
 **待续……**
 
 ## 原文档

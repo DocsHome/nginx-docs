@@ -526,6 +526,97 @@ error_page 404 =301 http://example.com/notfound.html;
 
 如果在 [server](#server) 级别指定了该指令，则其值仅在 server 为默认 server 时使用。指定的值也适用于监听相同地址和端口的所有虚拟服务器。
 
+### internal
+
+|\-|说明|
+|:------|:------|
+|**语法**|**internal**; |
+|**默认**|——|
+|**上下文**|location|
+
+指定给定的 location 只能用于内部请求。对于外部请求，返回客户端错误 404（未找到）。内部请求如下：
+
+- 请求由 [error_page](#error_page)、[index](#index)、[random_index](#random_index) 和 [try_files](#try_files) 指令重定向
+- 来 upstream server 的 **X-Accel-Redirect** 响应头字段重定向的请求
+- 由 [ngx_http_ssi_module](ngx_http_ssi_module.md) 模块的 `include virtual` 命令、[ngx_http_addition_module](ngx_http_addition_module.md) 模块指令和 [auth_request](ngx_http_auth_request_module.md#auth_request) 和 [mirror](ngx_http_mirror_module.md#mirror) 指令组成的子请求
+- 由 [rewrite](ngx_http_rewrite_module.md#rewrite) 指令更改的请求
+
+示例：
+
+```nginx
+error_page 404 /404.html;
+
+location /404.html {
+    internal;
+}
+```
+
+> 每个请求限制 10 个内部重定向，以防止不正确配置引发的请求处理死循环。如果达到此限制，则返回错误 500（内部服务器错误）。在这种情况下，可以在错误日志中看到 `rewrite or internal redirection cycle` 消息。
+
+### keepalive_disable
+
+|\-|说明|
+|:------|:------|
+|**语法**|**keepalive_disable** `none` \| `browser ...`; |
+|**默认**|keepalive_disable msie6;|
+|**上下文**|http、server、location|
+
+禁用与行为异常的浏览器保持连接。`browser` 参数指定哪些浏览器将受到影响。一旦接收到 POST 请求，值 `msie6` 将禁用与旧版本 MSIE 保持连接。值 `safari` 禁用与 macOS 和类似 MacOS 的操作系统上的 Safari 和 Safari 浏览器保持连接。值 `none` 启用与所有浏览器保持连接。
+
+> 在 1.1.18 版本之前，值 `safari` 匹配所有操作系统上的所有 Safari 和类 Safari 浏览器，并且默认情况下，禁用与它们保持连接。
+
+### keepalive_requests
+
+|\-|说明|
+|:------|:------|
+|**语法**|**keepalive_requests** `number`; |
+|**默认**|keepalive_requests 100;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 0.8.0 版本中出现|
+
+设置通过一个保持活动（keep-alive）连接可以提供的最大请求数。在发出的请求达到最大数量后，连接将被关闭。
+
+### keepalive_timeout 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**keepalive_timeout** `timeout` `[header_timeout]`; |
+|**默认**|keepalive_timeout 75s;|
+|**上下文**|http、server、location|
+
+第一个参数设置一个超时时间，keep-alive 客户端连接将在服务端保持打开状态。零值将禁用  keep-alive 客户端连接。可选的第二个参数在 **Keep-Alive: timeout=`time`** 响应头域中设置一个值。两个参数可能不同。
+
+Mozilla 和 Konqueror 会识别 **Keep-Alive: timeout=`time` 头字段。MSIE 在大约在 60 秒钟内自行关闭 keep-alive 连接。
+
+### large_client_header_buffers 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**large_client_header_buffers** `number size`; |
+|**默认**|arge_client_header_buffers 4 8k;|
+|**上下文**|http、server|
+
+设置用于读取大客户端请求头的缓冲区的最大 `number`（数量）和 `size`（大小）。请求行不能超过一个缓冲区的大小，否则将返回 414（请求 URI 太长）错误给客户端。请求头字段也不能超过一个缓冲区的大小，否则将返回 400（错误请求）错误给客户端。缓冲区只能按需分配。默认情况下，缓冲区大小等于 8K 字节。如果在请求处理结束之后，连接被转换为 keep-alive 状态，这些缓冲区将被释放。
+
+### limit_except 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**limit_except** `method ... { ... }`; |
+|**默认**|——|
+|**上下文**|location|
+
+限制给定的 location 内允许的 HTTP 方法。`method` 参数可以是以下之一：`GET`、`HEAD`、`POST`、`PUT`、`DELETE`、`MKCOL`、`COPY`、`MOVE`、`OPTIONS`、`PROPFIND`、`PROPPATCH`、`LOCK`、`UNLOCK` 或 `PATCH`。允许 `GET` 方法也将使得 `HEAD`方法被允许。可以使用 [ngx_http_access_module](ngx_http_access_module.md) 和 [ngx_http_auth_basic_module](ngx_http_auth_basic_module.md) 模块指令来限制对其他方法的访问：
+
+```nginx
+limit_except GET {
+    allow 192.168.1.0/32;
+    deny  all;
+}
+```
+
+请注意，这将限制访问除 `GET` 和 `HEAD` 之外的所有方法。
+
 **待续……**
 
 ## 原文档

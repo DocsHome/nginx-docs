@@ -617,6 +617,86 @@ limit_except GET {
 
 请注意，这将限制访问除 `GET` 和 `HEAD` 之外的所有方法。
 
+### limit_rate 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**limit_rate** `rate`; |
+|**默认**|limit_rate 0;|
+|**上下文**|http、server、location、location 中的 if|
+
+限制客户端的响应传输速率。`rate` 以字节/秒为单位。零值将禁用速率限制。限制设置是针对每个请求，因此如果客户端同时打开两个连接，则整体速率将是指定限制的两倍。
+
+也可以在 `$limit_rate` 变量中设置速率限制。根据某些条件来限制速率可能会有用：
+
+```nginx
+server {
+
+    if ($slow) {
+        set $limit_rate 4k;
+    }
+
+    ...
+}
+```
+
+也可以在代理服务器响应的 **X-Accel-Limit-Rate** 头字段中设置速率限制。可以使用 [proxy_ignore_headers](ngx_http_proxy_module.md#proxy_ignore_headers)、[fastcgi_ignore_headers](ngx_http_fastcgi_module.md#fastcgi_ignore_headers)、[uwsgi_ignore_headers](ngx_http_uwsgi_module.md#uwsgi_ignore_headers) 和 [scgi_ignore_headers](ngx_http_scgi_module.md#scgi_ignore_headers) 指令禁用此功能。
+
+### lingering_time 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**lingering_time** `time`; |
+|**默认**|lingering_time 30s;|
+|**上下文**|http、server、location|
+
+当 [lingering_close](ngx_http_core_module.md#lingering_close) 生效时，该指令指定 nginx 处理（读取和忽略）来自客户端的额外数据的最长时间。之后，连接将被关闭，即使还有更多的数据。
+
+### lingering_timeout 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**lingering_timeout** `time`; |
+|**默认**|lingering_timeout 5s;|
+|**上下文**|http、server、location|
+
+当 [lingering_close](ngx_http_core_module.md#lingering_close) 生效时，该指令指定更多的客户端数据到达的最长等待时间。如果在此期间未收到数据，则关闭连接。否则，读取和忽略数据，nginx 再次开始等待更多的数据。**wait-read-ignore** 循环被重复，但不再由 [lingering_time](#lingering_time) 指令指定。
+
+### listen 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**listen** `address[:port] [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `port [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `unix:path [default_server] [ssl] [http2 | spdy] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];`; |
+|**默认**|listen *:80 \| *:8000;|
+|**上下文**|server|
+
+设置 IP 的 `address` （地址）和 `port` （端口），或服务器接受请求的 UNIX 域套接字的 `path` （路径）。可以同时指定 `addres` （地址）和 `port` （端口），也可以只指定 `address` （地址）或 `port` （端口）。`address` 也可以是主机名，例如：
+
+```nginx
+listen 127.0.0.1:8000;
+listen 127.0.0.1;
+listen 8000;
+listen *:8000;
+listen localhost:8000;
+```
+IPv6 地址（0.7.36）在方括号中指定：
+
+```nginx
+listen [::]:8000;
+listen [::1];
+```
+UNIX 域套接字（0.8.21）用 `unix:` 前缀指定：
+
+```nginx
+listen unix:/var/run/nginx.sock;
+```
+
+如果只指定 `address`，则使用 80 端口。
+
+如果指令不存在，那么如果 nginx 是以超级用户权限运行，则使用 `*:80`，否则使用 `*:8000`。
+
+`default_server` 参数（如果存在）将使得服务器成为指定 `address:port` 对的默认服务器。如果没有指令有 `default_server` 参数，那么具有 `address:port` 对的第一个服务器将是该对的默认服务器。
+
 **待续……**
 
 ## 原文档

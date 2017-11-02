@@ -666,7 +666,7 @@ server {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**listen** `address[:port] [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `port [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `unix:path [default_server] [ssl] [http2 | spdy] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; |
+|**语法**|**listen** `address[:port] [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; **listen** `port [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; **listen** `unix:path [default_server] [ssl] [http2 | spdy] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; |
 |**默认**|listen *:80 \| *:8000;|
 |**上下文**|server|
 
@@ -716,7 +716,7 @@ listen unix:/var/run/nginx.sock;
     此参数（0.8.44）设置相关联的路由表，监听套接字的 FIB（`SO_SETFIB` 选项）。目前只适用于 FreeBSD。
 - `fastopen=number`
 
-    为侦听套接字启用 **[TCO Fast Open](http://en.wikipedia.org/wiki/TCP_Fast_Open)** （1.5.8），并限制尚未完成三次握手的连接队列的最大长度。
+    为侦听套接字启用 **[TCP Fast Open](http://en.wikipedia.org/wiki/TCP_Fast_Open)** （1.5.8），并限制尚未完成三次握手的连接队列的最大长度。
 
     > 不要启用此功能，除非服务器可以一次处理接收多个[相同的 SYN 包的数据](https://tools.ietf.org/html/rfc7413#section-6.1)。
 - `backlog=number`

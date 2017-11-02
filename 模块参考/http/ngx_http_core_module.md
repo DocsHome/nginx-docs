@@ -666,7 +666,7 @@ server {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**listen** `address[:port] [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `port [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `unix:path [default_server] [ssl] [http2 | spdy] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]];`; |
+|**语法**|**listen** `address[:port] [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `port [default_server] [ssl] [http2 | spdy] [proxy_protocol] [setfib=number] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; <br /> **listen** `unix:path [default_server] [ssl] [http2 | spdy] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] [deferred] [bind] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`; |
 |**默认**|listen *:80 \| *:8000;|
 |**上下文**|server|
 
@@ -696,6 +696,72 @@ listen unix:/var/run/nginx.sock;
 如果指令不存在，那么如果 nginx 是以超级用户权限运行，则使用 `*:80`，否则使用 `*:8000`。
 
 `default_server` 参数（如果存在）将使得服务器成为指定 `address:port` 对的默认服务器。如果没有指令有 `default_server` 参数，那么具有 `address:port` 对的第一个服务器将是该对的默认服务器。
+
+> 在 0.8.21 之前的版本中，此参数简单地命名为 `default`。
+
+`ssl` 参数（0.7.14）允许指定该端口上接受的所有连接都应该工作在 SSL 模式。这样可以为处理 HTTP 和 HTTPS 请求的服务器提供更紧凑的[配置](介绍/配置HTTPS服务器.md#single_http_https_server)。
+
+`http2` 参数（1.9.5）配置端口接受 [HTTP/2](ngx_http_v2_module.md) 连接。通常，为了能够工作，还应该指定 `ssl` 参数，但也可以将 nginx 配置为接受没有 SSL 的 HTTP/2 连接。
+
+`spdy` 参数（1.3.15 — 1.9.4）允许在此端口上接受 [SPDY](ngx_http_spdy_module.md) 连接。通常，为了能够工作，还应该指定 `ssl` 参数，但也可以将 nginx 配置为接受没有 SSL 的 SPDY 连接。
+
+`proxy_protocol` 参数（1.5.12）允许指定此端口上接受的所有连接都应使用 [PROXY 协议](http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt)。
+
+`listen` 指令可以有特定于套接字相关系统调用的几个附加参数。这些参数可以在任何 `listen` 指令中指定，但对于给定的 `address:port` 只能使用一次。
+
+> 在 0.8.21 之前的版本中，它们只能在 `listen` 指令中与默认参数一起指定。
+
+- `setfib=number`
+
+    此参数（0.8.44）设置相关联的路由表，监听套接字的 FIB（`SO_SETFIB` 选项）。目前只适用于 FreeBSD。
+- `fastopen=number`
+
+    为侦听套接字启用 **[TCO Fast Open](http://en.wikipedia.org/wiki/TCP_Fast_Open)** （1.5.8），并限制尚未完成三次握手的连接队列的最大长度。
+
+    > 不要启用此功能，除非服务器可以一次处理接收多个[相同的 SYN 包的数据](https://tools.ietf.org/html/rfc7413#section-6.1)。
+- `backlog=number`
+
+    在 `listen()` 调用中设置限制挂起连接队列的最大长度的`backlog` 参数。默认情况下，FreeBSD、DragonFly BSD 和 macOS 上的 `backlog` 设置为 -1，在其他平台上设置为 511。
+- `rcvbuf=size`
+
+    设置侦听套接字的接收缓冲区大小（`SO_RCVBUF` 选项）。
+- `sndbuf=size`
+
+    设置侦听套接字的发送缓冲区大小（`SO_SNDBUF` 选项）。
+- `accept_filter=filter`
+
+    为侦听套接字设置接受过滤器（`SO_ACCEPTFILTER` 选项）的名称，该套接字将传入的连接在传递给 `accept()` 之前进行过滤。这只适用于 FreeBSD 和 NetBSD 5.0+。可设置值[dataready](http://man.freebsd.org/accf_data) 或 [httpready](http://man.freebsd.org/accf_http)。
+- `deferred`
+    
+    指示在 Linux 上使用延迟 `accept()`（`TCP_DEFER_ACCEPT` 套接字选项）。
+- `bind`
+
+    指示为给定的 `address:port` 对单独进行 `bind()` 调用。这是有用的，因为如果有多个有相同端口但不同地址的 `listen` 指令，并且其中一个 `listen` 指令监听给定端口（`*:port`）的所有地址，则 nginx 将 `bind()` 应用到`*:port`。应该注意的是，在这种情况下将会进行 `getsockname()` 系统调用，以确定接受该连接的地址。如果使用 `setfib`、`backlog`、`rcvbuf`、`sndbuf`、`accept_filter`、`deferred`、`ipv6only` 或 `so_keepalive` 参数，那么对于给定的 `address:port` 对将始终进行单独的 `bind()` 调用。
+- `ipv6only=ON|OFF`
+    
+    此参数（0.7.42）确定（通过 `IPV6_V6ONLY` 套接字选项）一个监听通配符地址 `[::]` 的 IPv6 套接字是否仅接受 IPv6 连接或 IPv6 和 IPv4 连接。此参数默认为开启。它只能在启动时设置一次。
+
+    > 在 1.3.4 版本之前，如果省略该参数，则操作系统的设置将对于套接字产生影响。
+- `reuseport`
+
+    此参数（1.9.1）指示为每个工作进程创建一个单独的监听套接字（使用 `SO_REUSEPORT` 套接字选项），允许内核在工作进程之间分配传入的连接。目前只适用于 Linux 3.9+ 和 DragonFly BSD。
+
+    > 不当地使用此选项可能会带来安全[隐患](http://man7.org/linux/man-pages/man7/socket.7.html)。
+- `SO_KEEPALIVE=ON|OFF|[keepidle]:[keepintvl]:[keepcnt]`
+
+    此参数（1.1.11）配置监听套接字的 **TCP keepalive”** 行为。如果省略此参数，则操作系统的设置将对套接字产生影响。如果设置为 `on`，则套接字将打开 `SO_KEEPALIVE` 选项。如果设置为 `off`，则 `SO_KEEPALIVE` 选项将被关闭。一些操作系统支持在每个套接字上使用 `TCP_KEEPIDLE`、`TCP_KEEPINTVL` 和 `TCP_KEEPCNT` 套接字选项来设置 TCP keepalive 参数。在这样的系统上（目前为 Linux 2.4+、NetBSD 5+ 和 FreeBSD 9.0-STABLE），可以使用 `keepidle`、`keepintvl`和 `keepcnt` 参数进行配置。可以省略一个或两个参数，在这种情况下，相应套接字选项的系统默认设置将生效。例如，
+
+    ```nginx
+    SO_KEEPALIVE=30m::10
+    ```
+
+    将空闲超时（`TCP_KEEPIDLE`）设置为 30 分钟，将探测间隔（`TCP_KEEPINTVL`）设置为系统默认值，并将探测数量（`TCP_KEEPCNT`）设置为 10 个探测。
+
+示例：
+
+```nginx
+listen 127.0.0.1 default_server accept_filter=dataready backlog=1024;
+```
 
 **待续……**
 

@@ -1,3 +1,4 @@
+- [贡献导引](CONTRIBUTING.md)
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
   - [初学者指南](介绍/初学者指南.md)

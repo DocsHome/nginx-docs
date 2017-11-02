@@ -749,7 +749,7 @@ listen unix:/var/run/nginx.sock;
     > 不当地使用此选项可能会带来安全[隐患](http://man7.org/linux/man-pages/man7/socket.7.html)。
 - `SO_KEEPALIVE=ON|OFF|[keepidle]:[keepintvl]:[keepcnt]`
 
-    此参数（1.1.11）配置监听套接字的 **TCP keepalive”** 行为。如果省略此参数，则操作系统的设置将对套接字产生影响。如果设置为 `on`，则套接字将打开 `SO_KEEPALIVE` 选项。如果设置为 `off`，则 `SO_KEEPALIVE` 选项将被关闭。一些操作系统支持在每个套接字上使用 `TCP_KEEPIDLE`、`TCP_KEEPINTVL` 和 `TCP_KEEPCNT` 套接字选项来设置 TCP keepalive 参数。在这样的系统上（目前为 Linux 2.4+、NetBSD 5+ 和 FreeBSD 9.0-STABLE），可以使用 `keepidle`、`keepintvl`和 `keepcnt` 参数进行配置。可以省略一个或两个参数，在这种情况下，相应套接字选项的系统默认设置将生效。例如，
+    此参数（1.1.11）配置监听套接字的 **TCP keepalive** 行为。如果省略此参数，则操作系统的设置将对套接字产生影响。如果设置为 `on`，则套接字将打开 `SO_KEEPALIVE` 选项。如果设置为 `off`，则 `SO_KEEPALIVE` 选项将被关闭。一些操作系统支持在每个套接字上使用 `TCP_KEEPIDLE`、`TCP_KEEPINTVL` 和 `TCP_KEEPCNT` 套接字选项来设置 TCP keepalive 参数。在这样的系统上（目前为 Linux 2.4+、NetBSD 5+ 和 FreeBSD 9.0-STABLE），可以使用 `keepidle`、`keepintvl`和 `keepcnt` 参数进行配置。可以省略一个或两个参数，在这种情况下，相应套接字选项的系统默认设置将生效。例如，
 
     ```nginx
     SO_KEEPALIVE=30m::10

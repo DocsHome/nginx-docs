@@ -762,8 +762,73 @@ listen unix:/var/run/nginx.sock;
 ```nginx
 listen 127.0.0.1 default_server accept_filter=dataready backlog=1024;
 ```
+### location
+
+|\-|说明|
+|:------|:------|
+|**语法**|**location** `[ = \| ~ \| ~* \| ^~ ] uri { ... }`; <br /> **location** `@name { ... }; |
+|**默认**|——|
+|**上下文**|server、location|
+
+根据请求 URI 设置配置。
+
+在解码以 `％XX` 形式编码的文本，解析对相对路径组件 `.` 和`..` 的引用并且将两个或更多个相邻斜线[压缩](#merge_slashes)成单斜线之后，对规范化的 URI 执行匹配。
+
+location 可以由前缀字符串定义，也可以由正则表达式定义。正则表达式前面使用`~*`修正符（用于不区分大小写的匹配）或 `~` 修正符（用于区分大小写的匹配）指定。要查找匹配给定请求的 location，nginx 首先检查使用前缀字符串（前缀 location）定义的 location。期间，前缀最长的 location 被匹配选中并记住。然后按照它们在配置文件中出现的顺序检查正则表达式。正则表达式的搜索将在第一次匹配时终止，并使用相应的配置。如果找不到正则表达式的匹配，则使用先前记住的前缀 location 的配置。
+
+location 块可以嵌套，除了下面提到的一些例外。
+
+对于不区分大小写的操作系统，如 macOS 和 Cygwin，与前缀字符串匹配忽略大小写（0.7.7）。但是，比较仅限于一个字节的区域设置。
+
+正则表达式可以包含捕获（0.7.40），之后可以在其他指令中使用。
+
+如果最长匹配的前缀 location 具有 `^~` 修正符，则不检查正则表达式。
+
+另外，使用 `=` 修正符可以使 URI 和 location 的匹配精确。如果找到完全匹配，则搜索结束。例如，如果 `/` 请求频繁，那么定义 `location=/` 会加快这些请求的处理速度，因为搜索在第一次比较之后会立即终止。这样的 location 不能包含嵌套 location。
+
+> 从 0.7.1 到 0.8.41 版本，如果请求与没有 `=` 和 `^~` 修正符的前缀 location 匹配，则搜索也会终止，并且不再检查正则表达式。
+
+下面举一个例子来说明：
+
+```nginx
+location = / {
+    [ configuration A ]
+}
+
+location / {
+    [ configuration B ]
+}
+
+location /documents/ {
+    [ configuration C ]
+}
+
+location ^~ /images/ {
+    [ configuration D ]
+}
+
+location ~* \.(gif|jpg|jpeg)$ {
+    [ configuration E ]
+}
+```
+
+`/` 请求将与配置 A 匹配，`/index.html` 请求将匹配配置 B，`/documents/document.html` 请求将匹配配置 C，`/images/1.gif` 请求将匹配配置 D，`/documents/1.jpg` 请求将匹配配置 E。
+
+`@` 前缀定义了一个命名 location。这样的 location 不用于常规的请求处理，而是用于请求重定向。它们不能嵌套，也不能包含嵌套的 location。
+
+如果某个 location 由以斜杠字符结尾的前缀字符串定义，并且请求由 [proxy_pass](ngx_http_proxy_module.md#proxy_pass)、[fastcgi_pass](ngx_http_fastcgi_module.md#fastcgi_pass)、[uwsgi_pass](ngx_http_uwsgi_module.md#uwsgi_pass)、[scgi_pass](ngx_http_scgi_module.md#scgi_pass) 或 [memcached_pa​​ss](ngx_http_memcached_module.md#memcached_pass) 中的一个进行处理，则会执行特殊处理。为了响应 URI 为该字符串的请求，但没有以斜杠结尾，带有 301 代码的永久重定向将返回所请求的 URI，并附上斜线。如果不需要，可以像以下这样定义 URI 和 location 的精确匹配：
+
+```nginx
+location /user/ {
+    proxy_pass http://user.example.com;
+}
+
+location = /user {
+    proxy_pass http://login.example.com;
+}
+```
 
 **待续……**
-
+  
 ## 原文档
 [http://nginx.org/en/docs/http/ngx_http_core_module.html](http://nginx.org/en/docs/http/ngx_http_core_module.html)

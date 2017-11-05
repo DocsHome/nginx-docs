@@ -828,6 +828,61 @@ location = /user {
 }
 ```
 
+### log_not_found
+
+|\-|说明|
+|:------|:------|
+|**语法**|**log_not_found** `on \| off`; |
+|**默认**|log_not_found on;|
+|**上下文**|http、server、location|
+
+启用或禁用将文件未找到错误记录到 [error_log](#error_log) 中。
+
+### log_subrequest
+
+|\-|说明|
+|:------|:------|
+|**语法**|**log_subrequest** `on \| off`; |
+|**默认**|log_subrequest off;|
+|**上下文**|http、server、location|
+
+启用或禁用将子请求记录到 [access_log](ngx_http_log_module.md#access_log) 中。
+
+### max_ranges
+
+|\-|说明|
+|:------|:------|
+|**语法**|**merge_slashes** `number`; |
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.2 版本中出现|
+
+限制 byte-range 请求中允许的最大范围数。如果没有指定字节范围，则处理超出限制的请求。 默认情况下，范围的数量不受限制。零值将完全禁用 byte-range 支持。
+
+### merge_slashes
+
+|\-|说明|
+|:------|:------|
+|**语法**|**merge_slashes** `on | off`; |
+|**默认**|merge_slashes on;|
+|**上下文**|http、server|
+
+启用或禁用将 URI 中两个或多个相邻斜线压缩为单斜线。
+
+请注意，压缩对于正确匹配前缀字符串和正则表达式的 location 非常重要。没有它，将不匹配 `//scripts/one.php` 请求：
+
+```nginx
+location /scripts/ {
+    ...
+}
+```
+
+并可能被作为一个静态文件处理。因此它需要被转换成 `/scripts/one.php`。
+
+因为 base64 在内部使用 `/` 字符，所以如果 URI 包含 base64 编码的名称，则可能需要关闭压缩。但是，出于安全考虑，最好不要关闭压缩。
+
+如果该指令是在 [server](#server) 级别指定的，则仅在 server 是默认 server 时才使用该指令。指定的值也适用于监听相同地址和端口的所有虚拟服务器。
+
 **待续……**
   
 ## 原文档

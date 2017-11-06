@@ -883,6 +883,117 @@ location /scripts/ {
 
 如果该指令是在 [server](#server) 级别指定的，则仅在 server 是默认 server 时才使用该指令。指定的值也适用于监听相同地址和端口的所有虚拟服务器。
 
+### msie_padding
+
+|\-|说明|
+|:------|:------|
+|**语法**|**msie_padding** `on | off`; |
+|**默认**|msie_padding on;|
+|**上下文**|http、server、location|
+
+启用或禁用向状态超过 400 的 MSIE 客户端响应添加注释以将响应大小增加到 512 字节。
+
+### msie_refresh
+
+|\-|说明|
+|:------|:------|
+|**语法**|**msie_refresh** `on | off`; |
+|**默认**|msie_refresh off;|
+|**上下文**|http、server、location|
+
+启用或禁用发布刷新替代 MSIE 客户端重定向。
+
+### open_file_cache
+
+|\-|说明|
+|:------|:------|
+|**语法**|**open_file_cache** `off`; <br /> **open_file_cache** `max=N [inactive=time]`;|
+|**默认**|open_file_cache off;|
+|**上下文**|http、server、location|
+
+配置一个缓存，可以存储：
+
+- 打开文件描述符、大小和修改时间
+- 有关目录是否存在信息
+- 文件查找错误，如**找不到文件**、**没有读取权限**等
+
+> 应该通过 [open_file_cache_errors](#open_file_cache_errors) 指令分别启用缓存错误。
+
+该指令有以下参数：
+
+- `max`
+
+    设置缓存中元素的最大数量。在缓存溢出时，最近最少使用的（LRU）元素将被移除
+- `inactive`
+
+    定义一个时间，在这个时间之后，元素在缓存中将被删除，默认是 60 秒
+- `off`
+    
+    禁用缓存
+
+示例：
+
+```nginx
+open_file_cache          max=1000 inactive=20s;
+open_file_cache_valid    30s;
+open_file_cache_min_uses 2;
+open_file_cache_errors   on;
+```
+
+### open_file_cache_errors
+
+|\-|说明|
+|:------|:------|
+|**语法**|**open_file_cache_errors** `off` \| `on`;|
+|**默认**|open_file_cache_errors off;|
+|**上下文**|http、server、location|
+
+通过 [open_file_cache](#open_file_cache) 启用或禁用文件查找错误缓存。
+
+### open_file_cache_min_uses
+
+|\-|说明|
+|:------|:------|
+|**语法**|**open_file_cache_min_uses** `number`;|
+|**默认**|open_file_cache_min_uses 1;|
+|**上下文**|http、server、location|
+
+设置由 [open_file_cache](#open_file_cache) 指令的 `inactive` 参数配置的时间段内文件访问的最小 `number` （次数），这是文件描述符在缓存中保持打开状态所必需的。
+
+### open_file_cache_valid
+
+|\-|说明|
+|:------|:------|
+|**语法**|**open_file_cache_valid** `time`;|
+|**默认**|open_file_cache_valid 60s;|
+|**上下文**|http、server、location|
+
+设置 [open_file_cache](#open_file_cache) 元素应该验证的时间。
+
+### output_buffers
+
+|\-|说明|
+|:------|:------|
+|**语法**|**output_buffers** `number size`;|
+|**默认**|output_buffers 2 32k;|
+|**上下文**|http、server、location|
+
+设置从磁盘读取响应缓冲区的 `number` （数量）和 `size` （大小）。
+
+> 在 1.9.5 版本之前，默认值是 `1 32k`。
+
+### port_in_redirect
+
+|\-|说明|
+|:------|:------|
+|**语法**|**port_in_redirect** `on` \| `off`;|
+|**默认**|port_in_redirect on;|
+|**上下文**|http、server、location|
+
+启用或禁用指定由 nginx 发出的[绝对](#absolute_redirect)重定向中的端口。
+
+> 在重定向中使用的主服务器名称由 [server_name_in_redirect](#server_name_in_redirect) 指令控制。
+
 **待续……**
   
 ## 原文档

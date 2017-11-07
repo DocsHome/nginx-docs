@@ -994,6 +994,62 @@ open_file_cache_errors   on;
 
 > 在重定向中使用的主服务器名称由 [server_name_in_redirect](#server_name_in_redirect) 指令控制。
 
+### postpone_output
+
+|\-|说明|
+|:------|:------|
+|**语法**|**postpone_output** `size`;|
+|**默认**|postpone_output 1460;|
+|**上下文**|http、server、location|
+
+如果指定的话，客户端数据的传输将被推迟，直到 nginx 至少有 `size` 字节的数据要发送。零值将禁止延迟数据传输。
+
+### read_ahead
+
+|\-|说明|
+|:------|:------|
+|**语法**|**read_ahead** `sizef`;|
+|**默认**|read_ahead 0;|
+|**上下文**|http、server、location|
+
+设置使用文件时内核的预读数量。
+
+在 Linux 上，使用 `posix_fadvise`（`0, 0, 0, POSIX_FADV_SEQUENTIAL`）系统调用，因此 `size` 参数将被忽略。
+
+在 FreeBSD 上，使用自 FreeBSD 9.0-CURRENT 后支持的 `fcntl`（`O_READAHEAD, size`）系统调用。FreeBSD 7 需要[打补丁](http://sysoev.ru/freebsd/patch.readahead.txt)。
+
+### recursive_error_pages
+
+|\-|说明|
+|:------|:------|
+|**语法**|**recursive_error_pages** `on` \| `off`;|
+|**默认**|reset_timedout_connection off;|
+|**上下文**|http、server、location|
+
+启用或禁用使用 [error_page](#error_page) 指令执行多个重定向。这种重定向的数量是[有限](#internal)的。
+
+### request_pool_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**request_pool_size** `size`;|
+|**默认**|request_pool_size 4k;|
+|**上下文**|http、server|
+
+允许精确调整每个请求的内存分配。该指令对性能影响最小，一般不应该使用。
+
+### reset_timedout_connection
+
+|\-|说明|
+|:------|:------|
+|**语法**|**reset_timedout_connection** `on` \| `off`;|
+|**默认**|reset_timedout_connection off;|
+|**上下文**|http、server、location|
+
+启用或禁用重置超时连接。重置过程如下。在关闭一个套接字之前，`SO_LINGER` 选项超时值被设置为 0。当套接字关闭时，TCP RST 被发送到客户端，并且释放该套接字占用的所有内存。这有助于避免长时间持有一个缓冲区已经被填充 FIN_WAIT1 状态的已关闭套接字。
+
+应该注意，超时的 keep-alive 连接被正常关闭。
+
 **待续……**
   
 ## 原文档

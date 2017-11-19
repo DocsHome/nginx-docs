@@ -1050,6 +1050,108 @@ open_file_cache_errors   on;
 
 应该注意，超时的 keep-alive 连接被正常关闭。
 
+### resolver
+
+|\-|说明|
+|:------|:------|
+|**语法**|**resolver** `address ... [valid=time] [ipv6=on|off]`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+将用于解析 upstream 服务器名称的名称服务器配置进指定的地址，例如：
+
+```nginx
+resolver 127.0.0.1 [:: 1]:5353;
+```
+
+地址可以指定为域名或 IP 地址，也可以指定一个可选的端口（1.3.1，1.2.2）。如果没有指定端口，则使用端口 53。名称服务器以轮询方式查询。
+
+> 在 1.1.7 版本之前，只能配置一个名称服务器。从 1.3.1 和 1.2.2 版本开始，支持使用 IPv6 地址来指定名称服务器。
+
+默认情况下，nginx 将在解析时查找 IPv4 和 IPv6 地址。如果不想查找 IPv6 地址，则可以指定 `ipv6=off` 参数。
+
+> 从 1.5.8 版本开始，支持将名称解析为 IPv6 地址。
+
+默认情况下，nginx 使用响应的 TTL 值缓存回复。可选的 `valid` 参数可以覆盖它：
+
+```nginx
+resolver 127.0.0.1 [:: 1]:5353 valid=30s;
+```
+
+> 在 1.1.9 版本之前，缓存时间是不能调整的，nginx 总是缓存 5 分钟的回复。
+
+> 为了防止 DNS 欺骗，建议在安全的可信任本地网络中配置 DNS 服务器。
+
+### satisfy
+
+|\-|说明|
+|:------|:------|
+|**语法**|**satisfy** `all` \| `any`;|
+|**默认**|satisfy all;|
+|**上下文**|http、server、location|
+
+如果所有（全部）或至少一个（任意一个） [ngx_http_access_module](ngx_http_access_module.md)、[ngx_http_auth_basic_module](ngx_http_auth_basic_module.md)、[ngx_http_auth_request_module](ngx_http_auth_request_module.md) 或 [ngx_http_auth_jwt_module](ngx_http_auth_jwt_module.md) 模块允许访问，则允许访问。
+
+示例：
+
+```nginx
+location / {
+    satisfy any;
+
+    allow 192.168.1.0/32;
+    deny  all;
+
+    auth_basic           "closed site";
+    auth_basic_user_file conf/htpasswd;
+}
+```
+
+### send_lowat
+
+|\-|说明|
+|:------|:------|
+|**语法**|**send_lowat** `size`;|
+|**默认**|send_lowat 0;|
+|**上下文**|http、server、location|
+
+如果指令设置为非零值，nginx 将尝试通过使用 [kqueue](http://nginx.org/en/docs/events.html#kqueue) 方法的 `NOTE_LOWAT` 标志或`SO_SNDLOWAT` 套接字选项来最小化客户端套接字上的发送操作数。在这两种情况下都使用到了指定的 `size`。
+
+该指令在 Linux、Solaris 和 Windows 上被忽略。
+
+### send_timeout
+
+|\-|说明|
+|:------|:------|
+|**语法**|**send_timeout** `time`;|
+|**默认**|send_timeout 60s;|
+|**上下文**|http、server、location|
+
+设置向客户端发送响应的超时时间。超时设置只限定在两次连续的写入操作之间，而不是用于整个响应的传输。如果客户端在此时间内没有收到任何内容，则连接将被关闭。
+
+### sendfile
+
+|\-|说明|
+|:------|:------|
+|**语法**|**sendfile** `on` \| `off`;|
+|**默认**|sendfile off;|
+|**上下文**|http、server、location、location 中的 if|
+
+启用或禁用 `sendfile()`。
+
+从 nginx 0.8.12 和 FreeBSD 5.2.1 开始，可以用 [aio](#aio) 来为 `sendfile()` 预加载数据：
+
+```nginx
+location /video/ {
+    sendfile       on;
+    tcp_nopush     on;
+    aio            on;
+}
+```
+
+在此配置中，使用 `SF_NODISKIO` 标志调用 `sendfile()`，使其不会阻塞磁盘 I/O，而是以报告数据不在内存中的方式代替。然后 nginx 通过读取一个字节来启动异步数据加载。在第一次读取时，FreeBSD 内核会将文件的第一个 128K 字节加载到内存中，但是下一次读取只能以 16K 块加载数据。可以使用 [read_ahead](#read_ahead) 指令进行修改。
+
+> 在 1.7.11 版本之前，可以使用 `aio sendfile` 来启用预加载。
+
 **待续……**
   
 ## 原文档

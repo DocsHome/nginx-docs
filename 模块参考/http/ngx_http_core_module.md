@@ -1152,6 +1152,189 @@ location /video/ {
 
 > 在 1.7.11 版本之前，可以使用 `aio sendfile` 来启用预加载。
 
+### sendfile_max_chunk 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**sendfile_max_chunk ** `size`;|
+|**默认**|sendfile_max_chunk 0;|
+|**上下文**|http、server、location|
+
+设置为非零值时，可限制单个 `sendfile()` 调用时传输的数据量。如果没有限制，一个快速连接可能会完全占用工作进程。
+
+### server  
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server** `{ ... }`;|
+|**默认**|——|
+|**上下文**|http|
+
+设置虚拟服务器的配置。基于 IP（基于 IP 地址）和基于名称（基于 `Host` 请求头字段）的虚拟服务器之间没有明确的界限。相反，[listen](#listen) 指令描述应接受服务器连接的所有地址和端口，[server_name](#server_name) 指令列出所有服务器名称。[如何处理请求](http://nginx.org/en/docs/http/request_processing.html)文档中提供了配置示例。
+
+### server_name  
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server_name** `name ...`;|
+|**默认**|server_name "";|
+|**上下文**|server|
+
+设置虚拟服务器名称，例如：
+
+```nginx
+server {
+    server_name example.com www.example.com;
+}
+```
+
+第一个名字将成为主服务器名称。
+
+服务器名称可以包含一个星号（`*`）以代替名称的第一部分或最后一部分：
+
+```nginx
+server {
+    server_name example.com *.example.com www.example.*;
+}
+```
+
+这样的名称被称为通配符名称。
+
+上面提到的前两个名字可以合并成一个：
+
+```nginx
+server {
+    server_name .example.com;
+}
+```
+
+也可以在服务器名称中使用正则表达式，在名称前面加上波浪号（`〜`）：
+
+```ngixn
+server {
+    server_name www.example.com ~^www\d+\.example\.com$;
+}
+```
+
+正则表达式可以包含之后用于其他指令的捕获（0.7.40）：
+
+```nginx
+server {
+    server_name ~^(www\.)?(.+)$;
+
+    location / {
+        root /sites/$2;
+    }
+}
+
+server {
+    server_name _;
+
+    location / {
+        root /sites/default;
+    }
+}
+```
+
+在正则表达式中命名捕获创建变量（0.8.25），之后可在其他指令中使用：
+
+```nginx
+server {
+    server_name ~^(www\.)?(?<domain>.+)$;
+
+    location / {
+        root /sites/$domain;
+    }
+}
+
+server {
+    server_name _;
+
+    location / {
+        root /sites/default;
+    }
+}
+```
+
+如果指令参数设置为 `$hostname`（0.9.4），则将替换为机器的主机名。
+
+也可以指定一个空的服务器名称（0.7.11）：
+
+```nginx
+server {
+    server_name www.example.com "";
+}
+```
+
+它允许这个服务器对给定的 address:port 对处理没有 `Host` 头的请求，而不是默认的服务器。这是默认设置。
+
+> 在 0.8.48 之前，默认使用机器的主机名。
+
+在按名称搜索虚拟服务器的过程中，如果名称与多个指定变体相匹配（例如，通配符名称和正则表达式匹配），将按照以下优先顺序选择第一个匹配变体：
+
+1. 确切的名字
+2. 以星号开头的最长通配符名称，例如 `*.example.com`
+3. 以星号结尾的最长通配符名称，例如 `mail.*`
+4. 第一个匹配的正则表达式（按照配置文件中的出现顺序）
+
+服务器名称的详细描述在单独的[服务器名称](http://nginx.org/en/docs/http/server_names.html)文档中提供。
+
+### server_name_in_redirect   
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server_name** `on` | `off`;|
+|**默认**|server_name_in_redirect off;|
+|**上下文**|http、server、location|
+
+启用或禁用在由 nginx 发出的 [absolute](#absolute_redirect) 指令中使用由 [server_name](#server_name) 指令指定的主服务器名称。当禁用主服务器名称时，将使用 `Host` 请求头字段中的名称。如果此字段不存在，则使用服务器的 IP 地址。
+
+重定向中使用端口由 [port_in_redirect](#port_in_redirect) 指令控制。
+
+### server_names_hash_bucket_size    
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server_names_hash_bucket_size** `size`;|
+|**默认**|server_names_hash_bucket_size 32|64|128;|
+|**上下文**|http|
+
+设置服务器名称哈希表的存储桶大小。默认值取决于处理器缓存行的大小。设置哈希表的细节在单独的[文档](http://nginx.org/en/docs/hash.html)中提供。
+
+### server_names_hash_max_size    
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server_names_hash_max_size** `size`;|
+|**默认**|server_names_hash_max_size 512;|
+|**上下文**|http|
+
+设置服务器名称哈希表的最大大小。设置哈希表的细节在单独的[文档]((http://nginx.org/en/docs/hash.html))中提供。
+
+### server_tokens    
+
+|\-|说明|
+|:------|:------|
+|**语法**|**server_tokens** `on` \| `off` \| `build` \| `string`;|
+|**默认**|server_tokens on;|
+|**上下文**|http、server、location|
+
+在错误页面和 `Server` 响应头字段中启用或禁用发送 nginx 版本。
+
+`build` 参数（1.11.10）能够发送构建名称以及 nginx 版本。
+
+此外，作为我们的[商业订阅](http://nginx.com/products/?_ga=2.14041591.1300915338.1513355851-1890203964.1497190280)的一部分，从1.9.13 版本开始，可以使用带有变量的字符串显式设置错误页面上的签名和 `Server` 响应头字段值。指定空字符串将禁用 `Server` 字段的发送。
+
+### tcp_nodelay    
+
+|\-|说明|
+|:------|:------|
+|**语法**|**tcp_nodelay** `on` \| `off`;|
+|**默认**|tcp_nodelay on;|
+|**上下文**|http、server、location|
+
+启用或禁用 `TCP_NODELAY` 选项的使用。该选项仅在连接转换到 keep-alive 状态时启用。
+
 **待续……**
   
 ## 原文档

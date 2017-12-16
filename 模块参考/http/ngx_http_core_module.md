@@ -1,6 +1,6 @@
 # ngx_http_core_module
 
-- 指令
+- [指令](#directives)
     - [absolute_redirect](#absolute_redirect)
     - [aio](#aio)
     - [aio_write](#aio_write)
@@ -77,7 +77,9 @@
     - [underscores_in_headers](#underscores_in_headers)
     - [variables_hash_bucket_size](#variables_hash_bucket_size)
     - [variables_hash_max_size](#variables_hash_max_size)
-- 内嵌变量
+- [内嵌变量](#embedded_variables)
+
+<a id="directives"></a>
 
 ## 指令
 
@@ -1334,6 +1336,208 @@ server {
 |**上下文**|http、server、location|
 
 启用或禁用 `TCP_NODELAY` 选项的使用。该选项仅在连接转换到 keep-alive 状态时启用。
+
+### tcp_nopush    
+
+|\-|说明|
+|:------|:------|
+|**语法**|**tcp_nopush** `on` \| `off`;|
+|**默认**|tcp_nopush off;|
+|**上下文**|http、server、location|
+
+启用或禁用在 FreeBSD 上使用 `TCP_NOPUSH` 套接字选项或在 Linux 上使用 `TCP_CORK` 套接字选项。这些选项只有在使用 [sendfile](#sendfile) 时才能使用。启用该选项将允许：
+
+- 在 Linux 和 FreeBSD 4 上，在同一包中可发送响应头和文件开头。
+- 以完整包的方式发送一个文件
+
+### try_files
+
+|\-|说明|
+|:------|:------|
+|**语法**|**try_files** `file ... uri`; <br /> **try_files** `file ... =code`;|
+|**默认**|——|
+|**上下文**|server、location|
+
+以指定顺序检查文件是否存在，并使用第一个找到的文件进行请求处理。处理将在当前上下文中执行。指向文件的路径根据 [root](#root) 和 [alias](#alias) 指令从 `file` 参数构造。可以通过在名称末尾指定斜线来检查目录是否存在，例如，`$URI/`。如果找不到任何文件，则内部重定向将指向最后一个参数中指定的 `uri`。例如：
+
+```nginx
+location /images/ {
+    try_files $uri /images/default.gif;
+}
+
+location = /images/default.gif {
+    expires 30s;
+}
+```
+
+最后一个参数也可以指向一个命名的 location ，如以下示例。从 0.7.51 版本开始，最后一个参数也可以是一个 `code`：
+
+```nginx
+location / {
+    try_files $uri $uri/index.html $uri.html =404;
+}
+```
+
+代理 Mongrel 示例：
+
+```nginx
+location / {
+    try_files /system/maintenance.html
+              $uri $uri/index.html $uri.html
+              @mongrel;
+}
+
+location @mongrel {
+    proxy_pass http://mongrel;
+}
+```
+
+Drupal/FastCGI 示例：
+
+```nginx
+location / {
+    try_files $uri $uri/ @drupal;
+}
+
+location ~ \.php$ {
+    try_files $uri @drupal;
+
+    fastcgi_pass ...;
+
+    fastcgi_param SCRIPT_FILENAME /path/to$fastcgi_script_name;
+    fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
+    fastcgi_param QUERY_STRING    $args;
+
+    ... other fastcgi_param's
+}
+
+location @drupal {
+    fastcgi_pass ...;
+
+    fastcgi_param SCRIPT_FILENAME /path/to/index.php;
+    fastcgi_param SCRIPT_NAME     /index.php;
+    fastcgi_param QUERY_STRING    q=$uri&$args;
+
+    ... other fastcgi_param's
+}
+```
+
+在以下示例中
+
+```nginx
+location / {
+    try_files $uri $uri/ @drupal;
+}
+```
+
+try_files 指令相当于
+
+```nginx
+location / {
+    error_page 404 = @drupal;
+    log_not_found off;
+}
+```
+
+还有一个示例
+
+```nginx
+location ~ \.php$ {
+    try_files $uri @drupal;
+
+    fastcgi_pass ...;
+
+    fastcgi_param SCRIPT_FILENAME /path/to$fastcgi_script_name;
+
+    ...
+}
+```
+
+在将请求传递给 FastCGI 服务器之前，try_files 将检查 PHP 文件是否存在。
+
+Wordpress 与 Joomla 示例：
+
+```nginx
+location / {
+    try_files $uri $uri/ @wordpress;
+}
+
+location ~ \.php$ {
+    try_files $uri @wordpress;
+
+    fastcgi_pass ...;
+
+    fastcgi_param SCRIPT_FILENAME /path/to$fastcgi_script_name;
+    ... other fastcgi_param's
+}
+
+location @wordpress {
+    fastcgi_pass ...;
+
+    fastcgi_param SCRIPT_FILENAME /path/to/index.php;
+    ... other fastcgi_param's
+}
+```
+
+### types_hash_bucket_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**types_hash_bucket_size** `size`;|
+|**默认**|types_hash_bucket_size 64;|
+|**上下文**|http、server、location|
+
+设置类型哈希表桶大小。设置哈希表的细节在单独的[文档](http://nginx.org/en/docs/hash.html)中有提供。
+
+> 在版 1.5.13 本之前，默认值取决于处理器缓存行的大小。
+
+### types_hash_max_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**types_hash_max_size** `size`;|
+|**默认**|types_hash_max_size 1024;|
+|**上下文**|http、server、location|
+
+设置类型哈希表的最大大小。设置哈希表的细节在单独的[文档](http://nginx.org/en/docs/hash.html)中有提供。
+
+### underscores_in_headers
+
+|\-|说明|
+|:------|:------|
+|**语法**|**underscores_in_headers** `on` \| `off`;|
+|**默认**|underscores_in_headers off;|
+|**上下文**|http、server|
+
+启用或禁用在客户端请求头字段中使用下划线。当禁用下划线时，名称中包含下划线的请求头字段将被标记为无效，并受制于 [ignore_invalid_headers](#ignore_invalid_headers) 指令。
+
+如果该指令是在 [server](#server) 级别指定，则仅在 server 是默认 server 时才使用该指令。指定的值也适用于监听相同地址和端口的所有虚拟服务器。
+
+### variables_hash_bucket_size
+
+|\-|说明|
+|:------|:------|
+|**语法**|**variables_hash_bucket_size** `size`;|
+|**默认**|variables_hash_bucket_size size;|
+|**上下文**|http|
+
+设置变量哈希表桶大小。设置哈希表的细节在单独的[文档](http://nginx.org/en/docs/hash.html)中有提供。
+
+### variables_hash_max_size 
+
+|\-|说明|
+|:------|:------|
+|**语法**|**variables_hash_max_size ** `size`;|
+|**默认**|variables_hash_max_size  1024;|
+|**上下文**|http|
+
+设置变量哈哈希表的最大大小。设置哈希表的细节在单独的[文档](http://nginx.org/en/docs/hash.html)中有提供。
+
+> 在 1.5.13 版本之前，默认值是 512。
+
+<a id="embedded_variables"></a>
+
+## 内嵌变量
 
 **待续……**
   

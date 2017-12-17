@@ -1668,13 +1668,13 @@ location @wordpress {
 
     请求正文
 
-    当请求正文被读取到内存缓冲区时，变量的值在由[proxy_pass](#proxy_pass)、[fastcgi_pass](#fastcgi_pass)、[uwsgi_pass](#uwsgi_pass) 和 [scgi_pass](#scgi_pass) 指令处理的 location 中可用。
+    当请求正文被读取到[内存缓冲区](#client_body_buffer_size)时，变量的值在由[proxy_pass](gx_http_proxy_module.md#proxy_pass)、[fastcgi_pass](ngx_http_fastcgi_module.md#fastcgi_pass)、[uwsgi_pass](ngx_http_uwsgi_module.md#uwsgi_pass) 和 [scgi_pass](ngx_http_scgi_module.md#scgi_pass) 指令处理的 location 中可用。
 
 - `$request_body_file`
 
     带有请求正文的临时文件的名称
 
-    在处理结束时，文件需要被删除。想始终将请求主体写入文件中，需要启用 [client_body_in_file_only](#client_body_in_file_only)。当临时文件的名称在代理请求中或在向 FastCGI/uwsgi/SCGI 服务器的请求中传递时，应该分别通过 [proxy_pass_request_body off](#proxy_pass_request_body)、[fastcgi_pass_request_body off](#fastcgi_pass_request_body)、[uwsgi_pass_request_body off](#uwsgi_pass_request_body) 或 [scgi_pass_request_body off](#scgi_pass_request_body) 指令禁用传递请求正文。
+    在处理结束时，文件需要被删除。想始终将请求主体写入文件中，需要启用 [client_body_in_file_only](#client_body_in_file_only)。当临时文件的名称在代理请求中或在向 FastCGI/uwsgi/SCGI 服务器的请求中传递时，应该分别通过 [proxy_pass_request_body off](ngx_http_proxy_module.md#proxy_pass_request_body)、[fastcgi_pass_request_body off](ngx_http_fastcgi_module.md#fastcgi_pass_request_body)、[uwsgi_pass_request_body off](ngx_http_uwsgi_module.md#uwsgi_pass_request_body) 或 [scgi_pass_request_body off](ngx_http_scgi_module.md#scgi_pass_request_body) 指令禁用传递请求正文。
 
 - `$request_completion`
 

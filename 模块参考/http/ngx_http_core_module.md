@@ -1527,7 +1527,7 @@ location @wordpress {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**variables_hash_max_size ** `size`;|
+|**语法**|**variables_hash_max_size** `size`;|
 |**默认**|variables_hash_max_size  1024;|
 |**上下文**|http|
 
@@ -1539,7 +1539,222 @@ location @wordpress {
 
 ## 内嵌变量
 
-**待续……**
-  
+`ngx_http_core_module` 模块支持嵌入式变量名称与 Apache 服务器变量匹配。首先，这些是出现在客户端请求头字段的变量，例如 `$http_user_agent`、`$http_cookie` 等等。还有其他变量：
+
+- `$arg_name`
+
+    请求行中的 `name` 参数
+
+- `$args`
+
+    请求行中的参数
+
+- `$binary_remote_addr`
+
+    客户端地址以二进制形式表示，值的长度对于 IPv4 地址总是 4 个字节，对于 IPv6 地址总是 16 个字节
+- `$body_bytes_sent`
+
+    发送到客户端的字节数，不包括响应头。此变量与 `mod_log_config` Apache 模块的 `％B` 参数兼容
+
+- `$bytes_sent`
+
+    发送到客户端的字节数（1.3.8、1.2.5）
+
+- $connection
+
+    连接序列号（1.3.8、1.2.5）
+
+- `$connection_requests`
+
+    当前通过连接请求的请求数（1.3.8、1.2.5）
+
+- `$connect_length`
+
+    `Content-Length` 请求头字段
+
+- `$content_type`
+
+    `Content-Type` 请求头字段
+
+- `$cookie_name`
+
+    名称为 `name` 的 cookie
+
+- `$document_root`
+
+    根目录或别名指令的当前请求的值
+
+- `$document_uri`
+    
+    与 `$uri` 相同
+
+- `$host`
+
+    按照以下优先顺序：来自请求行的主机名，来自 `Host` 请求头字段的主机名，或与请求匹配的服务器名
+
+- `$hostname`
+
+    主机名
+
+- `$http_name`
+
+    任意请求头字段,变量名称的最后一部分是将字段名称转换为小写，并用破折号替换为下划线
+
+- `$https`
+
+    如果连接以 SSL 模式运行，则为 `on`，否则为空字符串
+
+- `$is_args`
+
+    如果请求行有参数则为 `?`，否则为空字符串
+
+- `$limit_rate`
+
+    设置这个变量可以实现响应速率限制，见 [limit_rate](#limit_rate)
+
+- `$msec`
+
+    当前时间以毫秒为单位（1.3.9、1.2.6）
+
+- `$nginx_version`
+
+    nginx 版本
+
+- `$pid`
+
+    工作进程的 PID
+
+- `$pipe`
+
+    如果请求是管道模式则为 `p`，否则为 `.`（1.3.12、1.2.7）
+
+- `$proxy_protocol_addr`
+
+    来自 PROXY 协议头的客户端地址，否则为空字符串（1.5.12）
+    
+    要在 [listen](#listen) 指令中设置 `proxy_protocol` 参数，必须先启用 PROXY 协议。
+
+- `$proxy_protocol_port`  
+
+    PROXY 协议头中的客户端口，否则为空字符串（1.11.0）
+
+    要在 [listen](#listen) 指令中设置 `proxy_protocol` 参数，必须先启用 PROXY 协议。
+
+- `$query_string`
+
+    与 `$args` 相同
+
+- `$realpath_root`
+
+    与当前请求的 [root](#root) 或 [alias](#alias) 指令值相对应的绝对路径名，所有符号链接都将解析为实际路径
+
+- `$remote_addr`
+
+    客户端地址
+
+- `$remote_port`
+
+    客户端端口
+
+- `$remote_user`
+
+    基本身份验证提供的用户名
+
+- `$request`
+
+    完整的原始请求行
+
+- `$request_body`
+
+    请求正文
+
+    当请求正文被读取到内存缓冲区时，变量的值在由[proxy_pass](#proxy_pass)、[fastcgi_pass](#fastcgi_pass)、[uwsgi_pass](#uwsgi_pass) 和 [scgi_pass](#scgi_pass) 指令处理的 location 中可用。
+
+- `$request_body_file`
+
+    带有请求正文的临时文件的名称
+
+    在处理结束时，文件需要被删除。想始终将请求主体写入文件中，需要启用 [client_body_in_file_only](#client_body_in_file_only)。当临时文件的名称在代理请求中或在向 FastCGI/uwsgi/SCGI 服务器的请求中传递时，应该分别通过 [proxy_pass_request_body off](#proxy_pass_request_body)、[fastcgi_pass_request_body off](#fastcgi_pass_request_body)、[uwsgi_pass_request_body off](#uwsgi_pass_request_body) 或 [scgi_pass_request_body off](#scgi_pass_request_body) 指令禁用传递请求正文。
+
+- `$request_completion`
+
+    如果请求已经完成，则返回 `OK`，否则返回空字符串
+
+- `$request_filename`
+
+    当前请求的文件路径，基于 [root](#root) 或 [alias](#alias) 指令以及请求 URI
+
+- `$request_id`
+
+    由 16 个随机字节生成的唯一请求标识符，以十六进制表示（1.11.0）
+
+- `$request_length`
+
+    请求长度（包括请求行、头部和请求体）（1.3.12、1.2.7）
+
+- `$request_method`
+
+    请求方法，通常为 `GET` 或 `POST`
+
+- `$request_time`
+
+    请求处理时间以毫秒为单位（1.3.9、1.2.6）。自客户端读取第一个字节的时间起
+
+- `$request_uri`
+
+    完整的原始请求 URI（带参数）
+
+- `$scheme`
+
+    请求模式，`http` 或 `https`
+
+- `$sent_http_name`
+
+    任意响应头字段。变量名称的最后一部分是将字段名称转换为小写，并用破折号替换为下划线
+
+- `$sent_trailer_name`
+
+    响应结束时发送的任意字段（1.13.2）。变量名称的最后一部分是将字段名称转换为小写，并用破折号替换为下划线
+
+- `$server_addr`
+
+    接受请求的服务器地址
+
+    通常需要一个系统调用来计算这个变量的值。为了避免系统调用，[listen](#listen) 指令必须指定地址并使用 `bind` 参数。
+
+- `$server_name`
+
+    接受请求的服务器名称
+
+- `$server_port`
+
+    接受请求的服务器端口
+
+- `$server_protocol`
+
+    请求协议，通常为 `HTTP/1.0`、`HTTP/1.1` 或 [HTTP/2.0](ngx_http_v2_module.md)
+
+- `$status`
+
+    响应状态（1.3.2、1.2.2）
+
+- `$tcpinfo_rtt`、`$tcpinfo_rttvar`、`$tcpinfo_snd_cwnd`、`$tcpinfo_rcv_space`
+
+    有关客户端 TCP 连接的信息。在支持 `TCP_INFO` 套接字选项的系统上可用
+
+- `$time_iso8601`
+
+    本地时间采用 ISO 8601 标准格式（1.3.12、1.2.7）
+
+- `$time_local`
+
+    通用日志格式（Common Log Format）中的本地时间（1.3.12、1.2.7）
+
+- `$uri`
+
+    [规范化](#location)过的当前请求 URI
+
+    `$uri` 的值可能在请求期间会改变
+
 ## 原文档
 [http://nginx.org/en/docs/http/ngx_http_core_module.html](http://nginx.org/en/docs/http/ngx_http_core_module.html)

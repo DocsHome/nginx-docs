@@ -34,7 +34,7 @@
   - 指令字母索引
   - 变量字母索引
 - [核心功能](模块参考/核心功能.md)
-  - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)（翻译中）
+  - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)
   - [ngx_http_access_module](模块参考/http/ngx_http_access_module.md)
   - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
   - [ngx_http_auth_basic_module](模块参考/http/ngx_http_auth_basic_module.md)

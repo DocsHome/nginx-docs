@@ -46,7 +46,7 @@
   - [ngx_http_dav_module](模块参考/http/ngx_http_dav_module.md)
   - [ngx_http_empty_gif_module](模块参考/http/ngx_http_empty_gif_module.md)
   - [ngx_http_f4f_module](模块参考/http/ngx_http_f4f_module.md)
-  - ngx_http_fastcgi_module
+  - [ngx_http_fastcgi_module](模块参考/http/ngx_http_fastcgi_module.md)（翻译中）
   - ngx_http_flv_module
   - ngx_http_geo_module
   - ngx_http_geoip_module

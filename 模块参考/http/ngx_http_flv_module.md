@@ -4,11 +4,11 @@
 - [指令](#directives)
     - [flv](#flv)
 
-ngx_http_flv_module模块为Flash视频（FLV）文件提供伪流服务器端支持。
+`ngx_http_flv_module` 模块为 Flash 视频（FLV）文件提供伪流服务端支持。
 
-它通过发送返回从请求的字节偏移开始的文件的内容和前缀的FLV标题来处理请求URI查询字符串中的起始参数的请求。
+它通过发送回文件的内容来处理请求 URI 查询字符串中带有特定 `start` 参数的请求，文件的内容从请求字节偏移开始的且 FLV 头为前缀。
 
-该模块不是默认构建的，它应该使用--with-http_flv_module配置参数启用。
+该模块不是默认构的，您可以在构建时使用 `--with-http_flv_module` 配置参数启用。
 
 <a id="example_configuration"></a>
 

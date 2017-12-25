@@ -8,7 +8,7 @@ Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。�
 
 如果您发现内容存在错误或者不当之处，请提出 PR，期待您的加入：[如何贡献](CONTRIBUTING.md)。
 
-在线阅读：[Github](SUMMARY.md) | [GitBook](https://www.gitbook.com/book/docshome/nginx-docs/details)
+在线阅读：[Github](https://github.com/DocsHome/nginx-docs/blob/master/SUMMARY.md) | [GitBook](https://www.gitbook.com/book/docshome/nginx-docs/details)
 
 ## 排版规范
 

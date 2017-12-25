@@ -100,7 +100,7 @@ fastcgi_bind $remote_addr transparent;
 |\-|说明|
 |------:|------|
 |**语法**|**fastcgi_buffer_size** `size`;|
-|**默认**|fastcgi_buffer_size 4k|8k;|
+|**默认**|fastcgi_buffer_size 4k\|8k;|
 |**上下文**|http、server、location|
 
 设置读取 FastCGI 服务器收到的响应的第一部分的缓冲区的 `size`（大小）。该部分通常包含一个小的响应头。默认情况下，缓冲区大小等于一个内存页。为 4K 或 8K，因平台而异。但是，它可以设置得更小。
@@ -127,7 +127,7 @@ fastcgi_bind $remote_addr transparent;
 |\-|说明|
 |------:|------|
 |**语法**|**fastcgi_buffes** `number size`;|
-|**默认**|fastcgi_buffers 8 4k|8k;|
+|**默认**|fastcgi_buffers 8 4k\|8k;|
 |**上下文**|http、server、location|
 
 设置单个连接从 FastCGI 服务器读取响应的缓冲区的 `number` （数量）和 `size` （大小）。默认情况下，缓冲区大小等于一个内存页。为 4K 或 8K，因平台而异。
@@ -137,7 +137,7 @@ fastcgi_bind $remote_addr transparent;
 |\-|说明|
 |------:|------|
 |**语法**|**fastcgi_busy_buffers_size** `size`;|
-|**默认**|fastcgi_busy_buffers_size 8k|16k;|
+|**默认**|fastcgi_busy_buffers_size 8k\|16k;|
 |**上下文**|http、server、location|
 
 当启用 FastCGI 服务器响应[缓冲](#fastcgi_buffering)时，限制缓冲区的总大小（`size`）在当响应尚未被完全读取时可向客户端发送响应。同时，其余的缓冲区可以用来读取响应，如果需要的话，缓冲部分响应到临时文件中。默认情况下，`size` 受 [fastcgi_buffer_size](#fastcgi_buffer_size) 和 [fastcgi_buffers](#fastcgi_buffers) 指令设置的两个缓冲区的大小限制。

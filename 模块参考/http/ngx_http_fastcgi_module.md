@@ -142,6 +142,44 @@ fastcgi_bind $remote_addr transparent;
 
 当启用 FastCGI 服务器响应[缓冲](#fastcgi_buffering)时，限制缓冲区的总大小（`size`）在当响应尚未被完全读取时可向客户端发送响应。同时，其余的缓冲区可以用来读取响应，如果需要的话，缓冲部分响应到临时文件中。默认情况下，`size` 受 [fastcgi_buffer_size](#fastcgi_buffer_size) 和 [fastcgi_buffers](#fastcgi_buffers) 指令设置的两个缓冲区的大小限制。
 
+### fastcgi_cache
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache** `zone` \| `off`;|
+|**默认**|fastcgi_cache off;|
+|**上下文**|http、server、location|
+
+定义用于缓存的共享内存区域。同一个区域可以在几个地方使用。参数值可以包含变量（1.7.9）。`off` 参数将禁用从上级配置级别继承的缓存配置。
+
+### fastcgi_cache_background_update
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_background_update** `on` \| `off`;|
+|**默认**|fastcgi_cache_background_update off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.11.10. 版本中出现|
+
+允许启动后台子请求来更新过期的缓存项，而过时的缓存响应则返回给客户端。请注意，有必要在更新时[允许](#fastcgi_cache_use_stale_updating)使用陈旧的缓存响应。
+
+### fastcgi_cache_bypass
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_bypass** `string ...`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+定义不从缓存中获取响应的条件。如果字符串参数中有一个值不为空且不等于 `0`，则不会从缓存中获取响应：
+
+```nginx
+fastcgi_cache_bypass $cookie_nocache $arg_nocache$arg_comment;
+fastcgi_cache_bypass $http_pragma    $http_authorization;
+```
+
+可以和 [fastcgi_no_cache](#fastcgi_no_cache) 指令一起使用。
+
 **待续……**
 
 ## 原文档

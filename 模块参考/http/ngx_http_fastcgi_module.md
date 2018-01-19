@@ -180,6 +180,66 @@ fastcgi_cache_bypass $http_pragma    $http_authorization;
 
 可以和 [fastcgi_no_cache](#fastcgi_no_cache) 指令一起使用。
 
+### fastcgi_cache_key
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_key** `string`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+为缓存定义一个 key，例如：
+
+```nginx
+fastcgi_cache_key localhost:9000$request_uri;
+```
+
+### fastcgi_cache_lock
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_lock** `on` \| `off`;|
+|**默认**|fastcgi_cache_lock off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.12 版本中出现|
+
+当启用时，同一时间只允许一个请求通过将请求传递给 FastCGI 服务器来填充 [fastcgi_cache_key](#fastcgi_cache_key) 指令标识的新缓存元素。同一缓存元素的其他请求将等待响应出现在缓存中，或等待此元素的缓存锁释放，直到 [fastcgi_cache_lock_timeout](#fastcgi_cache_lock_timeout) 指令设置的时间。
+
+### fastcgi_cache_lock_age
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_lock_age** `time`;|
+|**默认**|fastcgi_cache_lock_age 5s;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.8 版本中出现|
+
+如果传递给 FastCGI 服务器的最后一个请求填充新缓存元素没能在指定的 `time` 内完成，则可能会有其他另一个请求被传递给 FastCGI 服务器。
+
+### fastcgi_cache_lock_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_lock_timeout** `time`;|
+|**默认**|fastcgi_cache_lock_timeout 5s;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.12 版本中出现|
+
+设置 [fastcgi_cache_lock](#fastcgi_cache_lock_timeout) 的超时时间。当时间到期时，请求将被传递给 FastCGI 服务器，但是，响应不会被缓存。
+
+> 在 1.7.8 之前，响应可以被缓存。
+
+### fastcgi_cache_max_range_offset
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_max_range_offset** `number`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.11.6 版本中出现|
+
+为 byte-range 请求设置字节偏移量。如果 range 超出 `number`（偏移量），range 请求将被传递给 FastCGI 服务器，并且不会缓存响应。
+
 **待续……**
 
 ## 原文档

@@ -345,6 +345,120 @@ server {
 
 > 该功能可作为我们[商业订阅](http://nginx.com/products/?_ga=2.96459743.2132667164.1520648382-1859001452.1520648382)的一部分。
 
+### fastcgi_cache_revalidate
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_purge** `on` &#124; `off`;|
+|**默认**|fastcgi_cache_revalidate off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.5.7 版本中出现|
+
+开启使用带有 `If-Modified-Since` 和 `If-None-Match` 头字段的条件请求对过期缓存项进行重新验证。
+
+### fastcgi_cache_use_stale
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_use_stale** `error` &#124; `timeout` &#124; `invalid_header` &#124; `updating` &#124; `http_500` &#124; `http_503` &#124; `http_403` &#124; `http_404` &#124; `http_429` &#124; `off ...`;|
+|**默认**|fastcgi_cache_use_stale off;|
+|**上下文**|http、server、location|
+
+当在与 FastCGI 服务器通信期间发生错误时可以使用陈旧的缓存响应。该指令的参数与 [fastcgi_next_upstream](#fastcgi_next_upstream) 指令的参数相匹配。
+
+如果无法选择使用 FastCGI 服务器处理请求，则 `error` 参数还允许使用陈旧的缓存响应。
+
+此外，如果它当前正在更新，`updating` 参数允许使用陈旧的缓存响应。这样可以在更新缓存数据时最大限度地减少对 FastCGI 服务器的访问次数。
+
+也可以在响应头中直接启用在响应变为陈旧的指定秒数后使用陈旧的缓存响应（1.11.10）。这比使用指令参数的优先级低。
+
+- `Cache-Control` 头字段的 [`stale-while-revalidate`](https://tools.ietf.org/html/rfc5861#section-3) 扩展允许使用陈旧的缓存响应当它正在更新。
+- `Cache-Control` 头字段的 [`stale-if-error`](https://tools.ietf.org/html/rfc5861#section-4) 扩展允许在发生错误时使用陈旧的缓存响应。
+
+为了最大限度地减少填充新缓存元素时对 FastCGI 服务器的访问次数，可以使用 [fastcgi_cache_lock](#fastcgi_cache_lock) 指令。
+
+### fastcgi_cache_valid
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_cache_valid** `[code ...] time`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+为不同的响应码设置缓存时间。例如：
+
+```nginx
+fastcgi_cache_valid 200 302 10m;
+fastcgi_cache_valid 404      1m;
+```
+
+对响应码为 200 和 302 的响应设置 10 分钟缓存，对响应码为 404 的响应设置为 1 分钟。
+
+如果只指定缓存时间（`time`）：
+
+```nginx
+fastcgi_cache_valid 5m;
+```
+
+那么只缓存 200 、301 和 302 响应。
+
+另外，可以指定 `any` 参数来缓存任何响应：
+
+```nginx
+fastcgi_cache_valid 200 302 10m;
+fastcgi_cache_valid 301      1h;
+fastcgi_cache_valid any      1m;
+```
+
+缓存参数也可以直接在响应头中设置。这比使用指令设置缓存时间具有更高的优先级。
+
+- `X-Accel-Expires` 头字段以秒为单位设置响应的缓存时间。零值会禁用响应缓存。如果该值以 `@` 前缀开头，则它会设置自 Epoch 以来的绝对时间（以秒为单位），最多可以缓存该时间段内的响应。
+- 如果头中不包含 `X-Accel-Expires` 字段，则可以在头字段 `Expires` 或 `Cache-Control` 中设置缓存参数。
+- 如果头中包含 `Set-Cookie` 字段，则不会缓存此类响应。
+- 如果头中包含具有特殊值 `*` 的 `Vary` 字段，则这种响应不会被缓存（1.7.7）。如果头中包含带有另一个值的 `Vary` 字段，考虑到相应的请求头字段（1.7.7），这样的响应将被缓存。
+
+使用 [fastcgi_ignore_headers](#fastcgi_ignore_headers) 指令可以禁用一个或多个响应头字段的处理。
+
+### fastcgi_catch_stderr
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_catch_stderr** `string`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+设置一个字符串，用于在从 FastCGI 服务器接收到的响应的错误流中搜索匹配。如果找到该字符串，则认为 FastCGI 服务器返回[无效响应](#fastcgi_next_upstream)。此时将启用 nginx 中的应用程序错误处理，例如：
+
+```nginx
+location /php {
+    fastcgi_pass backend:9000;
+    ...
+    fastcgi_catch_stderr "PHP Fatal error";
+    fastcgi_next_upstream error timeout invalid_header;
+}
+```
+
+### fastcgi_connect_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_connect_timeout** `time`;|
+|**默认**|fastcgi_connect_timeout 60s;|
+|**上下文**|http、server、location|
+
+设置与 FastCGI 服务器建立连接的超时时间。需要注意的是，这个超时通常不能超过 75 秒。
+
+### fastcgi_force_ranges
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_force_ranges** `on` &#124; `off`;|
+|**默认**|fastcgi_force_ranges off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.7 版本中出现|
+
+启用来自 FastCGI 服务器的缓存和未缓存响应的 byte-range 支持，忽略响应中的 `Accept-Ranges` 头字段。
+
 **待续……**
 
 ## 原文档

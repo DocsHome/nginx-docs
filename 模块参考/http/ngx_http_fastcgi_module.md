@@ -459,6 +459,153 @@ location /php {
 
 启用来自 FastCGI 服务器的缓存和未缓存响应的 byte-range 支持，忽略响应中的 `Accept-Ranges` 头字段。
 
+### fastcgi_hide_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_hide_header** `field`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+默认情况下，nginx 不会将 FastCGI 服务器响应中的头字段 `Status` 和 `X-Accel-...` 传递给客户端。`fastcgi_hide_header` 指令设置不会被传递的附加字段。但是，如果需要允许传递字段，则可以使用 [fastcgi_pass_header](#fastcgi_pass_header) 指令。
+
+### fastcgi_ignore_client_abort
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_ignore_client_abort** `on` &#124; `off`;|
+|**默认**|fastcgi_ignore_client_abort off;|
+|**上下文**|http、server、location|
+
+确定当客户端关闭连接而不等待响应时是否关闭与 FastCGI 服务器的连接。
+
+### fastcgi_ignore_headers
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_ignore_headers** `field ...`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+禁止处理来自 FastCGI 服务器的某些响应头字段。以下字段将被忽略：`X-Accel-Redirect`、`X-Accel-Expires`、`X-Accel-Limit-Rate`（1.1.6）、`X-Accel-Buffering`（1.1.6）、`X-Accel-Charset`（1.1.6）、`Expires`、`Cache-Control`、`Set-Cookie`（0.8.44）和 `Vary`（1.7.7）。
+
+如果未禁用，则处理这些头字段产生以下效果：
+
+- `X-Accel-Expires`、`Expires`、`Cache-Control`、`Set-Cookie` 和 `Vary` 设置响应[缓存](#fastcgi_cache_valid)的参数
+- `X-Accel-Redirect` 执行[内部重定向](#internal)到指定的 URI
+- `X-Accel-Limit-Rate` 设置响应的传送[速率限制](#limit_rate)回客户端
+- `X-Accel-Buffering` 启用或禁用[缓冲](#fastcgi_buffering)响应
+- `X-Accel-Charset` 设置所需的响应[字符集](ngx_http_charset_module.md#charset)
+
+### fastcgi_index
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_index** `name`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+在 `$fastcgi_script_name` 变量的值中设置一个文件名，该文件名追加到 URL 后面并以一个斜杠结尾。例如以下设置
+
+```nginx
+fastcgi_index index.php;
+fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
+```
+
+和 `/page.php` 请求，`SCRIPT_FILENAME` 参数将等于 `/home/www/scripts/php/page.php`，并且 `/` 请求将等于 `/home/www/scripts/php/index.php`。
+
+### fastcgi_intercept_errors
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_intercept_errors** `on` &#124; `off`;|
+|**默认**|fastcgi_intercept_errors off;|
+|**上下文**|http、server、location|
+
+确定当 FastCGI 服务器响应码大于或等于 300 时是否应传递给客户端，或者拦截并重定向到 nginx 以便使用 [error_page](ngx_http_core_module.md#error_page) 指令进行处理。
+
+### fastcgi_keep_conn
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_keep_conn** `on` &#124; `off`;|
+|**默认**|fastcgi_keep_conn off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.4 版本中出现|
+
+默认情况下，FastCGI 服务器将在发送响应后立即关闭连接。但是，如果当此指令设置为 `on` 值，则 nginx 将指示 FastCGI 服务器保持连接处于打开状态。这对保持 FastCGI 服务器连接 [keepalive](ngx_http_upstream_module.md#keepalive) 尤为重要。
+
+### fastcgi_limit_rate
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_limit_rate** `rate`;|
+|**默认**|fastcgi_limit_rate 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.7 版本中出现|
+
+限制读取 FastCGI 服务器响应的速度。`rate` 以每秒字节数为单位。零值则禁用速率限制。该限制针对每个请求设置的，因此如果 nginx 同时打开连接到 FastCFI 服务器的两个连接，则整体速率将是指定限制的两倍。该限制仅在启用[缓冲](#fastcgi_buffering)来自 FastCGI 服务器的响应时才起作用。
+
+### fastcgi_max_temp_file_size
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_max_temp_file_size** `size;`;|
+|**默认**|fastcgi_max_temp_file_size 1024m;|
+|**上下文**|http、server、location|
+
+当启用[缓冲](#fastcgi_buffering)来自 FastCGI 服务器的响应时并且整个响应不适合由 {fastcgi_buffer_size](#fastcgi_buffer_size)  和 [fastcgi_buffers](#fastcgi_buffers) 指令设置的缓冲时，响应的一部分可以保存到临时文件中。该指令用于设置临时文件的最大大小（`size`）。一次写入临时文件的数据大小由 [fastcgi_temp_file_write_size](#fastcgi_temp_file_write_size) 指令设置。
+
+零值将禁用临时文件响应缓冲。
+
+> 此限制不适用于将要[缓存](#fastcgi_cache)或[存储](#fastcgi_store)在磁盘上的响应。
+
+### fastcgi_next_upstream
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_next_upstream** `error` &#124; `timeout` &#124; `invalid_header` &#124; `http_500` &#124; `http_503` &#124; `http_403` &#124; `http_404` &#124; `http_429` &#124; `non_idempotent` &#124; `off ...`；|
+|**默认**|fastcgi_next_upstream error timeout;|
+|**上下文**|http、server、location|
+
+指定在哪些情况下请求应传递给下一台服务器：
+
+- `erorr`
+    在与服务器建立连接、传递请求或读取响应头时发生错误
+
+- `timeout`
+    在与服务器建立连接、传递请求或读取响应头时发生超时
+
+- `invalid_header`
+    服务器返回了空的或无效的响应
+
+- `http_500`
+    服务器返回 500 响应码
+
+- `http_503`
+    服务器返回 503 响应码
+
+- `http_403`
+    服务器返回 403 响应码
+
+- `http_404`
+    服务器返回 404 响应码
+
+- `http_429`
+    服务器返回 429 响应码（1.11.13）
+
+- `non_idempotent`
+    通常，如果请求已发送到上游服务器（1.9.13），则具有[非幂等](https://tools.ietf.org/html/rfc7231#section-4.2.2)方法（POST、LOCK、PATCH）的请求不会传递到下一个服务器，使这个选项明确允许重试这样的请求
+
+- `off`
+    禁用将请求传递给下一个服务器
+
+我们应该记住，只有在没有任何内容发送给客户端的情况下，才能将请求传递给下一台服务器。也就是说，如果在响应传输过程中发生错误或超时，要修复是不可能的。
+
+该指令还定义了与服务器进行通信的[不成功尝试](ngx_http_upstream_module.html#max_fails)。`erorr`、`timeout` 和 `invalid_header` 的情况总是被认为是不成功的尝试，即使它们没有在指令中指定。只有在指令中指定了 `http_500`、`http_503` 和 `http_429` 的情况下，它们才被视为不成功尝试。`http_403` 和 `http_404` 的情况永远不会被视为不成功尝试。
+
+将请求传递给下一台服务器可能受到[尝试次数](#fastcgi_next_upstream_tries)和[时间](#fastcgi_next_upstream_timeout)的限制。
+
 **待续……**
 
 ## 原文档

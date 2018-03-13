@@ -544,13 +544,13 @@ fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.7.7 版本中出现|
 
-限制读取 FastCGI 服务器响应的速度。`rate` 以每秒字节数为单位。零值则禁用速率限制。该限制针对每个请求设置的，因此如果 nginx 同时打开连接到 FastCFI 服务器的两个连接，则整体速率将是指定限制的两倍。该限制仅在启用[缓冲](#fastcgi_buffering)来自 FastCGI 服务器的响应时才起作用。
+限制读取 FastCGI 服务器响应的速度。`rate` 以每秒字节数为单位。零值则禁用速率限制。该限制是针对每个请求设置的，因此如果 nginx 同时打开两个连接到 FastCFI 服务器的连接，则整体速率将是指定限制的两倍。该限制仅在启用[缓冲](#fastcgi_buffering)来自 FastCGI 服务器的响应时才起作用。
 
 ### fastcgi_max_temp_file_size
 
 |\-|说明|
 |------:|------|
-|**语法**|**fastcgi_max_temp_file_size** `size;`;|
+|**语法**|**fastcgi_max_temp_file_size** `size`;|
 |**默认**|fastcgi_max_temp_file_size 1024m;|
 |**上下文**|http、server、location|
 
@@ -571,33 +571,43 @@ fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
 指定在哪些情况下请求应传递给下一台服务器：
 
 - `erorr`
-    在与服务器建立连接、传递请求或读取响应头时发生错误
 
+    在与服务器建立连接、传递请求或读取响应头时发生错误
+    
 - `timeout`
+
     在与服务器建立连接、传递请求或读取响应头时发生超时
 
 - `invalid_header`
+
     服务器返回了空的或无效的响应
 
 - `http_500`
+
     服务器返回 500 响应码
 
 - `http_503`
+
     服务器返回 503 响应码
 
 - `http_403`
+
     服务器返回 403 响应码
 
 - `http_404`
+
     服务器返回 404 响应码
 
 - `http_429`
+
     服务器返回 429 响应码（1.11.13）
 
 - `non_idempotent`
+
     通常，如果请求已发送到上游服务器（1.9.13），则具有[非幂等](https://tools.ietf.org/html/rfc7231#section-4.2.2)方法（POST、LOCK、PATCH）的请求不会传递到下一个服务器，使这个选项明确允许重试这样的请求
 
 - `off`
+
     禁用将请求传递给下一个服务器
 
 我们应该记住，只有在没有任何内容发送给客户端的情况下，才能将请求传递给下一台服务器。也就是说，如果在响应传输过程中发生错误或超时，要修复是不可能的。
@@ -606,7 +616,321 @@ fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
 
 将请求传递给下一台服务器可能受到[尝试次数](#fastcgi_next_upstream_tries)和[时间](#fastcgi_next_upstream_timeout)的限制。
 
-**待续……**
+### fastcgi_next_upstream_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_next_upstream_timeout** `time`;|
+|**默认**|fastcgi_next_upstream_timeout 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.5 版本中出现|
+
+限制请求可以传递到[下一个服务器](#fastcgi_next_upstream)的时间。`0` 值关闭此限制。
+
+### fastcgi_next_upstream_tries
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_next_upstream_tries** `number`;|
+|**默认**|fastcgi_next_upstream_tries 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.5 版本中出现|
+
+限制将请求传递到下一个服务器的[尝试次数](#fastcgi_next_upstream)。`0` 值关闭此限制。
+
+### fastcgi_no_cache
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_no_cache** `string ...`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+定义响应不会保存到缓存中的条件。如果 `string` 参数中有一个值不为空且不等于 `0`，则不会保存响应：
+
+```nginx
+fastcgi_no_cache $cookie_nocache $arg_nocache$arg_comment;
+fastcgi_no_cache $http_pragma    $http_authorization;
+```
+
+可以与 [fastcgi_cache_bypass](fastcgi_cache_bypass) 指令一起使用。
+
+### fastcgi_param
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_param** `parameter value [if_not_empty]`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+设置应传递给 FastCGI 服务器的 `parameter` (参数)。该值可以包含文本、变量及其组合。当且仅当在当前级别上没有定义 [fastcgi_param](#fastcgi_param) 指令时，这些指令才从前一级继承。
+
+以下示例展示了 PHP 的最小要求配置：
+
+```nginx
+fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
+fastcgi_param QUERY_STRING    $query_string;
+```
+
+`SCRIPT_FILENAME` 参数在 PHP 中用于确定脚本名称，`QUERY_STRING` 参数用于传递请求参数。
+
+对于处理 POST 请求的脚本，还需要以下三个参数：
+
+```nginx
+fastcgi_param REQUEST_METHOD  $request_method;
+fastcgi_param CONTENT_TYPE    $content_type;
+fastcgi_param CONTENT_LENGTH  $content_length;
+```
+
+如果 PHP 使用了 `--enable-force-cgi-redirect` 配置参数构建，则还应该使用值 `200` 传递 `REDIRECT_STATUS` 参数：
+
+```nginx
+fastcgi_param REDIRECT_STATUS 200;
+```
+
+如果该指令是通过 `if_not_empty`（1.1.11）指定的，那么只有当它的值不为空时，这个参数才会被传递给服务器：
+
+```nginx
+fastcgi_param HTTPS           $https if_not_empty;
+```
+
+### fastcgi_pass
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_pass** `address`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+设置 FastCGI 服务器的地址。该地址可以指定为域名或 IP 地址，以及端口：
+
+```nginx
+fastcgi_pass localhost:9000;
+```
+
+或者作为 UNIX 域套接字路径：
+
+```nginx
+fastcgi_pass unix:/tmp/fastcgi.socket;
+```
+
+如果域名解析为多个地址，则所有这些地址都将以循环方式使用。另外，地址可以被指定为[服务器组](ngx_http_upstream_module.md)。
+
+参数值可以包含变量。在这种情况下，如果地址被指定为域名，则在所描述的[服务器组](ngx_http_upstream_module.md)中搜索名称，如果未找到，则使用[解析器](ngx_http_core_module.md#resolver)来确定。
+
+### fastcgi_pass_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_pass_header** `field`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+允许从 FastCGI 服务器向客户端传递[隐藏禁用](#fastcgi_hide_header)的头字段。
+
+### fastcgi_pass_request_body
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_pass_request_body** `on` &#124; `off`;|
+|**默认**|fastcgi_pass_request_body on;|
+|**上下文**|http、server、location|
+
+指示是否将原始请求主体传递给 FastCGI 服务器。另请参阅 [fastcgi_pass_request_headers](#fastcgi_pass_request_body) 指令。
+
+### fastcgi_pass_request_headers
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_pass_request_headers** `on` &#124; `off`;|
+|**默认**|fastcgi_pass_request_headers on;|
+|**上下文**|http、server、location|
+
+指示原始请求的头字段是否传递给 FastCGI 服务器。另请参阅 [fastcgi_pass_request_body](#fastcgi_pass_request_body) 指令。
+
+### fastcgi_read_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_read_timeout** `time`;|
+|**默认**|fastcgi_read_timeout 60s;|
+|**上下文**|http、server、location|
+
+定义从 FastCGI 服务器读取响应的超时时间。超时设置在两次连续的读操作之间，而不是传输整个响应的过程。如果 FastCGI 服务器在此时间内没有发送任何内容，则连接将被关闭。
+
+### fastcgi_request_buffering
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_request_buffering** `on` &#124; `off`;|
+|**默认**|fastcgi_request_buffering on;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.11 版本中出现|
+
+启用或禁用客户端请求体缓冲。
+
+启用缓冲时，在将请求发送到 FastCGI 服务器之前，将从客户端[读](#client_body_buffer_size)取整个请求体。
+
+当缓冲被禁用时，请求体在收到时立即发送到 FastCGI 服务器。在这种情况下，如果 nginx 已经开始发送请求体，则请求不能传递到[下一个服务器](#fastcgi_next_upstream)。
+
+### fastcgi_send_lowat
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_send_lowat** `size`;|
+|**默认**|fastcgi_send_lowat 0;|
+|**上下文**|http、server、location|
+
+如果指令设置为非零值，则 nginx 将尝试通过使用 [kqueue](../../介绍/连接处理方式.md#kqueue) 方式的 `NOTE_LOWAT` 标志或 `SO_SNDLOWAT` 套接字选项，以指定的 `size`（大小）来最小化传出连接到 FastCGI 服务器上的发送操作次数。
+
+该指令在 Linux、Solaris 和 Windows 上被忽略。
+
+### fastcgi_send_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_send_timeout** `time`;|
+|**默认**|fastcgi_send_timeout 60s;|
+|**上下文**|http、server、location|
+
+设置向 FastCGI 服务器发送请求的超时时间。超时设置在两次连续写入操作之间，而不是传输整个请求的过程。如果 FastCGI 服务器在此时间内没有收到任何内容，则连接将关闭。
+
+### fastcgi_split_path_info
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_split_path_info** `regex`;|
+|**默认**|fastcgi_send_timeout 60s;|
+|**上下文**|location|
+
+定义一个捕获 `$fastcgi_path_info` 变量值的正则表达式。正则表达式应该有两个捕获：第一个为 `$fastcgi_script_name` 变量的值，第二个为 `$fastcgi_path_info` 变量的值。例如以下设置
+
+```nginx
+location ~ ^(.+\.php)(.*)$ {
+    fastcgi_split_path_info       ^(.+\.php)(.*)$;
+    fastcgi_param SCRIPT_FILENAME /path/to/php$fastcgi_script_name;
+    fastcgi_param PATH_INFO       $fastcgi_path_info;
+```
+
+和 `/show.php/article/0001` 请求，`SCRIPT_FILENAME` 参数等于 `/path/to/php/show.php`，并且 `PATH_INFO` 参数等于 `/article/0001`。
+
+### fastcgi_store
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_store** `on` &#124; `off` &#124; `string`;|
+|**默认**|fastcgi_store off;|
+|**上下文**|http、server、location|
+
+启用将文件保存到磁盘。`on` 参数将文件保存为与指令 [alias](ngx_http_core_module.md#alias) 或 [root](ngx_http_core_module.md#root) 相对应的路径。`off` 参数禁用保存文件。另外，可以使用带变量的字符串显式设置文件名：
+
+```nginx
+fastcgi_store /data/www$original_uri;
+```
+文件的修改时间根据收到的 `Last-Modified` 响应头字段设置。首先将响应写入临时文件，然后重命名该文件。从 0.8.9 版本开始，临时文件和持久存储可以放在不同的文件系统上。但是，请注意，在这种情况下，文件将跨两个文件系统进行复制，而不是简单地进行重命名操作。因此建议，对于任何给定位置，保存的文件和由 [fastcgi_temp_path](#fastcgi_temp_path) 指令设置的保存临时文件的目录都放在同一个文件系统上。
+
+该指令可用于创建静态不可更改文件的本地副本，例如：
+
+```nginx
+location /images/ {
+    root                 /data/www;
+    error_page           404 = /fetch$uri;
+}
+
+location /fetch/ {
+    internal;
+
+    fastcgi_pass         backend:9000;
+    ...
+
+    fastcgi_store        on;
+    fastcgi_store_access user:rw group:rw all:r;
+    fastcgi_temp_path    /data/temp;
+
+    alias                /data/www/;
+}
+```
+
+### fastcgi_store_access
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_store_access** `users:permissions ...`;|
+|**默认**|fastcgi_store_access user:rw;|
+|**上下文**|http、server、location|
+
+为新创建的文件和目录设置访问权限，例如：
+
+```nginx
+fastcgi_store_access user:rw group:rw all:r;
+```
+
+如果指定了任何组或所有访问权限，则可以省略用户权限
+
+```nginx
+fastcgi_store_access group:rw all:r;
+```
+
+### fastcgi_temp_file_write_size
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_temp_file_write_size** `size`;|
+|**默认**|fastcgi_temp_file_write_size 8k|16k;|
+|**上下文**|http、server、location|
+
+设置当开启缓冲 FastCGI 服务器响应到临时文件时，限制写入临时文件的数据 `size`（大小）。默认情况下，大小受 [fastcgi_buffer_size](#fastcgi_buffer_size) 和 [fastcgi_buffers](#fastcgi_buffers) 指令设置的两个缓冲区限制。临时文件的最大大小由 [fastcgi_max_temp_file_size](#fastcgi_max_temp_file_size) 指令设置。
+
+### fastcgi_temp_path
+
+|\-|说明|
+|------:|------|
+|**语法**|**fastcgi_temp_path** `path [level1 [level2 [level3]]]`;|
+|**默认**|astcgi_temp_path fastcgi_temp;|
+|**上下文**|http、server、location|
+
+定义一个目录，用于存储从 FastCGI 服务器接收到的数据的临时文件。指定目录下最多可有三级子目录。例如以下配置
+
+```nginx
+fastcgi_temp_path /spool/nginx/fastcgi_temp 1 2;
+```
+
+临时文件如下所示：
+
+```nginx
+/spool/nginx/fastcgi_temp/7/45/00000123457
+```
+
+另请参见 [fastcgi_cache_path](#fastcgi_cache_path) 指令的 `use_temp_path` 参数。
+
+<a id="parameters"></a>
+
+## 传参到 FastCGI 服务器
+
+HTTP 请求头字段作为参数传递给 FastCGI 服务器。在作为 FastCGI 服务器运行的应用程序和脚本中，这些参数通常作为环境变量提供。例如，`User-Agent` 头字段作为 `HTTP_USER_AGENT` 参数传递。除 HTTP 请求头字段外，还可以使用 [fastcgi_param](#fastcgi_param) 指令传递任意参数。
+
+<a id="embedded_variables"></a>
+
+## 内嵌变量
+
+`ngx_http_fastcgi_module` 模块支持在 [fastcgi_param](#fastcgi_param) 指令设置参数时使用内嵌变量：
+
+- `$fastcgi_script_name`
+
+    请求 URI，或者如果 URI 以斜杠结尾，则请求 URI 的索引文件名称由 [fastcgi_index](#fastcgi_index) 指令配置。该变量可用于设置 `SCRIPT_FILENAME` 和 `PATH_TRANSLATED` 参数，以确定 PHP 中的脚本名称。例如，对 `/info/` 请求的指令设置
+
+    ```nginx
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME /home/www/scripts/php$fastcgi_script_name;
+    ```
+
+    `SCRIPT_FILENAME` 参数等于 `/home/www/scripts/php/info/index.php`。
+
+    使用 [fastcgi_split_path_info](#fastcgi_split_path_info) 指令时，`$fastcgi_script_name` 变量等于指令设置的第一个捕获值。
+
+- `$fastcgi_path_info`
+
+    由 [fastcgi_split_path_info](#fastcgi_split_path_info) 指令设置的第二个捕获值。这个变量可以用来设置 `PATH_INFO` 参数。
 
 ## 原文档
 

@@ -48,8 +48,8 @@
   - [ngx_http_f4f_module](模块参考/http/ngx_http_f4f_module.md)
   - [ngx_http_fastcgi_module](模块参考/http/ngx_http_fastcgi_module.md)
   - [ngx_http_flv_module](模块参考/http/ngx_http_flv_module.md)
-  - ngx_http_geo_module
-  - ngx_http_geoip_module
+  - [ngx_http_geo_module](模块参考/http/ngx_http_geo_module.md)
+  - [ngx_http_geoip_module](模块参考/http/ngx_http_geoip_module.md)
   - ngx_http_gunzip_module
   - ngx_http_gzip_module
   - [ngx_http_gzip_static_module](模块参考/http/ngx_http_gzip_static_module.md)

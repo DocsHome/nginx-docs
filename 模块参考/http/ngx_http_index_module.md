@@ -1,4 +1,4 @@
-# ngx_http_index_module
+ngx_http_mirror_module# ngx_http_index_module
 
 - [示例配置](#example_configuration)
 - [指令](#directives)

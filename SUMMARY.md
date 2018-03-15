@@ -50,8 +50,8 @@
   - [ngx_http_flv_module](模块参考/http/ngx_http_flv_module.md)
   - [ngx_http_geo_module](模块参考/http/ngx_http_geo_module.md)
   - [ngx_http_geoip_module](模块参考/http/ngx_http_geoip_module.md)
-  - ngx_http_gunzip_module
-  - ngx_http_gzip_module
+  - [ngx_http_gunzip_module](模块参考/http/ngx_http_gunzip_module.md)
+  - [ngx_http_gzip_module](模块参考/http/ngx_http_gzip_module.md)（翻译中……）
   - [ngx_http_gzip_static_module](模块参考/http/ngx_http_gzip_static_module.md)
   - ngx_http_headers_module
   - ngx_http_hls_module
@@ -63,7 +63,7 @@
   - ngx_http_log_module
   - ngx_http_map_module
   - ngx_http_memcached_module
-  - ngx_http_mirror_module
+  - [ngx_http_mirror_module](模块参考/http/ngx_http_mirror_module.md)
   - ngx_http_mp4_module
   - ngx_http_perl_module
   - ngx_http_proxy_module

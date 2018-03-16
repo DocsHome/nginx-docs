@@ -51,10 +51,10 @@
   - [ngx_http_geo_module](模块参考/http/ngx_http_geo_module.md)
   - [ngx_http_geoip_module](模块参考/http/ngx_http_geoip_module.md)
   - [ngx_http_gunzip_module](模块参考/http/ngx_http_gunzip_module.md)
-  - [ngx_http_gzip_module](模块参考/http/ngx_http_gzip_module.md)（翻译中……）
+  - [ngx_http_gzip_module](模块参考/http/ngx_http_gzip_module.md)
   - [ngx_http_gzip_static_module](模块参考/http/ngx_http_gzip_static_module.md)
-  - ngx_http_headers_module
-  - ngx_http_hls_module
+  - [ngx_http_headers_module](模块参考/http/ngx_http_headers_module.md)
+  - [ngx_http_hls_module](模块参考/http/ngx_http_hls_module.md)
   - ngx_http_image_filter_module
   - [ngx_http_index_module](模块参考/http/ngx_http_index_module.md)
   - ngx_http_js_module

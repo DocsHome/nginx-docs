@@ -57,8 +57,9 @@
   - [ngx_http_hls_module](模块参考/http/ngx_http_hls_module.md)
   - ngx_http_image_filter_module
   - [ngx_http_index_module](模块参考/http/ngx_http_index_module.md)
-  - ngx_http_js_module
-  - ngx_http_limit_conn_module
+  - [ngx_http_js_module](模块参考/http/ngx_http_js_module.md)
+  - [ngx_http_keyval_module](模块参考/http/ngx_http_keyval_module.md)
+  - [ngx_http_limit_conn_module](模块参考/http/ngx_http_limit_conn_module.md)
   - ngx_http_limit_req_module
   - ngx_http_log_module
   - ngx_http_map_module

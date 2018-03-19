@@ -2,7 +2,7 @@
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
   - [初学者指南](介绍/初学者指南.md)
-- 管理指南
+  - 管理指南
   - [控制 nginx](介绍/控制nginx.md)
   - [连接处理方式](介绍/连接处理方式.md)
   - [设置哈希](介绍/设置哈希.md)
@@ -60,7 +60,7 @@
   - [ngx_http_js_module](模块参考/http/ngx_http_js_module.md)
   - [ngx_http_keyval_module](模块参考/http/ngx_http_keyval_module.md)
   - [ngx_http_limit_conn_module](模块参考/http/ngx_http_limit_conn_module.md)
-  - ngx_http_limit_req_module
+  - [ngx_http_limit_req_module](模块参考/http/ngx_http_limit_req_module.md)
   - ngx_http_log_module
   - ngx_http_map_module
   - ngx_http_memcached_module

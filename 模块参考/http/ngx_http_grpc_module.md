@@ -248,7 +248,167 @@ grpc_pass grpcs://127.0.0.1:443;
 
 允许从 gRPC 服务器向客户端传递忽略的头字段。
 
-**待续……**
+### grpc_read_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_read_timeout** `time`;|
+|**默认**|grpc_read_timeout 60s;|
+|**上下文**|http、server、location|
+
+定义从 gRPC 服务器读取响应的超时时间。超时间隔只在两次连续的读操作之间，而不是整个响应的传输过程。如果 gRPC 服务器在此时间内没有发送任何内容，则连接关闭。
+
+### grpc_send_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_send_timeout** `time`;|
+|**默认**|grpc_send_timeout 60s;|
+|**上下文**|http、server、location|
+
+设置向 gRPC 服务器发送请求的超时时间。超时间隔只在两次连续写入操作之间，而不是整个请求的传输过程。如果 gRPC 服务器在此时间内没有收到任何内容，则连接将关闭。
+
+### grpc_set_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_set_header** `field value`;|
+|**默认**|grpc_set_header Content-Length $content_length;|
+|**上下文**|http、server、location|
+
+允许重新定义或附加字段到[传递](#grpc_pass_request_headers)给 gRPC 服务器的请求头。该值可以包含文本、变量及其组合。当且仅当在当前级别上没有定义 `grpc_set_header` 指令时，这些指令才从上一级继承。
+
+如果头字段的值是一个空字符串，那么这个字段将不会被传递给 gRPC 服务器：
+
+```nginx
+grpc_set_header Accept-Encoding "";
+```
+
+### grpc_ssl_certificate
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_certificate** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定一个带有 PEM 格式证书的文件（`file`），用于向 gRPC SSL 服务器进行身份验证。
+
+### grpc_ssl_certificate_key
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_certificate_key** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定一个文件（`file`），其包含 PEM 格式的密钥，用于对 gRPC SSL 服务器进行身份验证。
+
+可以指定值 `engine:name:id` 来代替 `file`，其从 OpenSSL 引擎 `name` 加载具有指定 `id` 的密钥。
+
+### grpc_ssl_ciphers
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_ciphers** `ciphers`;|
+|**默认**|grpc_ssl_ciphers DEFAULT;|
+|**上下文**|http、server、location|
+
+指定对 gRPC SSL 服务器的请求启用的密码。密码格式能被 OpenSSL 库所支持。
+
+完整的列表详情可以使用 `openssl ciphers` 命令查看。
+
+### grpc_ssl_crl
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_crl** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定一个带有 PEM 格式的撤销证书（CRL）的文件（`file`），用于[验证](#grpc_ssl_verify) gRPC SSL 服务器的证书。
+
+### grpc_ssl_name
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_name** `name`;|
+|**默认**|grpc_ssl_name host from grpc_pass;|
+|**上下文**|http、server、location|
+
+允许重写用于[验证](#grpc_ssl_verify) gRPC SSL 服务器的证书并在与 gRPC SSL 服务器建立连接时[通过 SNI 传递](#grpc_ssl_server_name)的服务器名称。
+
+默认情况下，使用 [grpc_pass](#grpc_pass) 的主机部分。
+
+### grpc_ssl_password_file
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_password_file** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定一个密码为密钥的文件，[每个密码](#grpc_ssl_certificate_key)在单独的行上指定。加载密钥时会依次尝试每个密码。
+
+### grpc_ssl_server_name
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_server_name** `on` &#124; `off`;|
+|**默认**|grpc_ssl_server_name off;|
+|**上下文**|http、server、location|
+
+在建立与 gRPC SSL 服务器的连接时，启用或禁用通过 [TLS 服务器名称指示扩展](http://en.wikipedia.org/wiki/Server_Name_Indication)（SNI，RFC 6066）传送服务器名称。
+
+### grpc_ssl_session_reuse
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_session_reuse** `on` &#124; `off`;|
+|**默认**|grpc_ssl_session_reuse on;|
+|**上下文**|http、server、location|
+
+确定在使用 gRPC 服务器时是否可以重用 SSL 会话。如果错误 `SSL3_GET_FINISHED:digest check fialed` 出现在日志中，尝试禁用会话重用。
+
+### grpc_ssl_protocols
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_protocols** `[SSLv2] [SSLv3] [TLSv1] [TLSv1.1] [TLSv1.2] [TLSv1.3]`;|
+|**默认**|grpc_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;|
+|**上下文**|http、server、location|
+
+对 gRPC SSL 服务器的请求启用指定的协议。
+
+### grpc_ssl_trusted_certificate
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_trusted_certificate** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定一个带有 PEM 格式的可信 CA 证书的文件，用于[验证](#grpc_ssl_verify) gRPC SSL 服务器的证书。
+
+### grpc_ssl_verify
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_verify** `on` &#124; `off`;|
+|**默认**|grpc_ssl_verify off;|
+|**上下文**|http、server、location|
+
+启用或禁用验证 gRPC SSL 服务器证书。
+
+### grpc_ssl_verify_depth
+
+|\-|说明|
+|------:|------|
+|**语法**|**grpc_ssl_verify_depth** `number`;|
+|**默认**|grpc_ssl_verify_depth 1;|
+|**上下文**|http、server、location|
+
+设置 gRPC SSL 服务器证书链中的验证深度。
 
 ## 原文档
 

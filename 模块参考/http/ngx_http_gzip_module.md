@@ -12,7 +12,7 @@
     - [gzip_vary](#gzip_vary)
 - [内嵌变量](#embedded_variables)
 
-ngx_http_gzip_module模块是一个使用“gzip”方法压缩响应的过滤器。 这通常有助于将传输数据的大小减少一半甚至更多。
+`ngx_http_gzip_module` 模块是一个使用了 **gzip** 方法压缩响应的过滤器。有助于将传输数据的大小减少一半甚至更多。
 
 <a id="example_configuration"></a>
 
@@ -170,8 +170,5 @@ gzip_types      text/plain application/xml;
 
     实现压缩比率，计算为原始压缩响应大小与压缩后响应大小之间的比率。
 
-**待续……**
-
 ## 原文档
-
 [http://nginx.org/en/docs/http/ngx_http_gzip_module.html](http://nginx.org/en/docs/http/ngx_http_gzip_module.html)

@@ -65,7 +65,7 @@
     - [ngx_http_limit_req_module](模块参考/http/ngx_http_limit_req_module.md)
     - [ngx_http_log_module](模块参考/http/ngx_http_log_module.md)
     - [ngx_http_map_module](模块参考/http/ngx_http_map_module.md)
-    - ngx_http_memcached_module（翻译中）
+    - [ngx_http_memcached_module](模块参考/http/ngx_http_memcached_module.md)
     - [ngx_http_mirror_module](模块参考/http/ngx_http_mirror_module.md)
     - [ngx_http_mp4_module](模块参考/http/ngx_http_mp4_module.md)
     - ngx_http_perl_module

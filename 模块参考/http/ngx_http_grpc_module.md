@@ -1,7 +1,7 @@
-# ngx_http_grpc_module
+#   - [grpc_bind](#grpc_bind)
+  ngx_http_grpc_module
 
 - [指令](#directives)
-    - [grpc_bind](#grpc_bind)
     - [grpc_buffer_size](#grpc_buffer_size)
     - [grpc_connect_timeout](#grpc_connect_timeout)
     - [grpc_hide_header](#grpc_hide_header)
@@ -137,7 +137,7 @@ grpc_bind $remote_addr transparent;
 
 - `timeout`
 
-    在与服务器建立连接、传递请求或读取响应头时发生超时;
+    在与服务器建立连接、传递请求或读取响应头时发生超时
 
 - `invalid_header`
 

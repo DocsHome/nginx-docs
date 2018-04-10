@@ -35,7 +35,7 @@ server {
 
 > `default_server` 参数自 0.8.21 版本起可用。在早期版本中，应该使用 `default` 参数。
 
-请注意，默认 server 是 `listen port` 的属性，而不是 `server_name` 的。之后会有更多关于这方面的内容。
+请注意，`default_server` 是 `listen port` 的属性，而不是 `server_name` 的。之后会有更多关于这方面的内容。
 
 ## 如何使用未定义的 server 名称来阻止处理请求
 如果不允许没有 “Host” header 字段的请求，可以定义一个丢弃请求的 server：

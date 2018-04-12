@@ -77,7 +77,7 @@ server {
 
 此配置中，nginx 首先根据 `server` 块的 `listen` 指令检验请求的 IP 和端口。之后，根据与 IP 和端口相匹配的 `server` 块的 `server_name` 项对请求的“Host” header 域进行检验。如果找不到服务器的名称（server_name），请求将由 `default_server` 处理。例如，在 `192.168.1.1:80` 上收到的对 `www.example.com` 的请求将由 `192.168.1.1:80` 端口的 `default_server` （即第一个 server）处理，因为没有 `www.example.com` 在此端口上定义。
 
-如上所述，默认 `server` 是 `listen port` 的属性，可以为不同的端口定义不同的 `default_server`：
+如上所述，`default_server` 是 `listen port` 的属性，可以为不同的端口定义不同的 `default_server`：
 
 ```nginx
 server {

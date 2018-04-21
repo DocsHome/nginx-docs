@@ -212,7 +212,7 @@ __END__
 
 - `$r->header_only`
 
-确定整个响应还是仅将头部发送给客户端。
+    确定整个响应还是仅将头部发送给客户端。
 
 - `$r->header_out(field, value)`
 

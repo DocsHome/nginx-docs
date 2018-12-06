@@ -2,7 +2,7 @@
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
   - [初学者指南](介绍/初学者指南.md)
-  - [管理指南（忽略）](https://docs.nginx.com/nginx/admin-guide/)
+  - [管理指南](https://docs.nginx.com/nginx/admin-guide/)（忽略）
   - [控制 nginx](介绍/控制nginx.md)
   - [连接处理方式](介绍/连接处理方式.md)
   - [设置哈希](介绍/设置哈希.md)
@@ -23,7 +23,7 @@
 - How-To
   - [从源码构建 nginx](How-To/从源码构建nginx.md)
   - [在 Win32 平台上使用 Visual C 构建 nginx](How-To/在Win32平台上使用VisualC构建nginx.md)
-  - [设置 Amazon EC2 的 Nginx Plus 环境（忽略）](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus-amazon-web-services/)
+  - [设置 Amazon EC2 的 Nginx Plus 环境](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus-amazon-web-services/)（忽略）
   - [使用 DTrace pid 提供程序调试 nginx](How-To/使用DTrace_pid提供程序调试nginx.md)
   - [转换重写规则](How-To/转换重写规则.md)
   - [WebSocket 代理](How-To/WebSocket代理.md)
@@ -38,6 +38,7 @@
     - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)
     - [ngx_http_access_module](模块参考/http/ngx_http_access_module.md)
     - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
+    - ngx_http_api_module
     - [ngx_http_auth_basic_module](模块参考/http/ngx_http_auth_basic_module.md)
     - [ngx_http_auth_jwt_module](模块参考/http/ngx_http_auth_jwt_module.md)
     - [ngx_http_auth_request_module](模块参考/http/ngx_http_auth_request_module.md)
@@ -69,7 +70,6 @@
     - [ngx_http_mirror_module](模块参考/http/ngx_http_mirror_module.md)
     - [ngx_http_mp4_module](模块参考/http/ngx_http_mp4_module.md)
     - [ngx_http_perl_module](模块参考/http/ngx_http_perl_module.md)
-    - [ngx_http_proxy_module](模块参考/http/ngx_http_proxy_module.md)（翻译中……）
     - [ngx_http_random_index_module](模块参考/http/ngx_http_random_index_module.md)
     - ngx_http_realip_module
     - ngx_http_referer_module
@@ -117,5 +117,6 @@
     - [ngx_stream_ssl_preread_module](模块参考/stream/ngx_stream_ssl_preread_module.md)
     - ngx_stream_upstream_module
     - ngx_stream_upstream_hc_module
+    - ngx_stream_zone_sync_module
   - 其他
     - [ngx_google_perftools_module](模块参考/google/ngx_google_perftools_module.md)

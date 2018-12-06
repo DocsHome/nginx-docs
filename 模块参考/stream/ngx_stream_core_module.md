@@ -72,7 +72,7 @@ stream {
 
 |\-|说明|
 |------:|------|
-|**语法**|**listen** `address:port [ssl] [udp] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`;|
+|**语法**|**listen** `address:port [ssl] [udp] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on\|off] [reuseport] [so_keepalive=on\|off\|[keepidle]:[keepintvl]:[keepcnt]]`;|
 |**默认**|——|
 |**上下文**|server|
 
@@ -183,7 +183,7 @@ listen unix:/var/run/nginx.sock;
 
 |\-|说明|
 |------:|------|
-|**语法**|**resolver** `address ... [valid=time] [ipv6=on|off]`;|
+|**语法**|**resolver** `address ... [valid=time] [ipv6=on\|off]`;|
 |**默认**|——|
 |**上下文**|stream、server|
 |**提示**|该指令在 1.11.3 版本中出现|

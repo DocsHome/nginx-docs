@@ -96,7 +96,7 @@ upstream myapp1 {
 ## 健康检查
 nginx 中的反向代理实现包括了带内（或者被动）服务器健康检查。如果特定服务器的响应失败并出现错误，则 nginx 会将此服务器标记为失败，并尝试避免为此后续请求选择此服务器而浪费一段时间。
 
-[max_files](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 用于设置在 [fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 期间应该与服务器通信失败尝试的次数。默认情况下，[max_files](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 设置为 1。当设置为 0 时，该服务器的健康检查将被禁用。[fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 参数还定义了服务器被标记为失败的时间。在服务器发生故障后的 [fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 间隔后，nginx 开始以实时客户端的请求优雅地探测服务器。如果探测成功，则将服务器标记为活动。
+[max_fails](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 用于设置在 [fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 期间与服务器通信失败重新尝试的次数。默认情况下，[max_fails](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 设置为 1。当设置为 0 时，该服务器的健康检查将被禁用。[fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 参数还定义了服务器被标记为失败的时间。在服务器发生故障后的 [fail_timeout](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 间隔后，nginx 开始以实时客户端的请求优雅地探测服务器。如果探测成功，则将服务器标记为活动。
 
 ## 进一步阅读
 此外，还有更多的指令和参数可以控制 nginx 中的服务器负载均衡，例如，[proxy_next_upstream](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream)、[backup](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server)、[down](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#server) 和 [keepalive](http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive)。有关更多的信息，请查看我们的参考文档。

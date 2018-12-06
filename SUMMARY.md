@@ -2,7 +2,7 @@
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
   - [初学者指南](介绍/初学者指南.md)
-  - 管理指南
+  - [管理指南（忽略）](https://docs.nginx.com/nginx/admin-guide/)
   - [控制 nginx](介绍/控制nginx.md)
   - [连接处理方式](介绍/连接处理方式.md)
   - [设置哈希](介绍/设置哈希.md)
@@ -23,7 +23,7 @@
 - How-To
   - [从源码构建 nginx](How-To/从源码构建nginx.md)
   - [在 Win32 平台上使用 Visual C 构建 nginx](How-To/在Win32平台上使用VisualC构建nginx.md)
-  - 设置 Amazon EC2 的 Nginx Plus 环境
+  - [设置 Amazon EC2 的 Nginx Plus 环境（忽略）](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus-amazon-web-services/)
   - [使用 DTrace pid 提供程序调试 nginx](How-To/使用DTrace_pid提供程序调试nginx.md)
   - [转换重写规则](How-To/转换重写规则.md)
   - [WebSocket 代理](How-To/WebSocket代理.md)
@@ -101,7 +101,7 @@
     - [ngx_mail_pop3_module](模块参考/mail/ngx_mail_pop3_module.md)
     - [ngx_mail_smtp_module](模块参考/mail/ngx_mail_smtp_module.md)
   - Stream
-    - ngx_stream_core_module
+    - [ngx_stream_core_module](模块参考/stream/ngx_stream_core_module.md)
     - ngx_stream_access_module
     - ngx_stream_geo_module
     - ngx_stream_geoip_module

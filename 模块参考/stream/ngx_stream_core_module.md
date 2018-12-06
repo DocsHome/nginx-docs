@@ -72,7 +72,7 @@ stream {
 
 |\-|说明|
 |------:|------|
-|**语法**|**listen** `address:port [ssl] [udp] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on|off] [reuseport] [so_keepalive=on|off|[keepidle]:[keepintvl]:[keepcnt]]`;|
+|**语法**|**listen** `address:port [ssl] [udp] [proxy_protocol] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on\|off] [reuseport] [so_keepalive=on\|off\|[keepidle]:[keepintvl]:[keepcnt]]`;|
 |**默认**|——|
 |**上下文**|server|
 
@@ -138,7 +138,7 @@ listen unix:/var/run/nginx.sock;
 
     此参数配置监听套接字的 **TCP keepalive** 行为。如果省略此参数，将启用操作系统的套接字设置。如果将其设置为值 `on`，则为套接字打开 `SO_KEEPALIVE` 选项。如果将其值设置为 `off`，则为套接字关闭 `SO_KEEPALIVE` 选项。某些操作系统支持使用 `TCP_KEEPIDLE`、`TCP_KEEPINTVL` 和 `TCP_KEEPCNT` 套接字选项在每个套接字的基础上设置 TCP keepalive 参数。在此类系统上（目前有 Linux 2.4+、NetBSD 5+ 和 FreeBSD 9.0-STABLE），可以使用 `keepidle`、`keepintvl` 和` keepcnt` 参数配置。可省略一两个参数，在该情况下，相应套接字选项的系统默认设置将生效。例如，
     
-    ````nginx
+    ```nginx
     so_keepalive=30m::10
     ```
     
@@ -183,7 +183,7 @@ listen unix:/var/run/nginx.sock;
 
 |\-|说明|
 |------:|------|
-|**语法**|**resolver** `address ... [valid=time] [ipv6=on|off]`;|
+|**语法**|**resolver** `address ... [valid=time] [ipv6=on\|off]`;|
 |**默认**|——|
 |**上下文**|stream、server|
 |**提示**|该指令在 1.11.3 版本中出现|

@@ -102,7 +102,7 @@
     - [ngx_mail_smtp_module](模块参考/mail/ngx_mail_smtp_module.md)
   - Stream
     - [ngx_stream_core_module](模块参考/stream/ngx_stream_core_module.md)
-    - ngx_stream_access_module
+    - [ngx_stream_access_module](模块参考/stream/ngx_stream_access_module.md)
     - ngx_stream_geo_module
     - ngx_stream_geoip_module
     - ngx_stream_js_module

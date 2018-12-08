@@ -61,16 +61,6 @@ real_ip_recursive on;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.3.0 版本和 1.2.1 版本中出现|
 
-将 `variable` 设置为给定的 JWT claim 参数 `name`。
-
-### auth_jwt_key_file
-
-|\-|说明|
-|:------|:------|
-|**语法**|**auth_jwt_key_file** `file`;|
-|**默认**|——|
-|**上下文**|http、server、location|
-
 如果禁用递归搜索，则匹配其中一个可信地址的原始客户端地址替换为 [real_ip_header](ngx_http_realip_module.md#real_ip_header) 指令定义的请求头字段中发送的最后一个地址。如果启用了递归搜索，则匹配其中一个可信地址的原始客户端地址替换为请求头字段中发送的最后一个非受信任地址。
 
 <a id="embedded_variables"></a>

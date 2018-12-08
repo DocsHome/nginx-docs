@@ -71,8 +71,8 @@
     - [ngx_http_mp4_module](模块参考/http/ngx_http_mp4_module.md)
     - [ngx_http_perl_module](模块参考/http/ngx_http_perl_module.md)
     - [ngx_http_random_index_module](模块参考/http/ngx_http_random_index_module.md)
-    - ngx_http_realip_module
-    - ngx_http_referer_module
+    - [ngx_http_realip_module](模块参考/http/ngx_http_realip_module.md)
+    - [ngx_http_referer_module](模块参考/http/ngx_http_referer_module.md)
     - ngx_http_rewrite_module
     - ngx_http_scgi_module
     - ngx_http_secure_link_module
@@ -103,11 +103,11 @@
   - Stream
     - [ngx_stream_core_module](模块参考/stream/ngx_stream_core_module.md)
     - [ngx_stream_access_module](模块参考/stream/ngx_stream_access_module.md)
-    - ngx_stream_geo_module
-    - ngx_stream_geoip_module
-    - ngx_stream_js_module
-    - ngx_stream_limit_conn_module
-    - ngx_stream_log_module
+    - [ngx_stream_geo_module](模块参考/stream/ngx_stream_geo_module.md)
+    - [ngx_stream_geoip_module](模块参考/stream/ngx_stream_geoip_module.md)
+    - [ngx_stream_js_module](模块参考/stream/ngx_stream_js_module.md)
+    - [ngx_stream_limit_conn_module](模块参考/stream/ngx_stream_limit_conn_module.md)
+    - [ngx_stream_log_module](模块参考/stream/ngx_stream_log_module.md)
     - ngx_stream_map_module
     - ngx_stream_proxy_module
     - [ngx_stream_realip_module](模块参考/stream/ngx_stream_realip_module.md)

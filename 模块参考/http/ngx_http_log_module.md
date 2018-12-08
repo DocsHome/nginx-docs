@@ -53,7 +53,7 @@ access_log /spool/logs/nginx-access.log compression buffer=32k;
 access_log /path/to/log.gz combined gzip flush=5m;
 ```
 
-> 要使 gzip 压缩起作用，必须使用 zlib 库构建 nginx。
+> 要使 gzip 压缩起作用，必须在构建 nginx 时使用 zlib 库。
 
 文件路径可以包含变量（0.7.6+），但存在一些限制：
 
@@ -84,7 +84,7 @@ access_log /path/to/access.log combined if=$loggable;
 
 |\-|说明|
 |------:|------|
-|**语法**|**log_format** `name [escape=default&#124;json&#124;none] string ...`;|
+|**语法**|**log_format** `name [escape=default\|json\|none] string ...`;|
 |**默认**|log_format combined "...";|
 |**上下文**|http|
 
@@ -170,7 +170,7 @@ log_format combined '$remote_addr - $remote_user [$time_local] '
 
 - `valid`
 
-    设置检查文件是否仍然存在同名的时间，默认为 60 秒
+    设置检查同名文件是否仍然存在的时间，默认为 60 秒
 
 - `off`
 

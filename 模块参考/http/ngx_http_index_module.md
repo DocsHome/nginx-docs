@@ -49,4 +49,4 @@ location / {
 `/` 请求实际上是将在第二个 location 处理为 `/index.html`。
 
 ## 原文档
-[http://nginx.org/en/docs/http/ngx_http_flv_module.html](http://nginx.org/en/docs/http/ngx_http_flv_module.html)
+[http://nginx.org/en/docs/http/ngx_http_index_module.html](http://nginx.org/en/docs/http/ngx_http_index_module.html)

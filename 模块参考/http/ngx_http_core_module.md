@@ -768,7 +768,7 @@ listen 127.0.0.1 default_server accept_filter=dataready backlog=1024;
 
 |\-|说明|
 |:------|:------|
-|**语法**|**location** `[ = \| ~ \| ~* \| ^~ ] uri { ... }`; <br /> **location** `@name { ... }; |
+|**语法**|**location** `[ = \| ~ \| ~* \| ^~ ] uri { ... }`; <br /> **location** `@name { ... }`; |
 |**默认**|——|
 |**上下文**|server、location|
 
@@ -865,7 +865,7 @@ location = /user {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**merge_slashes** `on | off`; |
+|**语法**|**merge_slashes** `on \| off`; |
 |**默认**|merge_slashes on;|
 |**上下文**|http、server|
 
@@ -889,7 +889,7 @@ location /scripts/ {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**msie_padding** `on | off`; |
+|**语法**|**msie_padding** `on \| off`; |
 |**默认**|msie_padding on;|
 |**上下文**|http、server、location|
 
@@ -899,7 +899,7 @@ location /scripts/ {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**msie_refresh** `on | off`; |
+|**语法**|**msie_refresh** `on \| off`; |
 |**默认**|msie_refresh off;|
 |**上下文**|http、server、location|
 
@@ -1285,7 +1285,7 @@ server {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**server_name** `on` | `off`;|
+|**语法**|**server_name** `on` \| `off`;|
 |**默认**|server_name_in_redirect off;|
 |**上下文**|http、server、location|
 

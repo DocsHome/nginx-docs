@@ -78,8 +78,8 @@
     - ngx_http_secure_link_module
     - ngx_http_session_log_module
     - [ngx_http_slice_module](模块参考/http/ngx_http_slice_module.md)
-    - ngx_http_spdy_module
-    - ngx_http_split_clients_module
+    - [ngx_http_spdy_module](模块参考/http/ngx_http_spdy_module.md)
+    - [ngx_http_split_clients_module](模块参考/http/ngx_http_split_clients_module.md)
     - ngx_http_ssi_module
     - ngx_http_ssl_module
     - ngx_http_status_module

@@ -103,8 +103,7 @@ if ($invalid_referer) {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**return** `code [text]`;<br/>
-**return** `code URL`;<br/>**return** `URL`;|
+|**语法**|**return** `code [text]`;<br/>**return** `code URL`;<br/>**return** `URL`;|
 |**默认**|——|
 |**上下文**|server、location、if|
 

@@ -35,19 +35,6 @@ if ($invalid_referer) {
 |**默认**|referer_hash_bucket_size 64;|
 |**上下文**|server、location|
 
-定义已知可发送正确替换地址的可信地址。如果指定了特殊值 `unix:`，则所有 UNIX 域套接字都将受信任。也可以使用主机名（1.13.1）指定可信地址。
-
-> 从 1.3.0 版本和 1.2.1 版本开始支持 IPv6 地址。
-
-### real_ip_header
-
-|\-|说明|
-|:------|:------|
-|**语法**|**real_ip_header** `field` &#124; `X-Real-IP` &#124; `X-Forwarded-For` &#124; `proxy_protocol`;|
-|**默认**|real_ip_header X-Real-IP;|
-|**上下文**|http、server、location|
-|**提示**|该指令在 1.0.5 版本中出现|
-
 设置有效引用哈希表的桶大小。设置哈希表的详细信息在单独的[文档](../../介绍/设置哈希.md)中提供。
 
 ### referer_hash_max_size

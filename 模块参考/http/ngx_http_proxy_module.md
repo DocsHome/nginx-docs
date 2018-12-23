@@ -1,4 +1,4 @@
-# ngx_http_perl_module
+# ngx_http_proxy_module
 
 - [指令](#directives)
     - [proxy_bind](#proxy_bind)
@@ -252,9 +252,9 @@ proxy_cache_key $scheme$proxy_host$uri$is_args$args;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.1.12 版本中出现|
 
-设置 [proxy_cache_lock](#proxy_cache_lock) 的超时。 当时间到期时，请求将被传递给代理服务器，但是，响应将不会被缓存。
+设置 [proxy_cache_lock](#proxy_cache_lock) 的超时时间。当时间（`time`）到期时，请求将被传递到代理服务器，但响应不会被缓存。
 
-> 在1.7.8之前，可以缓存响应。
+> 在 1.7.8 之前可以缓存响应。
 
 ### proxy_cache_max_range_offset
 
@@ -265,7 +265,7 @@ proxy_cache_key $scheme$proxy_host$uri$is_args$args;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.11.6 版本中出现|
 
-设置字节范围请求的偏移量（以字节为单位）。 如果范围超出偏移量，则范围请求将传递到代理服务器，并且不会缓存响应。
+设置字节范围（byte-range）请求的偏移量。如果范围超出偏移量，则范围请求将传递到代理服务器，并且不会缓存响应。
 
 ### proxy_cache_methods
 
@@ -276,7 +276,7 @@ proxy_cache_key $scheme$proxy_host$uri$is_args$args;
 |**上下文**|http、server、location|
 |**提示**|该指令在 0.7.59 版本中出现|
 
-如果此指令中列出了客户端请求方法，则将缓存响应。 “GET”和“HEAD”方法总是添加到列表中，但建议明确指定它们。 另请参见proxy_no_cache指令。
+如果客户端的请求方法在该列表中，则将缓存响应。`GET` 和 `HEAD` 方法总是在列表中，但建议显式指定它们。另请参见 [proxy_no_cache](#proxy_no_cache) 指令。
 
 ### proxy_cache_min_uses
 
@@ -286,57 +286,59 @@ proxy_cache_key $scheme$proxy_host$uri$is_args$args;
 |**默认**|proxy_cache_min_uses 1;|
 |**上下文**|http、server、location|
 
-设置将缓存响应的请求数。
+设置在 `number` 此请求后缓存响应。
 
 ### proxy_cache_path
 
 |\-|说明|
 |------:|------|
-|**语法**|**proxy_cache_path** `path [levels=levels] [use_temp_path=on&#124;off] keys_zone=name:size [inactive=time] [max_size=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on&#124;off] [purger_files=number] [purger_sleep=time] [purger_threshold=time]`;|
+|**语法**|**proxy_cache_path** `path [levels=levels] [use_temp_path=on\|off] keys_zone=name:size [inactive=time] [max_size=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on\|off] [purger_files=number] [purger_sleep=time] [purger_threshold=time]`;|
 |**默认**|——|
 |**上下文**|http|
 
-设置缓存的路径和其他参数。 缓存数据存储在文件中。 缓存中的文件名是将MD5功能应用于缓存键的结果。 levels参数定义高速缓存的层次结构级别：从1到3，每个级别接受值1或2.例如，在以下配置中
+设置缓存的路径和其他参数。缓存数据存储在文件中。缓存中的文件名为[缓存 key](#proxy_cache_key) 经过 MD5 计算后的结果。`levels` 参数定义高速缓存的层次结构级别：从 1 到 3，每个级别接受值 1 或值 2。例如以下配置：
 
-```
+```nginx
 proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=one:10m;
 ```
+
 缓存中的文件名如下所示：
 
 ```
 /data/nginx/cache/c/29/b7f54b2df7773722d382f4809d65029c
 ```
-首先将缓存的响应写入临时文件，然后重命名该文件。 从版本0.8.9开始，临时文件和缓存可以放在不同的文件系统上。 但是，请注意，在这种情况下，文件将跨两个文件系统复制，而不是廉价的重命名操作。 因此，建议对于任何给定位置，缓存和保存临时文件的目录都放在同一文件系统上。 临时文件的目录是根据use_temp_path参数（1.7.10）设置的。 如果省略此参数或将其设置为on，则将使用proxy_temp_path指令为给定位置设置的目录。 如果该值设置为off，则临时文件将直接放入缓存目录中。
 
-此外，所有活动密钥和有关数据的信息都存储在共享内存区域中，其名称和大小由keys_zone参数配置。 一兆字节区域可以存储大约8000个密钥。
+首先缓存响应将写入临时文件，然后重命名该文件。从 0.8.9 版本开始，临时文件和缓存可以放在不同的文件系统中。但请注意，在这种情况下，文件将跨越两个文件系统进行复制，而不是简单的重命名操作。因此，建议对于任何指定位置，缓存和保存临时文件的目录都放在同一文件系统上。临时文件的目录是根据 `use_temp_path` 参数（1.7.10）设置的。如果省略此参数或将其设置为 `on`，则将使用 [proxy_temp_path](#proxy_temp_path) 指令指定的目录位置。如果该值设置为 `off`，则临时文件将直接放入缓存目录中。
 
-> 作为商业订阅的一部分，共享存储器区域还存储扩展的高速缓存信息，因此，需要为相同数量的密钥指定更大的区域大小。 例如，一兆字节区域可以存储大约4000个密钥。
+此外，所有活跃的 key 和有关数据的信息都存储在共享内存区域中，其 `name` 和 `size` 由 `keys_zone` 参数配置。一兆字节区域可以存储大约 8000 个 key。
 
-在非活动参数指定的时间内未访问的缓存数据将从缓存中删除，无论其新鲜度如何。默认情况下，非活动设置为10分钟。
+> 作为商业订阅的一部分，共享存储区域还存储着其他缓存[信息](ngx_http_api_module.md#http_caches_)，因此，需要为相同数量的 key 指定更大的区域大小。 例如，一兆字节区域可以存储大约 4000 个 key。
 
-特殊的“缓存管理器”进程监视max_size参数设置的最大缓存大小。超过此大小时，它会删除最近最少使用的数据。在manager_files，manager_threshold和manager_sleep参数（1.11.5）配置的迭代中删除数据。在一次迭代期间，不会删除manager_files项（默认情况下为100）。一次迭代的持续时间受manager_threshold参数限制（默认情况下为200毫秒）。在迭代之间，由manager_sleep参数（默认为50毫秒）配置的暂停。
+在 `inactive` 参数指定的时间内未访问的缓存数据将从缓存中删除，无论其新旧程度。默认情况下，`inactive` 设置为 10 分钟。
 
-启动一分钟后，激活特殊的“缓存加载程序”进程。它将有关存储在文件系统中的先前缓存数据的信息加载到缓存区。加载也是在迭代中完成的。在一次迭代期间，加载的loader_files项目不超过（默认情况下为100）。此外，一次迭代的持续时间受loader_threshold参数限制（默认为200毫秒）。在迭代之间，由loader_sleep参数（默认为50毫秒）配置暂停。
+特殊的**缓存管理器**进程监视 `max_size` 参数设置的最大缓存大小。超过此大小时，它会删除最近最少使用的数据。`manager_files`、`manager_threshold` 和 `manager_sleep` 参数（1.11.5）配置的数据将被迭代删除。在一次迭代期间，不会删除超过 `manager_files` 项（默认情况下为 100）。一次迭代的持续时间受 `manager_threshold` 参数限制（默认情况下为 200 毫秒）。在迭代之间，由 `manager_sleep` 参数（默认为 50 毫秒）配置的间隔时间。
 
-此外，以下参数作为我们商业订阅的一部分提供：
+启动一分钟后，特殊**缓存加载程序**进程被激活。它将有关存储在文件系统中的先前缓存数据的信息加载到缓存区。加载也是在迭代中完成的。在一次迭代期间，不会加载超过 `loader_files` 项（默认情况下为 100）。此外，一次迭代的持续时间受 `loader_threshold` 参数限制（默认为 200 毫秒）。在迭代之间，由 loader_sleep 参数（默认为 50 毫秒）配置间隔时间。
+
+此外，以下参数作为我们[商业订阅](http://nginx.com/products/?_ga=2.38653990.485685795.1545557717-1363596925.1544107800)的一部分提供：
 
 - `purger=on|off`
 
-    指示缓存清除程序是否将从磁盘中删除与通配符密钥匹配的缓存条目（1.7.12）。 将参数设置为on（默认为off）将激活“cache purger”进程，该进程将永久迭代所有缓存条目并删除与通配符键匹配的条目。
+    指示缓存清除程序（cache purger）是否将从磁盘中删除与[通配符 key](proxy_cache_purge) 匹配的缓存条目（1.7.12）。将参数设置为 `on`（默认为 `off`）将激活 **cache purger** 进程，该进程将永久迭代所有缓存条目并删除与通配符 key 匹配的条目。
 
 - `purger_files=number`
 
-    设置在一次迭代（1.7.12）期间将扫描的项目数。 默认情况下，purger_files设置为10。
+    设置在一次迭代期间将扫描的条目数（1.7.12）。默认情况下，`purger_files` 设置为 10。
 
 - `purger_threshold=number`
 
-    设置一次迭代的持续时间（1.7.12）。 默认情况下，purger_threshold设置为50毫秒。
+    设置一次迭代的持续时间（1.7.12）。 默认情况下，`purger_threshold` 设置为 50 毫秒。
 
 - `purger_sleep=number`
 
-    设置迭代之间的暂停（1.7.12）。 默认情况下，purger_sleep设置为50毫秒。
+    设置迭代之间的暂停间隔（1.7.12）。 默认情况下，`purger_sleep` 设置为 50 毫秒。
 
-    > 在版本1.7.3,1.7.7和1.11.10中，缓存头格式已更改。 升级到较新的nginx版本之前，缓存的响应将被视为无效。
+    > 在 1.7.3、1.7.7 和 1.11.10 版本中，缓存头格式已发生更改，升级到较新的 nginx 版本之后，缓存的响应将被视为无效。
 
 
 ### proxy_cache_purge
@@ -348,9 +350,9 @@ proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=one:10m;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.5.7 版本中出现|
 
-定义将请求视为缓存清除请求的条件。 如果字符串参数的至少一个值不为空并且不等于“0”，则移除具有相应高速缓存键的高速缓存条目。 通过返回204（无内容）响应来指示成功操作的结果。
+定义将请求视为缓存清除请求的条件。如果该字符串参数至少有一个值不为空并且不等于 `0`，则删除有相应[缓存 key](#proxy_cache_key) 的缓存项。通过返回 204（No Content）响应来指示操作成功。
 
-如果清除请求的缓存键以星号（“*”）结尾，则将从缓存中删除与通配符键匹配的所有缓存条目。 但是，这些条目将保留在磁盘上，直到它们被删除为不活动，或由缓存清除程序（1.7.12）处理，或者客户端尝试访问它们。
+如果清除请求的[缓存 key](#proxy_cache_key) 以星号（`*`）结尾，则将从缓存中删除与通配符 key 匹配的所有缓存项。但是，这些条目将保留在磁盘上，直到它们因为[非活跃](#proxy_cache_path)而被删除，或被[缓存清除程序](#purger)（1.7.12）处理，抑或客户端尝试访问它们。
 
 配置示例：
 
@@ -373,7 +375,7 @@ server {
 }
 ```
 
-此功能作为我们商业订阅的一部分提供。
+> 此功能作为我们[商业订阅](http://nginx.com/products/?_ga=2.96279577.485685795.1545557717-1363596925.1544107800)的一部分提供。
 
 ### proxy_cache_revalidate
 
@@ -384,7 +386,7 @@ server {
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.5.7 版本中出现|
 
-使用具有“If-Modified-Since”和“If-None-Match”标头字段的条件请求启用过期缓存项的重新验证。
+启用使用具有 **If-Modified-Since** 和 **If-None-Match** 头字段的条件请求来重新验证过期的缓存项。
 
 ### proxy_cache_use_stale
 
@@ -394,19 +396,29 @@ server {
 |**默认**|proxy_cache_use_stale off;|
 |**上下文**|http、server、location|
 
-确定在与代理服务器通信期间可以在哪些情况下使用过时的缓存响应。 该指令的参数与proxy_next_upstream指令的参数匹配。
+确定在与代理服务器通信期间可以在哪些情况下使用过时的缓存响应。该指令的参数与 [proxy_next_upstream](#proxy_next_upstream) 指令的参数匹配。
 
-如果无法选择代理服务器来处理请求，则error参数还允许使用过时的缓存响应。
+如果无法选择代理服务器来处理请求，则 `error` 参数还允许使用过时的缓存响应。
 
-此外，如果当前正在更新，则更新参数允许使用过时的缓存响应。 这允许在更新缓存数据时最小化对代理服务器的访问次数。
+此外，如果当前正在更新，则 `updating` 参数允许使用过时的缓存响应。这允许在更新缓存数据时最大化减少对代理服务器的访问次数。
 
-在响应变为失效后，也可以在响应头中直接启用过时的缓存响应指定的秒数（1.11.10）。 这比使用指令参数的优先级低。
+也可以直接在响应头中指定响应失效多少秒数后直接启用过时的缓存响应（1.11.10）。这比使用指令参数的优先级低。
 
-- “Cache-Control”头字段的“stale-while-revalidate”扩展允许使用陈旧的缓存响应（如果当前正在更新）。
+- **Cache-Control** 头字段的 [stale-while-revalidate](https://tools.ietf.org/html/rfc5861#section-3) 扩展允许使用过时的缓存响应（如果当前正在更新）。
 
-- “Cache-Control”头字段的“stale-if-error”扩展允许在出现错误时使用陈旧的缓存响应。
+- **Cache-Control** 头字段的 [stale-if-error](https://tools.ietf.org/html/rfc5861#section-4) 扩展允许在出现错误时使用过时的缓存响应。
 
-要在填充新缓存元素时最小化对代理服务器的访问次数，可以使用proxy_cache_lock指令。
+要在填充新缓存元素时最大化减少对代理服务器的访问次数，可以使用 [proxy_cache_lock](#proxy_cache_lock) 指令。
+
+
+
+
+
+
+
+
+
+
 
 ### proxy_cache_valid
 
@@ -416,24 +428,24 @@ server {
 |**默认**|——|
 |**上下文**|http、server、location|
 
-设置不同响应代码的缓存时间。 例如，以下指令
+为不同的响应代码设置缓存时间。例如以下指令
 
 ```nginx
 proxy_cache_valid 200 302 10m;
 proxy_cache_valid 404      1m;
 ```
 
-为代码为200和302的响应设置10分钟的缓存，为代码404的响应设置1分钟。
+为代码为 200 和 302 的响应设置 10 分钟的缓存时间，为代码 404 的响应设置 1 分钟的缓存时间。
 
-如果仅指定了缓存时间
+如果仅指定了缓存 `time`
 
 ```nginx
 proxy_cache_valid 5m;
 ```
 
-然后只缓存200,301和302个响应。
+将只缓存 200、301 和 302 的响应。
 
-此外，可以指定any参数来缓存任何响应：
+此外，可以指定 `any` 参数来缓存任何响应：
 
 ```nginx
 proxy_cache_valid 200 302 10m;
@@ -441,14 +453,14 @@ proxy_cache_valid 301      1h;
 proxy_cache_valid any      1m;
 ```
 
-缓存的参数也可以直接在响应头中设置。 这比使用该指令设置缓存时间具有更高的优先级。
+也可以直接在响应头中设置缓存的参数。这比使用该指令设置缓存时间具有更高的优先级。
 
-- “X-Accel-Expires”标题字段以秒为单位设置响应的缓存时间。 零值禁用响应的缓存。 如果值以@前缀开头，则设置自Epoch以来的绝对时间（以秒为单位），响应可以高速缓存。
-- 如果标题不包括“X-Accel-Expires”字段，则可以在标题字段“Expires”或“Cache-Control”中设置高速缓存的参数。
-- 如果标头包含“Set-Cookie”字段，则不会缓存此类响应。
-- 如果标题包含具有特殊值“*”的“Vary”字段，则不会缓存此类响应（1.7.7）。 如果标题包含具有另一个值的“Vary”字段，则将考虑相应的请求标题字段来缓存这样的响应（1.7.7）。
+- **X-Accel-Expires** 头字段设置以秒为单位的响应缓存时间。零值将禁用响应缓存。如果值以 `@` 前缀开头，则设置自 Epoch 以来的绝对时间（以秒为单位）内的响应可以被缓存。
+- 如果头不包括 **X-Accel-Expires** 字段，则可以在头字段 **Expires** 或 **Cache-Control** 中设置缓存的参数。
+- 如果头包含了 **Set-Cookie** 字段，则不会缓存此类响应。
+- 如果头包含有特殊值 `*` 的 **Vary** 字段，则不会缓存此类响应（1.7.7）。如果头包含有另一个值的 **Vary** 字段，这样的响应则将考虑缓存相应的请求头字段（1.7.7）。
 
-可以使用proxy_ignore_headers指令禁用这些响应头字段中的一个或多个的处理。
+可以使用 [proxy_ignore_headers](#proxy_ignore_headers) 指令禁用这些响应头字段的一个或多个的处理。
 
 ### proxy_connect_timeout
 
@@ -458,7 +470,7 @@ proxy_cache_valid any      1m;
 |**默认**|proxy_connect_timeout 60s;|
 |**上下文**|http、server、location|
 
-定义与代理服务器建立连接的超时。 应该注意，此超时通常不会超过75秒。
+定义与代理服务器建立连接的超时时间。应该注意，此超时时间通常不会超过 75 秒。
 
 ### proxy_cookie_path
 
@@ -469,34 +481,34 @@ proxy_cache_valid any      1m;
 |**上下文**|http、server、location|
 |**提示**|该指令在 1.1.15 版本中出现|
 
-设置应在代理服务器响应的“Set-Cookie”标头字段的path属性中更改的文本。 假设代理服务器返回带有属性“path = / two / some / uri /”的“Set-Cookie”头字段。 指令
+设置代理服务器响应的 **Set-Cookie** 头字段的 `path` 属性中的应该变更的文本。假设代理服务器返回带有属性 `path=/two/some/uri/` 的 **Set-Cookie** 头字段。指令：
 
 ```nginx
 proxy_cookie_path /two/ /;
 ```
 
-将此属性重写为“path = / some / uri /”。
+将此属性重写为 `path=/some/uri/`。
 
-路径和替换字符串可以包含变量：
+`path` 和 `replacement` 字符串可以包含变量：
 
 ```nginx
 proxy_cookie_path $uri /some$uri;
 ```
 
-也可以使用正则表达式指定该指令。 在这种情况下，路径应该从用于区分大小写的匹配的“〜”符号开始，或者从用于区分大小写的匹配的“〜*”符号开始。 正则表达式可以包含命名和位置捕获，替换可以引用它们：
+也可以使用正则表达式指定该指令。在这种情况下，路径应该以区分大小写的 `〜` 匹配符号开始，或者以区分大小写的 `〜*` 匹配符号开始。正则表达式可以包含命名和位置捕获，`replacement` 可以引用它们：
 
 ```nginx
 proxy_cookie_path ~*^/user/([^/]+) /u/$1;
 ```
 
-可能有几个proxy_cookie_path指令：
+可能有多个 `proxy_cookie_path` 指令：
 
 ```nginx
 proxy_cookie_path /one/ /;
 proxy_cookie_path / /two/;
 ```
 
-off参数取消所有proxy_cookie_path指令对当前级别的影响：
+`off` 参数取消所有 `proxy_cookie_path` 指令对当前级别的影响：
 
 ```nginx
 proxy_cookie_path off;

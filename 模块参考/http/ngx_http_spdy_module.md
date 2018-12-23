@@ -7,9 +7,9 @@
     - [spdy_headers_comp](#spdy_headers_comp)
 - [内嵌变量](#embedded_variables)
 
-`ngx_http_spdy_module` 模块为 [SPDY](http://www.chromium.org/spdy/spdy-protocol) 提供实验支持。目前，SPDY 协议[草案 3.1](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1)已实施。
+`ngx_http_spdy_module` 模块为 [SPDY](http://www.chromium.org/spdy/spdy-protocol) 提供实验性支持。目前，SPDY 协议[草案 3.1](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1)已实施。
 
-> 在 1.5.10 版之前，实施了 SPDY 协议[草案 2](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft2)。
+> 在 1.5.10 版之前，已实施 SPDY 协议[草案 2](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft2)。
 
 默认情况下不构建此模块，可在构建 nginx 时使用 `--with-http_spdy_module` 配置参数启用它。
 
@@ -25,7 +25,7 @@
 
 在 1.5.9 之前的版本中，SPDY 连接中的响应无法做到[速率限制](ngx_http_core_module.md#limit_rate)。
 
-无论 [proxy_request_buffering](ngx_http_proxy_module.md#proxy_request_buffering)、[fastcgi_request_buffering](ngx_http_fastcgi_module.md#fastcgi_request_buffering)、[uwsgi_request_buffering](ngx_http_uwsgi_module.md#uwsgi_request_buffering) 和 [scgi_request_buffering](ngx_http_scgi_module.md#scgi_request_buffering) 指令为何值，都无法禁用客户端请求正文缓冲。
+无论 [proxy_request_buffering](ngx_http_proxy_module.md#proxy_request_buffering)、[fastcgi_request_buffering](ngx_http_fastcgi_module.md#fastcgi_request_buffering)、[uwsgi_request_buffering](ngx_http_uwsgi_module.md#uwsgi_request_buffering) 和 [scgi_request_buffering](ngx_http_scgi_module.md#scgi_request_buffering) 指令为何值，都无法禁用客户端请求体缓冲。
 
 <a id="example_configuration"></a>
 

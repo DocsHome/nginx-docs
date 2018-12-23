@@ -35,7 +35,7 @@ http {
 |**默认**|——|
 |**上下文**|http|
 
-创建衣一个用于 A/B 测试的变量
+创建一个用于 A/B 测试的变量。
 
 ```nginx
 split_clients "${remote_addr}AAA" $variant {

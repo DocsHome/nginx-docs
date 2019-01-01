@@ -410,16 +410,6 @@ server {
 
 要在填充新缓存元素时最大化减少对代理服务器的访问次数，可以使用 [proxy_cache_lock](#proxy_cache_lock) 指令。
 
-
-
-
-
-
-
-
-
-
-
 ### proxy_cache_valid
 
 |\-|说明|
@@ -515,6 +505,317 @@ proxy_cookie_path off;
 proxy_cookie_path /two/ /;
 proxy_cookie_path ~*^/user/([^/]+) /u/$1;
 ```
+
+### proxy_force_ranges
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_force_ranges** `on` &#124; `off`;|
+|**默认**|proxy_force_ranges off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.7 版本中出现|
+
+无论代理服务器中的 **Accept-Ranges** 字段如何，对代理服务器的缓存和未缓存响应都启用字节范围（byte-range）支持。
+
+### proxy_force_ranges
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_headers_hash_bucket_size** `size`;|
+|**默认**|proxy_headers_hash_bucket_size 64;|
+|**上下文**|http、server、location|
+
+设置 [proxy_hide_header](#proxy_hide_header) 和 [proxy_set_header](#proxy_set_header) 指令使用的哈希表的桶 `size`。设置哈希表的详细介绍在[单独的文档](../../介绍/设置哈希.md)中提供。
+
+### proxy_headers_hash_max_size
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_headers_hash_max_size** `size`;|
+|**默认**|proxy_headers_hash_max_size 512;|
+|**上下文**|http、server、location|
+
+设置 [proxy_hide_header](#proxy_hide_header) 和 [proxy_set_header](#proxy_set_header) 指令使用的哈希表的最大 `size`。设置哈希表的详细介绍在[单独的文档](../../介绍/设置哈希.md)中提供。
+
+### proxy_hide_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_hide_header** `field`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+默认情况下，nginx 不会从代理服务器向客户端的响应中传递头字段 **Date**、**Server**、**X-Pad** 和 **X-Accel-...**。`proxy_hide_header` 指令设置不传递的其他字段。相反，如果需要允许传递字段，则可以使用 [proxy_pass_header](#proxy_pass_header) 指令设置。
+
+### proxy_http_version
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_http_version** `1.0` &#124; `1.1`;|
+|**默认**|proxy_http_version 1.0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.1.4 版本中出现|
+
+设置代理的 HTTP 协议版本。默认情况下，使用 1.0 版本。建议将 1.1 版与 [keepalive](ngx_http_upstream_module.md#keepalive) 连接和 [NTLM 身份验证](ngx_http_upstream_module.md#ntlm)配合使用。
+
+### proxy_ignore_client_abort
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ignore_client_abort** `on` &#124; `off`;|
+|**默认**|proxy_ignore_client_abort off;|
+|**上下文**|http、server、location|
+
+确定在客户端关闭连接不等待响应时是否应关闭与代理服务器的连接。
+
+### proxy_ignore_headers
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ignore_headers** `field ...`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+禁用处理某些来自代理服务器的响应头字段。可以忽略以下字段：**X-Accel-Redirect**、**X-Accel-Expires**、**X-Accel-Limit-Rate**（1.1.6）、**X-Accel-Buffering**（1.1.6）、**X-Accel-Charset**（1.1.6）、**Expires**、**Cache-Control**、**Set-Cookie**（0.8.44）和 **Vary**（1.7.7）。
+
+如果未禁用，处理这些头字段将会产生以下影响：
+
+- **X-Accel-Expires**、**Expires**、**Cache-Control**、**Set-Cookie** 和 **Vary** 设置响应[缓存](#proxy_cache_valid)的参数
+- **X-Accel-Redirect** 执行[内部重定](ngx_http_core_module.md#internal)向到指定的 URI
+- **X-Accel-Limit-Rate** 设置向客户端传输响应的[速率限制](ngx_http_core_module.md#limit_rate)
+- **X-Accel-Buffering** 启用或禁用响应[缓冲](#proxy_buffering)
+- **X-Accel-Charset** 设置了所需的响应[字符集](ngx_http_charset_module.md#charset)
+
+### proxy_intercept_errors
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_intercept_errors** `on` &#124; `off`;|
+|**默认**|proxy_intercept_errors off;|
+|**上下文**|http、server、location|
+
+确定状态码大于或等于 300 的代理响应是应该传递给客户端还是拦截并重定向到 nginx 以便使用 [error_page](ngx_http_core_module.md#error_page) 指令进行处理。
+
+### proxy_limit_rate
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_limit_rate** `rate`;|
+|**默认**|proxy_limit_rate 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.7 版本中出现|
+
+限制从代理服务器读取响应的速率。`rate` 以每秒字节数指定。零值则禁用速率限制。限制是针对每个请求，因此如果 nginx 同时打开两个到代理服务器的连接，则总速率将是指定限制的两倍。仅当启用了代理服务器的响应[缓冲](#proxy_buffering)时，此限制才生效。
+
+### proxy_max_temp_file_size
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_max_temp_file_size** `size`;|
+|**默认**|proxy_max_temp_file_size 1024m;|
+|**上下文**|http、server、location|
+
+当启用[缓冲](#proxy_buffering)来自代理服务器的响应，并且整个响应不符合 [proxy_buffer_size](#proxy_buffer_size) 和 [proxy_buffers](#proxy_buffers) 指令设置的缓冲时，部分响应可以保存到临时文件中。该指令设置临时文件的最大 `size`。一次写入临时文件的数据大小由 [proxy_temp_file_write_size](#proxy_temp_file_write_size) 指令设置。
+
+零值则禁止将缓冲响应写入临时文件。
+
+> 此限制不适用于将要[缓存](#proxy_cache)或[存储](#proxy_store)在磁盘上的响应。
+
+### proxy_method
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_method** `method`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+指定转发到代理服务器的请求使用的 HTTP 方法（`method`），而不是使用来自客户端请求的方法。参数值可以包含变量（1.11.6）。
+
+### proxy_next_upstream
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_next_upstream**  `error` &#124; `timeout` &#124; `invalid_header` &#124; `http_500` &#124; `http_502` &#124; `http_503` &#124; `http_504` &#124; `http_403` &#124; `http_404` &#124; `http_429` &#124; `non_idempotent` &#124; `off ...`;|
+|**默认**|proxy_intercept_errors off;|
+|**上下文**|http、server、location|
+
+指定应将请求传递到下一个服务器的条件：
+
+- `error`
+    
+    与服务器建立连接，向其传递请求或读取响应头时发生错误
+
+- `timeout`
+
+    在与服务器建立连接，向其传递请求或读取响应头时发生超时
+
+- `invalid_header`
+
+    服务器返回空或无效响应
+
+- `http_500`
+
+    服务器返回代码为 500 的响应
+    
+- `http_502`
+
+    服务器返回代码为 502 的响应
+
+- `http_503`
+
+    服务器返回代码为 503 的响应
+
+- `http_504`
+
+    服务器返回代码 504 的响应
+
+- `http_403`
+
+    服务器返回代码为 403 的响应
+
+- `http_404`
+
+    服务器返回代码为 404 的响应
+
+- `http_429`
+
+    服务器返回代码为 429 的响应（1.11.13）
+
+- `non_idempotent`
+
+    通常，如果请求已发送到上游服务器，则使用[非幂等](https://tools.ietf.org/html/rfc7231#section-4.2.2)方法（`POST`、`LOCK`、`PATCH`）的请求不会传递给下一个服务器（1.9.13），启用此选项显式允许重试此类请求
+
+- `off`
+
+    禁止将请求传递给下一个服务器
+
+应该记住，只有在尚未向客户端发送任何内容的情况下，才能将请求传递给下一个服务器。也就是说，如果在传输响应的过程中发生错误或超时，则无法修复此问题。
+
+该指令还定义了与服务器通信的[失败尝试](ngx_http_upstream_module.md#max_fails)。`error`、`timeout` 和 `invalid_header` 的情况始终被视为失败尝试，即使它们未在指令中指定。`http_500`、`http_502`、`http_503`、`http_504` 和 `http_429` 的情况仅在指令中指定时才被视为失败尝试。`http_403` 和 `http_404` 的情况不会被视为失败尝试。
+
+将请求传递到下一个服务器可能会受到[尝试次数](#proxy_next_upstream_tries)和[时间](#proxy_next_upstream_timeout)的限制。
+
+### proxy_next_upstream_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_next_upstream_timeout** `time`;|
+|**默认**|proxy_next_upstream_timeout 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.5 版本中出现|
+
+限制请求可以传递到[下一个服务器](#proxy_next_upstream)的时间。`0` 值关闭此限制。
+
+### proxy_next_upstream_tries
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_next_upstream_tries** `number`;|
+|**默认**|proxy_next_upstream_tries 0;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.5 版本中出现|
+
+限制将请求传递到[下一个服务器](#proxy_next_upstream)的可能尝试次数。`0` 值关闭此限制。
+
+### proxy_no_cache
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_no_cache** `string ...`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+定义不将响应保存到缓存的条件。如果字符串参数有一个值不为空且不等于 `0`，则不会保存响应：
+
+```nginx
+proxy_no_cache $cookie_nocache $arg_nocache$arg_comment;
+proxy_no_cache $http_pragma    $http_authorization;
+```
+
+可以与 [proxy_cache_bypass](#proxy_cache_bypass) 指令一起使用。
+
+### proxy_pass
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_pass** `URL`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+设置代理服务器的协议、地址以及应映射位置的可选 URI。协议可以指定 `http` 或 `https`。可以将地址指定为域名或 IP 地址，以及一个可选端口号：
+
+```nginx
+proxy_pass http://localhost:8000/uri/;
+```
+
+或者在 `unix` 单词后面指定使用冒号括起来的 UNIX 域套接字路径：
+
+```nginx
+proxy_pass http://unix:/tmp/backend.socket:/uri/;
+```
+
+如果域名解析为多个地址，则所有这些地址将以轮询的方式使用。此外，可以将地址指定为[服务器组](ngx_http_upstream_module.md)。
+
+参数值可以包含变量。在这种情况下，如果将地址指定为域名，则在所描述的服务器组中搜索名称，如果未找到，则使用[解析器](ngx_http_core_module.md#resolver)确定。
+
+请求 URI 按如下方式传递给服务器：
+
+- 如果指定了带有 URI 的 `proxy_pass`，那么当请求传递给服务器时，与该位置（location）匹配的[规范化](ngx_http_core_module.md#location)请求 URI 的部分将被指令中指定的 URI 替换：
+
+
+    ```nginx
+    location /name/ {
+        proxy_pass http://127.0.0.1/remote/;
+    }
+    ```
+
+- 如果指定了没有 URI 的 `proxy_pass`，则请求 URI 将以与处理原始请求时客户端发送的格式相同的形式传递给服务器，或者在处理更改的 URI 时传递完整的规范化请求 URI：
+
+    ```nginx
+    location /some/path/ {
+        proxy_pass http://127.0.0.1;
+    }
+    ```
+
+    > 在 1.1.12 版本之前，如果指定了没有 URI 的 `proxy_pass`，则在某些情况下可能会传递原始请求 URI 而不是更改 URI。
+
+在某些情况下，无法确定请求 URI 要替换的部分：
+
+- 使用正则表达式指定 location （位置）时，以及在命名位置内指定位置。
+在这些情况下，应指定 `proxy_pass` 而不使用 URI。
+
+- 使用 [rewrite](ngx_http_rewrite_module.md#rewrite) 指令在代理位置内更改 URI 时，将使用相同的配置来处理请求（`break`）：
+
+    ```nginx
+    location /name/ {
+        rewrite    /name/([^/]+) /users?name=$1 break;
+        proxy_pass http://127.0.0.1;
+    }
+    ```
+
+    在这种情况下，将忽略指令中指定的 URI，并将完整更改的请求 URI 传递给服务器。
+
+- 在 proxy_pass 中使用变量时：
+
+    ```nginx
+    location /name/ {
+        proxy_pass http://127.0.0.1$request_uri;
+    }
+    ```
+
+    在这种情况下，如果在指令中指定了 URI，则将其原样传递给服务器，替换原始请求 URI。
+
+[WebSocket](../../How-To/WebSocket代理.md) 代理需要特殊配置，从 1.3.13 版本开始支持。
+
+### proxy_pass_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_pass_header** `field`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+允许将[已禁用](#proxy_hide_header)的头字段从代理服务器传递到客户端。
 
 **待续……**
 

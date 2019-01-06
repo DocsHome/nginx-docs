@@ -817,6 +817,283 @@ proxy_pass http://unix:/tmp/backend.socket:/uri/;
 
 允许将[已禁用](#proxy_hide_header)的头字段从代理服务器传递到客户端。
 
+### proxy_pass_request_body
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_pass_request_body**  `on` &#124; `off`;|
+|**默认**|proxy_pass_request_body on;|
+|**上下文**|http、server、location|
+
+指示是否将原始请求体传递给代理服务器。
+
+```nginx
+location /x-accel-redirect-here/ {
+    proxy_method GET;
+    proxy_pass_request_body off;
+    proxy_set_header Content-Length "";
+
+    proxy_pass ...
+}
+```
+
+另请参阅 [proxy_set_header](#proxy_set_header) 和 [proxy_pass_request_headers](#proxy_pass_request_headers) 指令。
+
+### proxy_pass_request_headers
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_pass_request_headers**  `on` &#124; `off`;|
+|**默认**|proxy_pass_request_headers on;|
+|**上下文**|http、server、location|
+
+指示是否将原始请求的 header 字段传递给代理服务器。
+
+```nginx
+location /x-accel-redirect-here/ {
+    proxy_method GET;
+    proxy_pass_request_headers off;
+    proxy_pass_request_body off;
+
+    proxy_pass ...
+}
+```
+
+另请参阅 [proxy_set_header](#proxy_set_header) 和 [proxy_pass_request_body](#proxy_pass_request_body) 指令。
+
+### proxy_read_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_read_timeout**  `time`;|
+|**默认**|proxy_read_timeout 60s;|
+|**上下文**|http、server、location|
+
+定义从代理服务器读取响应的超时时间。该超时时间仅针对两个连续的读操作之间设置，而不是整个响应的传输过程。如果代理服务器在该时间内未传输任何内容，则关闭连接。
+
+### proxy_redirect
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_redirect**  `default`;<br/>**proxy_redirect**  `off`;<br/>**proxy_redirect**  `redirect replacement`;|
+|**默认**|proxy_redirect default;|
+|**上下文**|http、server、location|
+
+设置代理服务器响应 header 中的 **Location** 和 **Refresh** 字段应要更改的文本。假设代理服务器返回header 字段为 `Location: http://localhost:8000/two/some/uri/`。指令
+
+```nginx
+proxy_redirect http://localhost:8000/two/ http://frontend/one/;
+```
+
+将此字符串重写为 `Location: http://frontend/one/some/uri/`。
+
+`replacement` 中可能省略了服务器名称：
+
+```nginx
+proxy_redirect http://localhost:8000/two/ /;
+```
+
+然后如果不是来自 80 端口，则将插入主服务器的名称和端口。
+
+`default` 参数指定的默认替换使用 [location](ngx_http_core_module.md#location) 和 [proxy_pass](ngx_http_proxy_module.md#proxy_pass) 指令的参数。因此，以下两种配置是等效的：
+
+```nginx
+location /one/ {
+    proxy_pass     http://upstream:port/two/;
+    proxy_redirect default;
+```
+
+```nginx
+location /one/ {
+    proxy_pass     http://upstream:port/two/;
+    proxy_redirect http://upstream:port/two/ /one/;
+```
+
+如果使用变量指定 [proxy_pass](ngx_http_proxy_module.md#proxy_pass)，则不允许使用 `default` 参数。
+
+`replacement` 字符串可以包换变量：
+
+```nginx
+proxy_redirect http://localhost:8000/ http://$host:$server_port/;
+```
+
+`redirect` 也可以包含变量（1.1.11 版本）:
+
+```nginx
+proxy_redirect http://$proxy_host:8000/ /;
+```
+
+可以使用正则表达式指定指令（1.1.11）。在这种情况下，`redirect` 应该以 `~` 符号开头，以区分大小写匹配，或者使用 `~*` 符号以区分大小写匹配。正则表达式可以包含命名和位置捕获，并且 `replacement` 可以引用它们：
+
+```nginx
+proxy_redirect ~^(http://[^:]+):\d+(/.+)$ $1$2;
+proxy_redirect ~*/user/([^/]+)/(.+)$      http://$1.example.com/$2;
+```
+
+`off` 参数取消所有 `proxy_redirect` 指令对当前级别的影响：
+
+```nginx
+proxy_redirect off;
+proxy_redirect default;
+proxy_redirect http://localhost:8000/  /;
+proxy_redirect http://www.example.com/ /;
+```
+
+使用此指令，还可以将主机名添加到代理服务器发出的相对重定向：
+
+```nginx
+proxy_redirect / /;
+```
+
+### proxy_request_buffering
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_request_buffering** `on` &#124; `off`;|
+|**默认**|proxy_request_buffering on;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.11 版本中出现|
+
+启用或禁用客户端请求体缓冲。
+
+启用缓冲后，在将请求发送到代理服务器之前，将从客户端[读取](ngx_http_core_module.md#client_body_buffer_size)整个请求体。
+
+禁用缓冲时，请求体在收到时立即发送到代理服务器。在这种情况下，如果 nginx 已经开始发送请求体，则无法将请求传递给[下一个服务器](#proxy_next_upstream)。
+
+当使用 HTTP/1.1 分块传输编码发送原始请求体时，无论指令值如何，都将缓冲请求体，除非为代理[启用](#proxy_http_version)了 HTTP/1.1。
+
+### proxy_send_lowat
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_send_lowat** `size`;|
+|**默认**|proxy_send_lowat 0;|
+|**上下文**|http、server、location|
+
+如果指令设置为非零值，则 nginx 将尝试通过使用 [kqueue](../../介绍/连接处理方式.md#kqueue) 方法的 `NOTE_LOWAT` 标志或有指定大小的 `SO_SNDLOWAT` 套接字选项来最小化到代理服务器的传出连接上的发送操作数。
+
+在 Linux、Solaris 和 Windows 上忽略此指令。
+
+### proxy_send_timeout
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_send_timeout** `time`;|
+|**默认**|proxy_send_timeout 60s;|
+|**上下文**|http、server、location|
+
+设置将请求传输到代理服务器的超时时间。超时时间仅作用于两个连续的写操作之间，而不是整个请求的传输过程。如果代理服务器在该时间内未收到任何内容，则关闭连接。
+
+### proxy_set_body
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_set_body** `value`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+
+允许重新定义传递给代理服务器的请求体。该值可以包含文本、变量及其组合。
+
+### proxy_set_header
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_set_header** `filed value`;|
+|**默认**|**proxy_set_header** `Host $proxy_host`;<br/>**proxy_set_header** `Connection close`;|
+|**上下文**|http、server、location|
+
+允许将字段重新定义或附加到[传递](#proxy_pass_request_headers)给代理服务器的请求 header。该值可以包含文本、变量及其组合。当且仅当在当前级别上没有定义 `proxy_set_header` 指令时，这些指令才从上层级别继承。默认情况下，只重新定义了两个字段：
+
+```nginx
+proxy_set_header Host       $proxy_host;
+proxy_set_header Connection close;
+```
+
+如果启用了缓存，则来自原始请求的 header 字段 **If-Modified-Since**、**If-Unmodified-Since**、**If-None-Match**、**If-Match**、**Range** 和 **If-Range** 不会传递给代理服务器。
+
+一个未经更改的请求头（header）字段 **Host** 可以像这样传递：
+
+```nginx
+proxy_set_header Host       $http_host;
+```
+
+但是，如果客户端请求 header 中不存在此字段，则不会传递任何内容。在这种情况下，最好使用 `$host` 变量 —— 它的值等于 **Host** 请求头字段中的服务器名称，或者如果此字段不存在则等于主服务器名称：
+
+```nginx
+proxy_set_header Host       $host;
+```
+
+此外，服务器名称可以与代理服务器的端口一起传递：
+
+```nginx
+proxy_set_header Host       $host:$proxy_port;
+```
+
+如果头字段的值为空字符串，则此字段将不会传递给代理服务器：
+
+```nginx
+proxy_set_header Accept-Encoding "";
+```
+
+### proxy_socket_keepalive
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_socket_keepalive** `on` &#124; `off`;|
+|**默认**|proxy_socket_keepalive off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.15.6 版本中出现|
+
+配置到代理服务器的传出连接的 **TCP keepalive** 行为。默认情况下，操作系统的设置对 socket 有影响。如果指令设置为值 `on`，则为 socket 打开 `SO_KEEPALIVE` socket 选项。
+
+### proxy_ssl_certificate
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_certificate** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.8 版本中出现|
+
+指定一个 PEM 格式的证书文件（`file`），该证书用于 HTTPS 代理服务器身份验证。
+
+### proxy_ssl_certificate_key
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_certificate_key** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.8 版本中出现|
+
+指定一个有密钥的 PEM 格式文件（`file`），用于 HTTPS 代理服务器身份验证。
+
+可以指定 `engine:name:id` 来代替 `file`（1.7.9），它将从名为 `name` 的 OpenSSL 引擎加载 id 为 `id` 的密钥。
+
+### proxy_ssl_ciphers
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_ciphers** `ciphers`;|
+|**默认**|proxy_ssl_ciphers DEFAULT;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.5.6 版本中出现|
+
+指定对 HTTPS 代理服务器的请求已启用密码。密码应为 OpenSSL 库支持的格式。
+
+可以使用 `openssl ciphers` 命令查看完整的支持列表。
+
+### proxy_ssl_crl
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_crl** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+指定一个包含已撤销证书（CRL）的 PEM 格式的文件（`file`），用于[验证](#proxy_ssl_verify) HTTPS 代理服务器的证书。
+
 **待续……**
 
 ## 原文档

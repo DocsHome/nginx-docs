@@ -1094,6 +1094,221 @@ proxy_set_header Accept-Encoding "";
 
 指定一个包含已撤销证书（CRL）的 PEM 格式的文件（`file`），用于[验证](#proxy_ssl_verify) HTTPS 代理服务器的证书。
 
+### proxy_ssl_name
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_name** `name`;|
+|**默认**|proxy_ssl_name $proxy_host;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+允许覆盖用于[验证](#proxy_ssl_verify) HTTPS 代理服务器证书的服务器名称，并在与 HTTPS 代理服务器建立连接时[通过 SNI 传送](#proxy_ssl_server_name)。
+
+默认情况下，使用 [proxy_pass](#proxy_pass) URL 的 host 部分。
+
+### proxy_ssl_password_file
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_password_file** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.8 版本中出现|
+
+为[密钥](#proxy_ssl_certificate_key)指定一个密码文件（`file`），每个密码单独占一行。在加载密钥时依次尝试这些密码。
+
+### proxy_ssl_protocols
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_protocols** `[SSLv2] [SSLv3] [TLSv1] [TLSv1.1] [TLSv1.2] [TLSv1.3]`;|
+|**默认**|proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.5.6 版本中出现|
+
+为 HTTPS 代理服务器请求启用指定的协议。
+
+### proxy_ssl_server_name
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_server_name** `on` &#124; `off`;|
+|**默认**|proxy_ssl_server_name off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+在与 HTTPS 代理服务器建立连接时，启用或禁用通过 [TLS 服务器名称指示扩展](http://en.wikipedia.org/wiki/Server_Name_Indication)（SNI，RFC 6066）传递服务器名称。
+
+### proxy_ssl_session_reuse
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_session_reuse** `on` &#124; `off`;|
+|**默认**|proxy_ssl_session_reuse on;|
+|**上下文**|http、server、location|
+
+确定在使用代理服务器时是否可以复用 SSL 会话。如果日志中出现错误 `SSL3_GET_FINISHED:digest check failed`，请尝试禁用会话复用。
+
+### proxy_ssl_trusted_certificate
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_trusted_certificate** `file`;|
+|**默认**|——|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+指定 PEM 格式的可信 CA 证书文件，用于[验证](#proxy_ssl_verify) HTTPS 代理服务器证书。
+
+### proxy_ssl_verify
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_verify** `on` &#124; `off`;|
+|**默认**|proxy_ssl_verify off;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+启用或禁用验证 HTTPS 代理服务器证书。
+
+### proxy_ssl_verify_depth
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_ssl_verify_depth** `number`;|
+|**默认**|proxy_ssl_verify_depth 1;|
+|**上下文**|http、server、location|
+|**提示**|该指令在 1.7.0 版本中出现|
+
+设置代理的 HTTPS 服务器证书链验证深度。
+
+### proxy_store
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_store** `on` &#124; `off` &#124; `string`;|
+|**默认**|proxy_store off;|
+|**上下文**|http、server、location|
+
+允许将文件保存到磁盘。`on` 参数使用与 [alias](ngx_http_core_module.md#alias) 或 [root](ngx_http_core_module.md#root) 指令对应的路径保存文件。`off` 参数禁用文件保存。此外，可以使用带变量的字符串显式设置文件名：
+
+```nginx
+proxy_store /data/www$original_uri;
+```
+
+根据接收的 **Last-Modified** 响应 header 字段设置文件的修改时间。首先将响应写入临时文件，然后重命名该文件。从 0.8.9 版本开始，临时文件和持久化存储可以放在不同的文件系统上。但是，请注意，在这种情况下，文件复制需要跨越两个文件系统，而不是简单的重命名操作。因此，建议由 [proxy_temp_path](#proxy_temp_path) 指令设置的保存文件和保存临时文件的目录都放在同一文件系统上。
+
+该指令可用于创建静态不可更改文件的本地副本，例如：
+
+```nginx
+location /images/ {
+    root               /data/www;
+    error_page         404 = /fetch$uri;
+}
+
+location /fetch/ {
+    internal;
+
+    proxy_pass         http://backend/;
+    proxy_store        on;
+    proxy_store_access user:rw group:rw all:r;
+    proxy_temp_path    /data/temp;
+
+    alias              /data/www/;
+}
+```
+
+或者：
+
+```nginx
+location /images/ {
+    root               /data/www;
+    error_page         404 = @fetch;
+}
+
+location @fetch {
+    internal;
+
+    proxy_pass         http://backend;
+    proxy_store        on;
+    proxy_store_access user:rw group:rw all:r;
+    proxy_temp_path    /data/temp;
+
+    root               /data/www;
+}
+```
+
+### proxy_store_access
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_store_access** `users:permissions ...`;|
+|**默认**|proxy_store_access user:rw;|
+|**上下文**|http、server、location|
+
+为新创建的文件和目录设置访问权限，例如：
+
+```nginx
+proxy_store_access user:rw group:rw all:r;
+```
+
+如果指定了任何 `group` 或 `all` 访问权限，则可以省略用户权限：
+
+```nginx
+proxy_store_access group:rw all:r;
+```
+
+### proxy_temp_file_write_size
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_temp_file_write_size** `size`;|
+|**默认**|proxy_temp_file_write_size 8k&#124;16k;|
+|**上下文**|http、server、location|
+
+当启用缓冲从代理服务器到临时文件的响应时，限制一次写入临时文件的数据大小（`size`）。 默认情况下，`size` 由 [proxy_buffer_size](#proxy_buffer_size) 和 [proxy_buffers](#proxy_buffers) 指令设置的两个缓冲区限制。临时文件的最大大小由 [proxy_max_temp_file_size](#proxy_max_temp_file_size) 指令设置。
+
+### proxy_temp_path
+
+|\-|说明|
+|------:|------|
+|**语法**|**proxy_temp_path** `path [level1 [level2 [level3]]]`;|
+|**默认**|proxy_temp_path proxy_temp;|
+|**上下文**|http、server、location|
+
+定义用于存储临时文件的目录，其中包含从代理服务器接收的数据。在指定目录下最多可有三级子目录。例如在以下配置
+
+```nginx
+proxy_temp_path /spool/nginx/proxy_temp 1 2;
+```
+
+临时文件可能如下：
+
+```nginx
+/spool/nginx/proxy_temp/7/45/00000123457
+```
+
+另请参阅 [proxy_cache_path](#proxy_cache_path) 指令的 `use_temp_path` 参数。
+
+<a id="embedded_variables"></a>
+
+## 内嵌变量
+
+`ngx_http_proxy_module` 模块支持内嵌变量，可使用 [proxy_set_header](#proxy_set_header) 指令来聚合 header：
+
+- `$proxy_host`
+
+    [proxy_pass](#proxy_pass) 指令中指定的代理服务器的名称和端口
+
+- `$proxy_port`
+
+    [proxy_pass](#proxy_pass) 指令中指定的代理服务器的端口或协议的默认端口
+
+- `$proxy_add_x_forwarded_for`
+
+    **X-Forwarded-For** 客户端请求头字段，其中附加了 `$remote_addr` 变量，以逗号分割。如果客户端请求头中不存在 **X-Forwarded-For”** 字段，则 `$proxy_add_x_forwarded_for` 变量等于 `$remote_addr` 变量。
+
 **待续……**
 
 ## 原文档

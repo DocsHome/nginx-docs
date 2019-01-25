@@ -70,7 +70,7 @@
     - [ngx_http_mirror_module](模块参考/http/ngx_http_mirror_module.md)
     - [ngx_http_mp4_module](模块参考/http/ngx_http_mp4_module.md)
     - [ngx_http_perl_module](模块参考/http/ngx_http_perl_module.md)
-    - [ngx_http_proxy_module](模块参考/http/ngx_http_proxy_module.md) 翻译中……
+    - [ngx_http_proxy_module](模块参考/http/ngx_http_proxy_module.md)
     - [ngx_http_random_index_module](模块参考/http/ngx_http_random_index_module.md)
     - [ngx_http_realip_module](模块参考/http/ngx_http_realip_module.md)
     - [ngx_http_referer_module](模块参考/http/ngx_http_referer_module.md)

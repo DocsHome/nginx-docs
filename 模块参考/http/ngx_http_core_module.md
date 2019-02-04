@@ -1212,7 +1212,7 @@ server {
 
 也可以在服务器名称中使用正则表达式，在名称前面加上波浪号（`〜`）：
 
-```ngixn
+```nginx
 server {
     server_name www.example.com ~^www\d+\.example\.com$;
 }

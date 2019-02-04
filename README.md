@@ -12,6 +12,24 @@ Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。�
 
 在线阅读：[Github](https://github.com/DocsHome/nginx-docs/blob/master/SUMMARY.md) | [GitBook](https://www.gitbook.com/book/docshome/nginx-docs/details)
 
+## 安装
+
+如果你没有安装 gitbook，则先使用 npm（或者 cnpm）安装 `gitbook-cli`：
+
+```shell
+npm install gitbook-cli -g
+```
+
+进入项目根目录，执行以下命令运行 gitbook：
+
+```shell
+gitbook install
+```
+
+```shell
+gitbook serve
+```
+
 ## 项目状态
 
 翻译中……

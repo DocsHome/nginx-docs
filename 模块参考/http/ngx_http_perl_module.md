@@ -67,7 +67,7 @@ http {
 
 The perl/lib/hello.pm module:
 
-```pm
+```perl
 package hello;
 
 use nginx;
@@ -163,7 +163,7 @@ __END__
 
     如果请求中没有请求体，则返回 0。如果存在，则为请求设置指定的处理程序，并返回 1。在读取请求体后，nginx 将调用指定的处理程序。请注意，处理函数应该通过引用传递。例：
 
-    ```pm
+    ```perl
     package hello;
 
     use nginx;
@@ -267,7 +267,7 @@ __END__
 
     设置指定的处理程序（`handler`）和指定停止请求处理的时间（`milliseconds`）。在此期间，nginx 继续处理其他请求。在经过指定的时间后，nginx 将调用已安装的处理程序。请注意，处理函数应该通过引用传递。为了在处理程序之间传递数据，应使用 `$r->variable()`。例：
 
-    ```pm
+    ```perl
     package hello;
 
     use nginx;

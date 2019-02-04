@@ -215,7 +215,7 @@ grpc_bind $remote_addr transparent;
 
 设置 gRPC 服务器地址。该地址可以指定为域名或 IP 地址以及端口：
 
-```ngixn
+```nginx
 grpc_pass localhost:9000;
 ```
 或使用 UNIX 域套接字路径：

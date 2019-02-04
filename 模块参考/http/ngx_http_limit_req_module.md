@@ -109,7 +109,7 @@ server {
 
 用法示例：
 
-```ngixn
+```nginx
 limit_req_zone $binary_remote_addr zone=one:10m rate=1r/s;
 ```
 

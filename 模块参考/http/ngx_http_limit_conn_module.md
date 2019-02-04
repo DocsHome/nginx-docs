@@ -108,7 +108,7 @@ server {
 
 用法示例：
 
-```ngixn
+```nginx
 limit_conn_zone $binary_remote_addr zone=addr:10m;
 ```
 

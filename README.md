@@ -16,17 +16,21 @@ Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。�
 
 如果你没有安装 gitbook，则先使用 npm（或者 cnpm）安装 `gitbook-cli`：
 
-```shell
+```bash
 npm install gitbook-cli -g
 ```
 
 进入项目根目录，执行以下命令运行 gitbook：
 
-```shell
+**安装依赖**
+
+```bash
 gitbook install
 ```
 
-```shell
+**启动本地服务器**
+
+```bash
 gitbook serve
 ```
 

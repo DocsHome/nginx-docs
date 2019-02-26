@@ -5,6 +5,7 @@
 该模块默认不会被构建到 nginx 中，需要在编译时加入 `--with-http_random_index_module` 配置参数启用。
 
 ## 配置示例
+
 ```nginx
 location / {
     random_index on;

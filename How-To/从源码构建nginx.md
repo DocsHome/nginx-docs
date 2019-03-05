@@ -14,6 +14,9 @@
 - **--pid-path=path**
 
     设置存储主进程的进程 ID 的 nginx.pid 文件名称。安装后，可以在 `nginx.conf` 配置文件中使用 [pid](http://nginx.org/en/docs/ngx_core_module.html#pid) 指令更改文件名。默认文件名为 `prefix/logs/nginx.pid`。
+- **--lock-path=path**
+
+    设置锁文件的名称前缀。安装后，可以在 `nginx.conf` 配置文件中使用 [lock_file](http://nginx.org/en/docs/ngx_core_module.html#lock_file) 指令更改对应的值。默认值为 `prefix/logs/nginx.lock`。
 - **--error-log-path=path**
 
     设置主要错误、警告和诊断文件的名称。安装后，可以在 `nginx.conf` 配置文件中使用 [error_log](http://nginx.org/en/docs/ngx_core_module.html#error_log) 指令更改文件名。默认情况下，文件名为 `prefix/logs/error.log`。

@@ -7,13 +7,13 @@
     - [spdy_headers_comp](#spdy_headers_comp)
 - [内嵌变量](#embedded_variables)
 
+**该模块已被 `1.9.5` 中的 [ngx_http_v2_module](http://nginx.org/en/docs/http/ngx_http_v2_module.html) 模块所取代。**
+
 `ngx_http_spdy_module` 模块为 [SPDY](http://www.chromium.org/spdy/spdy-protocol) 提供实验性支持。目前，SPDY 协议[草案 3.1](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1)已实施。
 
 > 在 1.5.10 版之前，已实施 SPDY 协议[草案 2](http://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft2)。
 
 默认情况下不构建此模块，可在构建 nginx 时使用 `--with-http_spdy_module` 配置参数启用它。
-
-> 该模块已被 1.9.5 中的 [ngx_http_v2_module](http://nginx.org/en/docs/http/ngx_http_v2_module.html) 模块所取代。
 
 <a id="issues"></a>
 
@@ -81,6 +81,6 @@ server {
 - `$spdy_request_priority`
 
     请求 SPDY 连接的优先级，无则为空字符串
-    
+
 ## 原文档
 [http://nginx.org/en/docs/http/ngx_http_spdy_module.html](http://nginx.org/en/docs/http/ngx_http_spdy_module.html)

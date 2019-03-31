@@ -34,7 +34,7 @@
   - 指令字母索引
   - 变量字母索引
 - [核心功能](模块参考/核心功能.md)
-  - HTTP 
+  - HTTP
     - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)
     - [ngx_http_access_module](模块参考/http/ngx_http_access_module.md)
     - [ngx_http_addition_module](模块参考/http/ngx_http_addition_module.md)
@@ -75,11 +75,11 @@
     - [ngx_http_realip_module](模块参考/http/ngx_http_realip_module.md)
     - [ngx_http_referer_module](模块参考/http/ngx_http_referer_module.md)
     - [ngx_http_rewrite_module](模块参考/http/ngx_http_rewrite_module.md)
-    - ngx_http_scgi_module
+    - [ngx_http_scgi_module](模块参考/http/ngx_http_scgi_module.md)
     - ngx_http_secure_link_module
     - ngx_http_session_log_module
     - [ngx_http_slice_module](模块参考/http/ngx_http_slice_module.md)
-    - [ngx_http_spdy_module](模块参考/http/ngx_http_spdy_module.md)
+    - [ngx_http_spdy_module 被 ngx_http_v2_module 替代](模块参考/http/ngx_http_spdy_module.md)
     - [ngx_http_split_clients_module](模块参考/http/ngx_http_split_clients_module.md)
     - ngx_http_ssi_module
     - ngx_http_ssl_module
@@ -107,6 +107,7 @@
     - [ngx_stream_geo_module](模块参考/stream/ngx_stream_geo_module.md)
     - [ngx_stream_geoip_module](模块参考/stream/ngx_stream_geoip_module.md)
     - [ngx_stream_js_module](模块参考/stream/ngx_stream_js_module.md)
+    - ngx_stream_keyval_module
     - [ngx_stream_limit_conn_module](模块参考/stream/ngx_stream_limit_conn_module.md)
     - [ngx_stream_log_module](模块参考/stream/ngx_stream_log_module.md)
     - ngx_stream_map_module
@@ -118,6 +119,7 @@
     - [ngx_stream_ssl_preread_module](模块参考/stream/ngx_stream_ssl_preread_module.md)
     - ngx_stream_upstream_module
     - ngx_stream_upstream_hc_module
+    - ngx_stream_zone_sync_module
     - ngx_stream_zone_sync_module
   - 其他
     - [ngx_google_perftools_module](模块参考/google/ngx_google_perftools_module.md)

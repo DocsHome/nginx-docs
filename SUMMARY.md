@@ -76,7 +76,7 @@
     - [ngx_http_referer_module](模块参考/http/ngx_http_referer_module.md)
     - [ngx_http_rewrite_module](模块参考/http/ngx_http_rewrite_module.md)
     - [ngx_http_scgi_module](模块参考/http/ngx_http_scgi_module.md)
-    - ngx_http_secure_link_module
+    - [ngx_http_secure_link_module](模块参考/http/ngx_http_secure_link_module.md)
     - ngx_http_session_log_module
     - [ngx_http_slice_module](模块参考/http/ngx_http_slice_module.md)
     - [ngx_http_spdy_module 被 ngx_http_v2_module 替代](模块参考/http/ngx_http_spdy_module.md)

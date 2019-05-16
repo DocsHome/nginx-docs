@@ -38,6 +38,12 @@
 - **--with-poll_module 和 --without-poll_module**
 
     启用或禁用构建允许服务器使用 `poll()` 方法的模块。如果平台不支持其他更合适的方法（如 kqueue、epoll 或 /dev/poll），则将自动构建该模块。
+- **with-threads**
+    
+    允许使用线程池[thread pools](http://nginx.org/en/docs/ngx_core_module.html#thread_pool)
+- **with-file-aio**
+
+    启用在FreeBSD和Linux上[asynchronous file I/O](http://nginx.org/en/docs/http/ngx_http_core_module.html#aio) (aio)指令的使用
 - **--without-http_gzip_module**
 
     禁用构建 HTTP 服务器[响应压缩](http://nginx.org/en/docs/http/ngx_http_gzip_module.html)模块。需要 zlib 库来构建和运行此模块。
@@ -49,7 +55,40 @@
     禁用构建 HTTP 服务器[代理模块](http://nginx.org/en/docs/http/ngx_http_proxy_module.html)。
 - **--with-http_ssl_module**
 
-    启用构建可将 [HTTPS 协议支持](http://nginx.org/en/docs/http/ngx_http_ssl_module.html)添加到 HTTP 服务器的模块。默认情况下，此模块参与构建。构建和运行此模块需要 OpenSSL 库支持。
+    允许构建可将 [HTTPS 协议支持](http://nginx.org/en/docs/http/ngx_http_ssl_module.html)添加到 HTTP 服务器的模块。默认情况下，此模块参与构建。构建和运行此模块需要 OpenSSL 库支持。
+- **with-http_v2_module**
+
+    允许构建一个支持[HTTP/2](http://nginx.org/en/docs/http/ngx_http_v2_module.html) 的模块。默认情况下，该模块不构建。
+- **with-http_realip_module**
+    
+    允许构建[ngx_http_realip_module](http://nginx.org/en/docs/http/ngx_http_realip_module.html) 模块，该模块将客户端地址更改为在指定的header中发送的地址。该模块默认不构建。
+- **with-http_addition_module**
+
+    允许构建[ngx_http_addition_module](http://nginx.org/en/docs/http/ngx_http_addition_module.html) 模块，该模块能够在响应之前和之后添加文本。该模块默认不构建。
+- **with-http_xslt_module**和**with-http_xslt_module=dynamic**
+
+    允许构建使用一个或者多个XSLT样式表转化为XML响应的[ngx_http_xslt_module](http://nginx.org/en/docs/http/ngx_http_xslt_module.html)。该模块默认不构建。[libxslt](http://xmlsoft.org/XSLT/) 和 [libxml2](http://xmlsoft.org/) 库需要这个模块来构建和启动。
+- **with-http_image_filter_module**和**with-http_image_filter_module=dynamic**
+
+    允许构建[ngx_http_image_filter_module](http://nginx.org/en/docs/http/ngx_http_image_filter_module.html) 模块，该模块可以转换 JPEG, GIF, PNG, 和 WebP 格式的图片。该模块默认不构建。
+- **with-http_geoip_module**和**with-http_geoip_module=dynamic**
+    
+    允许构建[ngx_http_geoip_module](http://nginx.org/en/docs/http/ngx_http_geoip_module.html) 模块。该模块根据客户端 IP 地址和预编译[MaxMind](https://www.maxmind.com/en/home) 的数据库创建变量。该模块默认不构建。
+- **with-http_sub_module**
+
+    允许构建[ngx_http_sub_module](http://nginx.org/en/docs/http/ngx_http_sub_module.html) 模块。该模块通过将一个指定的字符串替换为另一个来修改相应。该模块默认不构建。
+-- **with-http_dav_module**
+    
+    允许构建[ngx_http_dav_module ](http://nginx.org/en/docs/http/ngx_http_dav_module.html) 模块。该模块通过WebDEV协议提供文件管理自动化。该模块默认不构建。
+-- **with-http_flv_module**
+    
+    允许构建[with-http_flv_module](http://nginx.org/en/docs/http/ngx_http_flv_module.html) 模块。该模块为 Flash Videos (FLV) 文件提供伪流服务器端的支持。该模块默认不构建。
+-- **with-http_mp4_module**
+    
+    允许构建[with-http_mp4_module](http://nginx.org/en/docs/http/ngx_http_mp4_module.html) 模块。该模块为 MP4 文件提供伪流服务器端的支持。该模块默认不构建。
+-- **with-http_gunzip_module**
+    
+    允许构建[with-http_gunzip_module](http://nginx.org/en/docs/http/ngx_http_gunzip_module.html) 模块。该模块使用 `Content-Encoding: gzip` 来解压缩响应对于那些不支持`gzip`编码方法的客户端。该模块默认不构建。
 - **--with-pcre=path**
 
     设置 PCRE 库的源路径。发行版（4.4 至 8.40 版本）需要从 [PCRE](http://www.pcre.org/) 站点下载并提取。其余工作由 nginx 的 `./configure` 和 `make` 完成。该库是 [location](http://nginx.org/en/docs/http/ngx_http_core_module.html#location) 指令和 [ngx_http_rewrite_module](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html) 模块中正则表达式支持所必需的。

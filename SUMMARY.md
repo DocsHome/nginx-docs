@@ -28,11 +28,9 @@
   - [转换重写规则](How-To/转换重写规则.md)
   - [WebSocket 代理](How-To/WebSocket代理.md)
 - 开发
-  - [贡献变更](开发/贡献变更.md)
+  - [贡献指南](开发/贡献指南.md)
   - 开发指南
 - 模块参考
-  - 指令字母索引
-  - 变量字母索引
 - [核心功能](模块参考/核心功能.md)
   - HTTP
     - [ngx_http_core_module](模块参考/http/ngx_http_core_module.md)
@@ -77,11 +75,11 @@
     - [ngx_http_rewrite_module](模块参考/http/ngx_http_rewrite_module.md)
     - [ngx_http_scgi_module](模块参考/http/ngx_http_scgi_module.md)
     - [ngx_http_secure_link_module](模块参考/http/ngx_http_secure_link_module.md)
-    - ngx_http_session_log_module
+    - [ngx_http_session_log_module](模块参考/http/ngx_http_session_log_module.md)
     - [ngx_http_slice_module](模块参考/http/ngx_http_slice_module.md)
     - [ngx_http_spdy_module 被 ngx_http_v2_module 替代](模块参考/http/ngx_http_spdy_module.md)
     - [ngx_http_split_clients_module](模块参考/http/ngx_http_split_clients_module.md)
-    - ngx_http_ssi_module
+    - [ngx_http_ssi_module](模块参考/http/ngx_http_ssi_module.md)
     - ngx_http_ssl_module
     - ngx_http_status_module
     - ngx_http_stub_status_module

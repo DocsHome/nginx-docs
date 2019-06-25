@@ -17,7 +17,6 @@
   - [配置 HTTPS 服务器](介绍/配置HTTPS服务器.md)
   - [nginx 如何处理 TCP/UDP 会话](介绍/Nginx如何处理TCP_UDP会话.md)
   - [关于 nginScript](介绍/关于nginScript.md)
-  - “开源应用程序架构” 中的 “nginx” 章节
 - 其他
   - [Linux 软件包](其他/linux包.md)
 - How-To
@@ -77,13 +76,13 @@
     - [ngx_http_secure_link_module](模块参考/http/ngx_http_secure_link_module.md)
     - [ngx_http_session_log_module](模块参考/http/ngx_http_session_log_module.md)
     - [ngx_http_slice_module](模块参考/http/ngx_http_slice_module.md)
-    - [ngx_http_spdy_module 被 ngx_http_v2_module 替代](模块参考/http/ngx_http_spdy_module.md)
+    - [ngx_http_spdy_module（过时）](模块参考/http/ngx_http_spdy_module.md)
     - [ngx_http_split_clients_module](模块参考/http/ngx_http_split_clients_module.md)
     - [ngx_http_ssi_module](模块参考/http/ngx_http_ssi_module.md)
-    - ngx_http_ssl_module
-    - ngx_http_status_module
-    - ngx_http_stub_status_module
-    - ngx_http_sub_module
+    - [ngx_http_ssl_module](模块参考/http/ngx_http_ssl_module.md)
+    - [ngx_http_status_module（过时）](模块参考/http/ngx_http_status_module.md)
+    - [ngx_http_stub_status_module](模块参考/http/ngx_http_stub_status_module.md)
+    - [ngx_http_sub_module](模块参考/http/ngx_http_sub_module.md)
     - ngx_http_upstream_module
     - ngx_http_upstream_conf_module
     - ngx_http_upstream_hc_module
@@ -117,7 +116,6 @@
     - [ngx_stream_ssl_preread_module](模块参考/stream/ngx_stream_ssl_preread_module.md)
     - ngx_stream_upstream_module
     - ngx_stream_upstream_hc_module
-    - ngx_stream_zone_sync_module
     - ngx_stream_zone_sync_module
   - 其他
     - [ngx_google_perftools_module](模块参考/google/ngx_google_perftools_module.md)

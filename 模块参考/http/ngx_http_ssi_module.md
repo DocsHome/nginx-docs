@@ -59,7 +59,7 @@ location / {
 |**默认**|ssi_min_file_chunk 1k;|
 |**上下文**|http、server、location|
 
-设置响应存储在磁盘上的部分的最小大小（`size`），从使用 [sendfile](ngx_http_core_module.md#sendfile) 发送它们开始生效。
+设置响应存储在磁盘上的部分的最小大小（`size`），从使用 [sendfile](ngx_http_core_module.md#sendfile) 发送它们起生效。
 
 ### ssi_silent_errors
 

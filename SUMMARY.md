@@ -1,6 +1,7 @@
 - [贡献导引](CONTRIBUTING.md)
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
+  - [源码安装nginx](How-To/从源码构建nginx.md)
   - [初学者指南](介绍/初学者指南.md)
   - [管理指南](https://docs.nginx.com/nginx/admin-guide/)（忽略）
   - [控制 nginx](介绍/控制nginx.md)

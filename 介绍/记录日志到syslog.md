@@ -1,6 +1,6 @@
 # 记录日志到 syslog
 
-`error_log` 和 `access_log` 指令支持把日志记录到 syslog。以下配置参数将使 nginx 日志记录到 syslog：
+[error_log](http://nginx.org/en/docs/ngx_core_module.html#error_log) 和 [access_log](http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log) 指令支持把日志记录到 syslog。以下配置参数将使 nginx 日志记录到 syslog：
 
 ```yaml
 server=address
@@ -19,7 +19,7 @@ facility=string
 severity=string
 ```
 
-> 设置 `access_log` 的消息严重程度，在 [RFC3164](https://tools.ietf.org/html/rfc3164#section-4.1.1) 中定义。可能值与 `error_log` 指令的第二个参数（ `level`，级别）相同，默认是 `info`。错误消息的严重程度由 nginx 确定，因此在 `error_log` 指令中将忽略该参数。
+> 设置 [access_log](http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log) 的消息严重程度，在 [RFC3164](https://tools.ietf.org/html/rfc3164#section-4.1.1) 中定义。可能值与 [error_log](http://nginx.org/en/docs/ngx_core_module.html#error_log) 指令的第二个参数（ `level`，级别）相同，默认是 `info`。错误消息的严重程度由 nginx 确定，因此在 `error_log` 指令中将忽略该参数。
 
 ```
 tag=string

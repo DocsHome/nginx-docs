@@ -1,5 +1,9 @@
 # 控制 nginx
 
+- [配置变更](#配置变更)
+- [日志轮转](#日志轮转)
+- [升级可执行文件](#升级可执行文件)
+
 可以用信号控制 nginx。默认情况下，主进程（Master）的 pid 写在 `/use/local/nginx/logs/nginx.pid` 文件中。这个文件的位置可以在配置时更改或者在 nginx.conf 文件中使用 `pid` 指令更改。Master 进程支持以下信号：
 
 信号 | 作用
@@ -18,13 +22,13 @@ Worker 进程也是可以用信号控制的，尽管这不是必须的。支持�
 TERM, INT | 快速关闭
 QUIT | 正常关闭
 USR1 | 重新打开日志文件
-WINCH | 调试异常终止（需要开启 `debug_points`）
+WINCH | 调试异常终止（需要开启 [debug_points](http://nginx.org/en/docs/ngx_core_module.html#debug_points)）
 
 ## 配置变更
 
-为了让 nginx 重新读取配置文件，应将 `HUP` 信号发送给 Master 进程。Master 进程首先会检查配置文件的语法有效性，之后尝试应用新的配置，即打开日志文件和新的 socket。如果失败了，它会回滚更改并继续使用旧的配置。如果成功，它将启动新的 Worker 进程并向旧的 Worker 进程发送消息请求它们正常关闭。旧的 Worker 进程关闭监听 socket 并继续为旧的客户端服务，当所有就的客户端被处理完成，旧的 Worker 进程将被关闭。
+为了让 nginx 重新读取配置文件，应将 `HUP` 信号发送给 Master 进程。Master 进程首先会检查配置文件的语法有效性，之后尝试应用新的配置，即打开日志文件和新的 socket。如果失败了，它会回滚更改并继续使用旧的配置。如果成功，它将启动新的 Worker 进程并向旧的 Worker 进程发送消息请求它们正常关闭。旧的 Worker 进程关闭监听 socket 并继续为旧的客户端服务，当所有旧的客户端被处理完成，旧的 Worker 进程将被关闭。
 
-我们来举例说明一下。 想象一下，nginx 是在 FreeBSD 4.x 命令行上运行的
+我们来举例说明一下。 假设 nginx 是在 FreeBSD 4.x 命令行上运行的
 
 ```bash
 ps axw -o pid,ppid,user,%cpu,vsz,wchan,command | egrep '(nginx|PID)'

@@ -1,10 +1,14 @@
 # nginx 如何处理请求
 
-- [基于名称的虚拟服务器](#基于名称的虚拟服务器)
-- [如何使用未定义的server名称来阻止处理请求](#如何使用未定义的server名称来阻止处理请求)
-- [一个简单的PHP站点配置](#一个简单的PHP站点配置)
+- [基于名称的虚拟服务器](#name_based_virtual_servers)
+- [如何使用未定义的 server 名称来阻止处理请求](#how_to_prevent_undefined_server_names)
+- [基于名称和 IP 混合的虚拟服务器](#mixed_name_ip_based_servers)
+- [一个简单的 PHP 站点配置](#simple_php_site_configuration)
+
+<a id="name_based_virtual_servers"></a>
 
 ## 基于名称的虚拟服务器
+
 nginx 首先决定哪个 `server` 应该处理请求，让我们从一个简单的配置开始，三个虚拟服务器都监听了 `*:80` 端口：
 
 ```nginx
@@ -41,7 +45,10 @@ server {
 
 请注意，`default_server` 是 `listen port` 的属性，而不是 `server_name` 的。之后会有更多关于这方面的内容。
 
-## 如何使用未定义的server名称来阻止处理请求
+<a id="how_to_prevent_undefined_server_names"></a>
+
+## 如何使用未定义的 server 名称来阻止处理请求
+
 如果不允许没有 “Host” header 字段的请求，可以定义一个丢弃请求的 server：
 
 ```nginx
@@ -56,7 +63,10 @@ server {
 
 > 自 0.8.48 版本开始，这是 `server` 名称的默认设置，因此可以省略 `server name ""`。在早期版本中，机器的主机名被作为 `server` 的默认名称。
 
+<a id="mixed_name_ip_based_servers"></a>
+
 ## 基于名称和 IP 混合的虚拟服务器
+
 让我们看看更加复杂的配置，其中一些虚拟服务器监听在不同的 IP 地址上监听：
 
 ```nginx
@@ -103,7 +113,10 @@ server {
 }
 ```
 
-## 一个简单的PHP站点配置
+<a id="simple_php_site_configuration"></a>
+
+## 一个简单的 PHP 站点配置
+
 现在让我们来看看 nginx 是如何选择一个 `location` 来处理典型的简单 PHP 站点的请求：
 
 ```nginx
@@ -154,4 +167,5 @@ nginx 首先忽略排序搜索具有最明确字符串的前缀 `location`。在
 由 Brian Mercer 编辑
 
 ## 原文
+
 - [http://nginx.org/en/docs/http/request_processing.html](http://nginx.org/en/docs/http/request_processing.html)

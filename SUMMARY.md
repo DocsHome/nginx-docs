@@ -1,6 +1,7 @@
 - [贡献导引](CONTRIBUTING.md)
 - [介绍](README.md)
   - [安装 nginx](介绍/安装nginx.md)
+  - [从源码构建 nginx](How-To/从源码构建nginx.md)
   - [初学者指南](介绍/初学者指南.md)
   - [管理指南](https://docs.nginx.com/nginx/admin-guide/)（忽略）
   - [控制 nginx](介绍/控制nginx.md)
@@ -20,7 +21,6 @@
 - 其他
   - [Linux 软件包](其他/linux包.md)
 - How-To
-  - [从源码构建 nginx](How-To/从源码构建nginx.md)
   - [在 Win32 平台上使用 Visual C 构建 nginx](How-To/在Win32平台上使用VisualC构建nginx.md)
   - [设置 Amazon EC2 的 Nginx Plus 环境](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus-amazon-web-services/)（忽略）
   - [使用 DTrace pid 提供程序调试 nginx](How-To/使用DTrace_pid提供程序调试nginx.md)
@@ -83,10 +83,10 @@
     - [ngx_http_status_module（过时）](模块参考/http/ngx_http_status_module.md)
     - [ngx_http_stub_status_module](模块参考/http/ngx_http_stub_status_module.md)
     - [ngx_http_sub_module](模块参考/http/ngx_http_sub_module.md)
-    - ngx_http_upstream_module
-    - ngx_http_upstream_conf_module
-    - ngx_http_upstream_hc_module
-    - ngx_http_userid_module
+    - [ngx_http_upstream_module](模块参考/http/ngx_http_upstream_module.md)
+    - [ngx_http_upstream_conf_module](模块参考/http/ngx_http_upstream_conf_module.md)
+    - [ngx_http_upstream_hc_module](模块参考/http/ngx_http_upstream_hc_module.md)
+    - [ngx_http_userid_module](模块参考/http/ngx_http_userid_module.md)
     - ngx_http_uwsgi_module
     - ngx_http_v2_module
     - ngx_http_xslt_module

@@ -1,8 +1,7 @@
-# Nginx 中文文档
-
-[![GitHub stars](https://img.shields.io/github/stars/DocsHome/nginx-docs.svg?style=social&label=Stars)](https://github.com/DocsHome/nginx-docs) [![GitHub pull requests](https://img.shields.io/github/issues-pr/DocsHome/nginx-docs.svg)](https://github.com/DocsHome/nginx-docs) [![GitHub last commit](https://img.shields.io/github/last-commit/DocsHome/nginx-docs.svg)](https://github.com/DocsHome/nginx-docs)
-
-![Nginx logo](https://nginx.org/nginx.png)
+<div align="center">
+    <img src="https://nginx.org/nginx.png" alt="Nginx">
+    <h1>Nginx 中文文档</h1>
+</div>
 
 Nginx 官方文档中文翻译版，由本人在学习 nginx 时顺带翻译。因部分章节涉及到 Nginx Plus 或者其他内容，我将忽略该部分章节的内容。
 
@@ -33,6 +32,14 @@ gitbook install
 ```bash
 gitbook serve
 ```
+
+**生成 HTML 文件，存放在 `_book` 目录下**
+
+```
+gitbook build
+```
+
+更多文档操作明林个，请参照 GitBook 命令。
 
 ## 项目状态
 

@@ -87,9 +87,9 @@
     - [ngx_http_upstream_conf_module](模块参考/http/ngx_http_upstream_conf_module.md)
     - [ngx_http_upstream_hc_module](模块参考/http/ngx_http_upstream_hc_module.md)
     - [ngx_http_userid_module](模块参考/http/ngx_http_userid_module.md)
-    - ngx_http_uwsgi_module
-    - ngx_http_v2_module
-    - ngx_http_xslt_module
+    - [ngx_http_uwsgi_module](模块参考/http/ngx_http_uwsgi_module.md)
+    - [ngx_http_v2_module](模块参考/http/ngx_http_v2_module.md)
+    - [ngx_http_xslt_module](模块参考/http/ngx_http_xslt_module.md)
   - Mail
     - ngx_mail_core_module
     - ngx_mail_auth_http_module

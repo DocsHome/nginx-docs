@@ -15,8 +15,8 @@ $ git remote add source git@github.com:DocsHome/nginx-docs.git
 
 ```bash
 $ git add .
-$ git commit -a "Fix issue #1: change helo to hello"
-$ git push origin/master
+$ git commit -am "Fix issue #1: change helo to hello"
+$ git push origin master
 ```
 
 * 在 GitHub 上提交 `pull request`。

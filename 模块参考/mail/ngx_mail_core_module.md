@@ -1,4 +1,4 @@
-# ngx_http_v2_module
+# ngx_mail_core_module
 
 - [示例配置](#example_configuration)
 - [指令](#directives)
@@ -67,7 +67,7 @@ mail {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**listen** `address:port [ssl] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on\|off] [so_keepalive=on\|off|[keepidle]:[keepintvl]:[keepcnt]]`;|
+|**语法**|**listen** `address:port [ssl] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=on\|off] [so_keepalive=on\|off\|[keepidle]:[keepintvl]:[keepcnt]]`;|
 |**默认**|——|
 |**上下文**|server|
 

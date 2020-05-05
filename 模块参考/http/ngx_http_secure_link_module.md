@@ -1,4 +1,4 @@
-# ngx_http_scgi_module
+# ngx_http_secure_link_module
 
 - [指令](#directives)
     - [secure_link](#secure_link)

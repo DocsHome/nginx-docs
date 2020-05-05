@@ -53,7 +53,7 @@
 |\-|说明|
 |------:|------|
 |**语法**|**imap_client_buffer** `size`;|
-|**默认**|imap_client_buffer 4k|8k;|
+|**默认**|imap_client_buffer 4k&#124;8k;|
 |**上下文**|mail、server|
 
 设置 IMAP 命令读取缓冲区大小。默认情况下，缓冲区大小等于一个内存页面。4K 或 8K，取决于平台。

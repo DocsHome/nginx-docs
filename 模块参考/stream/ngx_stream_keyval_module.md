@@ -2,8 +2,8 @@
 
 - [示例配置](#example_configuration)
 - [指令](#directives)
-    - [val](#val)
-    - [val_zone](#val_zone)
+    - [keyval](#keyval)
+    - [keyval_zone](#keyval_zone)
 
 `ngx_stream_keyval_module` 模块（1.13.7）可用于创建变量，变量的值从由 [API](ngx_http_api_module.md#stream_keyvals_) 管理的键值对中获取。
 
@@ -56,7 +56,7 @@ stream {
 
 |\-|说明|
 |:------|:------|
-|**语法**|**keyval_zone** `zone=name:size [state=file] [timeout=time] [type=string|ip|prefix] [sync]`;|
+|**语法**|**keyval_zone** `zone=name:size [state=file] [timeout=time] [type=string\|ip\|prefix] [sync]`;|
 |**默认**|——|
 |**上下文**|stream|
 

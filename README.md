@@ -39,7 +39,7 @@ gitbook serve
 gitbook build
 ```
 
-更多文档操作明林个，请参照 GitBook 命令。
+更多操作命令，请参照 GitBook 命令。
 
 ## 项目状态
 

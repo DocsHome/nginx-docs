@@ -18,9 +18,9 @@
     - [random](#random)
     - [sticky](#sticky)
     - [sticky_cookie_insert](#sticky_cookie_insert)
-- [内嵌变量](#embedded_variables)
+- [内部变量](#embedded_variables)
 
-`ngx_http_upstream_module` 模块用于定义可被 [proxy_pass](ngx_http_proxy_module.md#proxy_pass)、[fastcgi_pass](ngx_http_fastcgi_module.md#fastcgi_pass)，[uwsgi_pass](ngx_http_uwsgi_module.md#uwsgi_pass)，[scgi_pass](ngx_http_scgi_module.md#scgi_pass)，[memcached_pass](ngx_http_memcached_module.md#memcached_pass) 和 [grpc_pass](ngx_http_grpc_module.md#grpc_pass) 指令引用的服务器组。
+`ngx_http_upstream_module` 模块用于定义可被 [proxy_pass](ngx_http_proxy_module.md#proxy_pass)、[fastcgi_pass](ngx_http_fastcgi_module.md#fastcgi_pass)、[uwsgi_pass](ngx_http_uwsgi_module.md#uwsgi_pass)、[scgi_pass](ngx_http_scgi_module.md#scgi_pass)、[memcached_pass](ngx_http_memcached_module.md#memcached_pass) 和 [grpc_pass](ngx_http_grpc_module.md#grpc_pass) 指令引用的服务器组。
 
 <a id="example_configuration"></a>
 
@@ -43,7 +43,7 @@ server {
 }
 ```
 
-动态可配置组定期[健康检查](ngx_http_upstream_hc_module.md)作为我们[商业订阅](http://nginx.com/products/?_ga=2.192708585.259929927.1564163363-1186072494.1564163363)的一部分：
+动态可配置组定期[健康检查](ngx_http_upstream_hc_module.md)为[商业订阅](http://nginx.com/products/?_ga=2.192708585.259929927.1564163363-1186072494.1564163363)部分：
 
 ```nginx
 resolver 10.0.0.1;
@@ -81,7 +81,7 @@ server {
 |**默认**|——|
 |**上下文**|http|
 
-定义一组服务器。服务器可以监听不同的端口。此外，可以混合侦听 TCP 和 UNIX 域套接字。
+定义一组服务器。服务器可以监听不同的端口。此外，可以混合监听 TCP 和 UNIX 域套接字。
 
 例如：
 
@@ -95,7 +95,7 @@ upstream backend {
 }
 ```
 
-默认情况下，使用加权轮询均衡算法在服务器间分配请求。在上面的示例中，每 7 个请求将按如下方式分发：5 个请求转到 `backend1.example.com`，另外 2 个请求分别转发给第二个和第三个服务器。如果在与服务器通信期间发生错误，请求将被传递到下一个服务器，依此类推，直到尝试完所有正常运行的服务器。如果无法从这些服务器中获得成功响应，则客户端将接收到与最后一个服务器的通信结果。
+默认情况下，使用加权轮询均衡算法在服务器间分配请求。在上面的示例中，每 7 个请求将按如下方式分发：5 个请求转到 `backend1.example.com`，另外 2 个请求分别转发给第二个和第三个服务器。如果在与服务器通信期间发生错误，请求将被传递到下一个服务器，依此类推，直到尝试完所有正常的服务器。如果无法从这些服务器中获得成功响应，则客户端将接收到与最后一个服务器的通信结果。
 
 ### server
 
@@ -115,36 +115,38 @@ upstream backend {
 
 - `max_conns=number`
 
-    限制与代理服务器的最大并发活动连接数（`number`）（1.11.5）。默认值为零，表示没有限制。如果服务器组不驻留在[共享内存](ngx_http_upstream_module.md#zone)中，则每个工作进程的限制都有效。
+    限制与被代理服务器的最大并发活动连接数（`number`）（1.11.5）。默认值为零，表示没有限制。如果服务器组不驻留在[共享内存](ngx_http_upstream_module.md#zone)中，则每个worker 进程的限制都有效。
 
-    > 如果启用了[空闲 keepalive](ngx_http_upstream_module.md#keepalive) 连接、多个[工作进程](../核心功能.md#worker_processes)和[共享内存](ngx_http_upstream_module.md#zone)，则代理服务器的活动和空闲连接总数可能会超过 `max_conns` 的值。
+    > 如果启用了[空闲 keepalive](ngx_http_upstream_module.md#keepalive) 连接、多个 [worker 进程](../核心功能.md#worker_processes)和[共享内存](ngx_http_upstream_module.md#zone)，则被代理服务器的活动和空闲连接总数可能会超过 `max_conns` 的值。
 
-    > 自 1.5.9 版本至 1.11.5 版本之前，此参数为我们的[商业订阅](http://nginx.com/products/?_ga=2.268156877.259929927.1564163363-1186072494.1564163363)的一部分提供。
+    > 自 1.5.9 版本至 1.11.5 版本之前，此参数为[商业订阅](http://nginx.com/products/?_ga=2.268156877.259929927.1564163363-1186072494.1564163363)部分。
 
 - `max_fails=number`
 
-    设置在 `fail_timeout` 参数设置的时间内发生与服务器通信的失败重试最大次数，以考虑服务器在 `fail_timeout` 参数设置的时间内不可用。默认情况下，失败重试次数设置为 1。零值则禁止重试计数。被认为是失败的尝试由 [proxy_next_upstream](ngx_http_proxy_module.md#proxy_next_upstream)、[fastcgi_next_upstream](ngx_http_fastcgi_module.md#fastcgi_next_upstream)、[uwsgi_next_upstream](ngx_http_uwsgi_module.md#uwsgi_next_upstream)、[scgi_next_upstream](ngx_http_scgi_module.md#scgi_next_upstream)、[memcached_next_upstream](ngx_http_memcached_module.md#memcached_next_upstream) 和 [grpc_next_upstream](ngx_http_grpc_module.md#grpc_next_upstream) 指令定义。
+    设置在 `fail_timeout` 参数设置的时间内发生与服务器通信的失败重试最大次数，以考虑服务器在 `fail_timeout` 参数设置的时间内不可用。默认情况下，失败尝试次数设置为 1。零值则禁止重试计数。失败尝试由 [proxy_next_upstream](ngx_http_proxy_module.md#proxy_next_upstream)、[fastcgi_next_upstream](ngx_http_fastcgi_module.md#fastcgi_next_upstream)、[uwsgi_next_upstream](ngx_http_uwsgi_module.md#uwsgi_next_upstream)、[scgi_next_upstream](ngx_http_scgi_module.md#scgi_next_upstream)、[memcached_next_upstream](ngx_http_memcached_module.md#memcached_next_upstream) 和 [grpc_next_upstream](ngx_http_grpc_module.md#grpc_next_upstream) 指令定义。
 
 - `fail_timeout=time`
 
-    - 考虑服务器不可用的情况，为最大失败重试次数设置时间范围
-    - 设置服务器被视为不可用的时间段。
+    设置
+
+    - 在时间范围内与服务器通信的失败尝试达到指定次数，应将服务器视为不可用
+    - 服务器被视为不可用的时长
 
     默认情况下，参数设置为 10 秒。
 
 - `backup`
 
-    将服务器标记为备份服务器。当主服务器不可用时，它将接收请求。
+    将服务器标记为备用服务器。当主服务器不可用时，它将接收请求。
 
 - `down`
 
     将服务器标记为永久不可用。
 
-此外，以下参数为商业订阅部分：
+此外，以下参数为[商业订阅](http://nginx.com/products/?_ga=2.99512918.99786210.1588592638-1615340879.1588592638)部分：
 
 - `resolve`
 
-    监控与服务器域名对应的 IP 地址的变更，并自动修改上游配置，无需重新启动 nginx（1.5.12）。服务器组必须驻留在[共享内存](ngx_http_upstream_module.md#zone)中。
+    监控与服务器域名对应的 IP 地址的变更，并自动修改 upstream 配置，无需重新启动 nginx（1.5.12）。服务器组必须驻留在[共享内存](ngx_http_upstream_module.md#zone)中。
 
     要使此参数起作用，必须在 [http](ngx_http_core_module.md#http) 块中指定 [resolver](ngx_http_core_module.md#resolver) 指令：
 
@@ -206,7 +208,7 @@ upstream backend {
 |**上下文**|upstream|
 |**提示**|该指令在 1.9.0 版本中出现|
 
-定义共享内存区域的名称（`name`）和大小（`size`），该区域在工作进程之间共享组配置和运行时状态。几个组可能共享同一个区域。在这种情况下，仅需指定一次大小（`size`）即可。
+定义共享内存区域的名称（`name`）和大小（`size`），该区域在 wo'r'kr之间共享组配置和运行时状态。几个组可能共享同一个区域。在这种情况下，仅需指定一次大小（`size`）即可。
 
 此外，作为[商业订阅](http://nginx.com/products/?_ga=2.242046977.2090741542.1564472262-1186072494.1564163363)部分，此类组允许更改组成员身份或修改特定服务器的设置，无需重新启动 nginx。 可以通过 [API](ngx_http_api_module.md) 模块（1.13.3）访问配置。
 
@@ -230,7 +232,7 @@ state /var/lib/nginx/state/servers.conf; # path for Linux
 state /var/db/nginx/state/servers.conf;  # path for FreeBSD
 ```
 
-该状态目前仅限于有参数的服务器列表。解析配置时会读取文件，每次[更改](ngx_http_api_module.md#http_upstreams_http_upstream_name_servers_)上游配置时都会更新该文件。应避免直接更改文件内容。该指令不能与 [server](ngx_http_upstream_module.md#server) 指令一起使用。
+该状态目前仅限于有参数的服务器列表。解析配置时会读取文件，每次[更改](ngx_http_api_module.md#http_upstreams_http_upstream_name_servers_) upstream 配置时都会更新该文件。应避免直接更改文件内容。该指令不能与 [server](ngx_http_upstream_module.md#server) 指令一起使用。
 
 > [配置重新加载](../../介绍/控制nginx.md#reconfiguration)或[二进制升级](../../介绍/控制nginx.md#upgrade)期间所做的更改可能会丢失。
 
@@ -287,13 +289,13 @@ upstream backend {
 |**上下文**|upstream|
 |**提示**|该指令在 1.1.4 版本中出现|
 
-激活缓存以连接到上游（upstream）服务器。
+激活缓存以连接到 upstream 服务器。
 
-`connections` 参数设置在每个工作进程（worker）的缓存中保留的上游服务器的最大空闲 keepalive 连接数。超过此数量时，将关闭最近最少使用的连接。
+`connections` 参数设置在每个 worker（worker）的缓存中保留的 upstream 服务器的最大空闲 keepalive 连接数。超过此数量时，将关闭最近最少使用的连接。
 
-> 需要特别注意的是，`keepalive` 指令不限制 nginx 工作进程可以打开的上游服务器的连接总数。`connections` 参数应设置为足够小的数字，以便上游服务器也可以处理新的传入连接。
+> 需要特别注意的是，`keepalive` 指令不限制 nginx worker 进程可以打开的 upstream 服务器的连接总数。`connections` 参数应设置为足够小的数字，以便 upstream 服务器也可以处理新的传入连接。
 
-使用 keepalive 连接的 memcached 上游示例配置：
+使用 keepalive 连接的 memcached  upstream 示例配置：
 
 ```nginx
 upstream memcached_backend {
@@ -335,7 +337,7 @@ server {
 }
 ```
 
-> 或者，可以通过将 **Connection: Keep-Alive** header 字段传递给上游服务器来使用 HTTP/1.0 持久连接，但不建议使用此方法。
+> 或者，可以通过将 **Connection: Keep-Alive** header 字段传递给 upstream 服务器来使用 HTTP/1.0 持久连接，但不建议使用此方法。
 
 对于 FastCGI 服务器，需要设置 [fastcgi_keep_conn](ngx_http_fastcgi_module.md#fastcgi_keep_conn) 才能使 keepalive 连接正常工作：
 
@@ -370,7 +372,7 @@ server {
 |**上下文**|upstream|
 |**提示**|该指令在 1.15.3 版本中出现|
 
-设置可通过一个 keepalive 连接提供的最大请求数。在发出最大请求数后，将关闭连接。
+设置可通过一个 keepalive 连接提供的最大请求数。在达到最大请求数后，连接将关闭。
 
 ### keepalive_timeout
 
@@ -381,7 +383,7 @@ server {
 |**上下文**|upstream|
 |**提示**|该指令在 1.15.3 版本中出现|
 
-设置超时时间，在此期间与上游服务器的空闲 keepalive 连接将保持打开状态。
+设置超时时间，在此期间与 upstream 服务器的空闲 keepalive 连接将保持打开状态。
 
 ### ntlm
 
@@ -392,9 +394,9 @@ server {
 |**上下文**|upstream|
 |**提示**|该指令在 1.9.2 版本中出现|
 
-允许使用 [NTLM 身份验证](https://en.wikipedia.org/wiki/Integrated_Windows_Authentication)代理请求。一旦客户端发送有以 `Negotiate` 或 `NTLM` 开头的 `Authorization` header 字段值的请求，上游连接将绑定到客户端连接。之后的客户端请求将通过相同的上游连接进行代理，从而保持身份验证上下文。
+允许使用 [NTLM 身份验证](https://en.wikipedia.org/wiki/Integrated_Windows_Authentication)代理请求。一旦客户端发送有以 `Negotiate` 或 `NTLM` 开头的 `Authorization` header 字段值的请求，upstream 连接将绑定到客户端连接。之后的客户端请求将通过相同的 upstream 连接进行代理，从而保持身份验证上下文。
 
-为了使 NTLM 身份验证生效，必须启用与上游服务器的 keepalive 连接。[proxy_http_version](ngx_http_proxy_module.md#proxy_http_version) 指令应设置为 `1.1`，并且应清除 **Connection** header 字段：
+为了使 NTLM 身份验证生效，必须启用与 upstream 服务器的 keepalive 连接。[proxy_http_version](ngx_http_proxy_module.md#proxy_http_version) 指令应设置为 `1.1`，并且应清除 **Connection** header 字段：
 
 ```nginx
 upstream http_backend {
@@ -456,7 +458,7 @@ server {
 |**上下文**|upstream|
 |**提示**|该指令在 1.5.12 版本中出现|
 
-如果在处理请求时无法立即选择上游服务器，则请求将被放在队列中。该指令指定可以同时在队列中的最大请求数（`number`）。如果队列已满，或者在超时参数（`timeout`）指定的时间段内无法选择要传递请求的服务器，则会将 **502 (Bad Gateway)** 错误返回给客户端。
+如果在处理请求时无法立即选择 upstream 服务器，则请求将被放在队列中。该指令指定可以同时在队列中的最大请求数（`number`）。如果队列已满，或者在超时参数（`timeout`）指定的时间段内无法选择要传递请求的服务器，则会将 **502 (Bad Gateway)** 错误返回给客户端。
 
 `timeout` 参数的默认值为 60 秒。
 
@@ -546,7 +548,7 @@ server {
 
 - `route`
 
-    使用 `route` 方法时，代理服务器在收到第一个请求时为客户端分配路由。来自此客户端的所有后续请求将在 cookie 或 URI 中携带路由信息。此信息将与 [server](ngx_http_upstream_module.md#server) 指令的 `route` 参数进行比较，以标识应将请求代理到哪个服务器。如果未指定 `route` 参数，则路由名称将是 IP 地址和端口的 MD5 哈希值或 UNIX 域套接字路径的十六进制表示形式。如果指定的服务器无法处理请求，则使用配置的均衡策略选择新服务器，与请求中没有路由信息的情况处理方式一样。
+    使用 `route` 方法时，被代理服务器在收到第一个请求时为客户端分配路由。来自此客户端的所有后续请求将在 cookie 或 URI 中携带路由信息。此信息将与 [server](ngx_http_upstream_module.md#server) 指令的 `route` 参数进行比较，以标识应将请求代理到哪个服务器。如果未指定 `route` 参数，则路由名称将是 IP 地址和端口的 MD5 哈希值或 UNIX 域套接字路径的十六进制表示形式。如果指定的服务器无法处理请求，则使用配置的均衡策略选择新服务器，与请求中没有路由信息的情况处理方式一样。
 
     `route` 方法的参数指定可能包含路由信息的变量。第一个非空变量用于查找匹配服务器。
 
@@ -573,7 +575,7 @@ server {
 
 - `learn`
 
-    当使用 `learn` 方法（1.7.1）时，nginx 会分析上游服务器响应并了解经常在 HTTP cookie 中传递的服务器会话。
+    当使用 `learn` 方法（1.7.1）时，nginx 会分析 upstream 服务器响应并了解经常在 HTTP cookie 中传递的服务器会话。
 
     ```nginx
     upstream backend {
@@ -587,17 +589,17 @@ server {
     }
     ```
 
-    在该示例中，上游服务器通过在响应中设置 cookie `EXAMPLECOOKIE` 来创建会话。使用此 cookie 的其他请求将传递到同一服务器。如果服务器无法处理请求，则选择新服务器，与客户端尚未绑定特定服务器的情况一样。
+    在该示例中， upstream 服务器通过在响应中设置 cookie `EXAMPLECOOKIE` 来创建会话。使用此 cookie 的其他请求将传递到同一服务器。如果服务器无法处理请求，则选择新服务器，与客户端尚未绑定特定服务器的情况一样。
 
     参数 `create` 和 `lookup` 分别指示如何创建新会话和搜索现有会话的变量。两个参数可以多次指定，在这种情况下使用第一个非空变量。
 
     会话存储在共享内存区域中，其名称（`name`）和大小（`size`）由 `zone` 参数配置。一兆字节区域可以在 64 位平台上存储大约 4000 个会话。在 `timeout` 参数指定的时间内未访问的会话将从区域中删除。默认情况下，超时时间设置为 10 分钟。
 
-    `header` 参数（1.13.1）允许在从上游服务器接收响应头之后立即创建会话。
+    `header` 参数（1.13.1）允许在从 upstream 服务器接收响应头之后立即创建会话。
 
     `sync` 参数（1.13.8）启用共享内存区域[同步](../stream/ngx_stream_zone_sync_module.md#zone_sync)。
 
-    > 该指令作为[商业订阅](http://nginx.com/products/?_ga=2.25871412.860729840.1564753618-1186072494.1564163363)部分提供。
+> 该指令作为[商业订阅](http://nginx.com/products/?_ga=2.25871412.860729840.1564753618-1186072494.1564163363)部分提供。
 
 ### sticky_cookie_insert
 
@@ -607,7 +609,7 @@ server {
 |**默认**|——|
 |**上下文**|upstream|
 
-从 1.5.7 版本开始，该指令已过时。应使用有新语法的 [sticky](ngx_http_upstream_module.md#sticky) 指令：
+从 1.5.7 版本开始，该指令已过时。应使用新的 [sticky](ngx_http_upstream_module.md#sticky) 指令代替：
 
 ```
 sticky cookie name [expires=time] [domain=domain] [path=path];
@@ -615,23 +617,23 @@ sticky cookie name [expires=time] [domain=domain] [path=path];
 
 <a id="embedded_variables"></a>
 
-## 内嵌变量
+## 内部变量
 
-`ngx_http_upstream_module` 模块支持以下内嵌变量：
+`ngx_http_upstream_module` 模块支持以下内部变量：
 
 <a id="upstream_addr"></a>
 
 - `$upstream_addr`
 
-    保存 IP 地址和端口，或上游服务器的 UNIX 域套接字的路径。如果在请求处理期间接触了多个服务器，则它们的地址用逗号分隔，例如 `192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock`。如果从一个服务器组到另一个服务器组的内部发生重定向，由 `X-Accel-Redirect` 或 `error_page` 发起，则来自不同组的服务器地址由冒号分隔，例如 `192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock : 192.168.10.1:80, 192.168.10.2:80`。 如果无法选择服务器，则变量将保留服务器组的名称。
+    保存 IP 地址和端口，或 upstream 服务器的 UNIX 域套接字的路径。如果在请求处理期间接触了多个服务器，则它们的地址用逗号分隔，例如 `192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock`。如果从一个服务器组到另一个服务器组的内部发生重定向，由 `X-Accel-Redirect` 或 `error_page` 发起，则来自不同组的服务器地址由冒号分隔，例如 `192.168.1.1:80, 192.168.1.2:80, unix:/tmp/sock : 192.168.10.1:80, 192.168.10.2:80`。 如果无法选择服务器，则变量将保留服务器组的名称。
 
 - `$upstream_bytes_received`
 
-    从上游服务器（1.11.4）接收的字节数。来自多个连接的值由逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    从 upstream 服务器（1.11.4）接收的字节数。来自多个连接的值由逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_bytes_sent`
 
-    发送到上游服务器的字节数（1.15.8）。来自多个连接的值由逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    发送到 upstream 服务器的字节数（1.15.8）。来自多个连接的值由逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_cache_status`
 
@@ -639,15 +641,15 @@ sticky cookie name [expires=time] [domain=domain] [path=path];
 
 - `$upstream_connect_time`
 
-    保存与上游服务器建立连接所花费的时间（1.9.1），时间以秒为单位，精度为毫秒。在 SSL 的情况下，包含握手时间。多个连接的时间用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    保存与 upstream 服务器建立连接所花费的时间（1.9.1），时间以秒为单位，精度为毫秒。在 SSL 的情况下，包含握手时间。多个连接的时间用逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_cookie_name`
 
-    上游服务器在 `Set-Cookie` 响应头字段（1.7.1）中发送的有指定名称的 cookie。仅保存最后一台服务器响应中的 cookie。
+    upstream 服务器在 `Set-Cookie` 响应头字段（1.7.1）中发送的有指定名称的 cookie。仅保存最后一台服务器响应中的 cookie。
 
 - `$upstream_header_time`
 
-    保存从上游服务器接收响应头所花费的时间（1.7.10），时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，如[$upstream_addr](#upstream_addr) 变量中的地址格式。
+    保存从 upstream 服务器接收响应头所花费的时间（1.7.10），时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_http_name`
 
@@ -655,23 +657,23 @@ sticky cookie name [expires=time] [domain=domain] [path=path];
 
 - `$upstream_queue_time`
 
-    保存请求在上游队列中花费的时间（1.13.9），时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    保存请求在 upstream 队列中花费的时间（1.13.9），时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_response_length`
 
-    保存从上游服务器获得的响应长度（0.7.27），长度以字节为单位。多个响应的长度用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    保存从 upstream 服务器获得的响应长度（0.7.27），长度以字节为单位。多个响应的长度用逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_response_time`
 
-    保存从上游服务器接收响应所花费的时间，时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。
+    保存从 upstream 服务器接收响应所花费的时间，时间以秒为单位，精度为毫秒。多个响应的时间用逗号和冒号分隔，参考 [$upstream_addr](#upstream_addr) 变量中的地址格式。
 
 - `$upstream_status`
 
-    保存从上游服务器获得的响应的状态代码。多个响应的状态代码用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。如果没有服务器被选中，该变量的值将为 502 (Bad Gateway) 状态码。
+    保存从 upstream 服务器获得的响应的状态代码。多个响应的状态代码用逗号和冒号分隔，如 [$upstream_addr](#upstream_addr) 变量中的地址格式。如果没有服务器被选中，该变量的值将为 502 (Bad Gateway) 状态码。
 
 - `$upstream_trailer_name`
 
-    保存从上游服务器（1.13.10）获得的响应结束时的字段。
+    保存从 upstream 服务器（1.13.10）获得的响应结束时的字段。
 
 ## 原文档
 

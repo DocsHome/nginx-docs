@@ -108,13 +108,13 @@
     - [ngx_stream_limit_conn_module](模块参考/stream/ngx_stream_limit_conn_module.md)
     - [ngx_stream_log_module](模块参考/stream/ngx_stream_log_module.md)
     - ngx_stream_map_module
-    - ngx_stream_proxy_module
+    - [ngx_stream_proxy_module](模块参考/stream/ngx_stream_proxy_module.md)
     - [ngx_stream_realip_module](模块参考/stream/ngx_stream_realip_module.md)
     - [ngx_stream_return_module](模块参考/stream/ngx_stream_return_module.md)
     - [ngx_stream_split_clients_module](模块参考/stream/ngx_stream_split_clients_module.md)
     - ngx_stream_ssl_module
     - [ngx_stream_ssl_preread_module](模块参考/stream/ngx_stream_ssl_preread_module.md)
-    - ngx_stream_upstream_module
+    - [ngx_stream_upstream_module](模块参考/stream/ngx_stream_upstream_module.md)
     - ngx_stream_upstream_hc_module
     - ngx_stream_zone_sync_module
   - 其他

@@ -411,7 +411,7 @@ openssl rand 80> ticket.key
 
 - `$ssl_client_s_dn`
 
-    返回建立的SSL连接的客户端证书的 [RFC 2253](https://tools.ietf.org/html/rfc2253) **subject DN** 字符串（1.11.8）
+    返回已建立的 SSL 连接的客户端证书的 [RFC 2253](https://tools.ietf.org/html/rfc2253) **subject DN** 字符串（1.11.8）
 
 - `$ssl_client_serial`
 

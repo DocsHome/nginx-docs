@@ -115,7 +115,7 @@
     - [ngx_stream_ssl_module](模块参考/stream/ngx_stream_ssl_module.md)
     - [ngx_stream_ssl_preread_module](模块参考/stream/ngx_stream_ssl_preread_module.md)
     - [ngx_stream_upstream_module](模块参考/stream/ngx_stream_upstream_module.md)
-    - ngx_stream_upstream_hc_module
-    - ngx_stream_zone_sync_module
+    - [ngx_stream_upstream_hc_module](模块参考/stream/ngx_stream_upstream_hc_module.md)
+    - [ngx_stream_zone_sync_module](模块参考/stream/ngx_stream_zone_sync_module.md)
   - 其他
     - [ngx_google_perftools_module](模块参考/google/ngx_google_perftools_module.md)

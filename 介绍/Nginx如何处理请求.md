@@ -161,7 +161,7 @@ nginx 首先忽略排序搜索具有最明确字符串的前缀 `location`。在
 - 请求 `/logo.gif` 首先与 前缀 `location` 为 `/` 相匹配，然后由正则表达式 `\.(gif|jpg|png)$` 匹配，因此由后一个 `location` 处理。使用指令 `root /data/www` 将请求映射到 `/data/www/logo.gif` 文件，并将文件发送给客户端。
 - 一个 `/index.php` 的请求也是首先与前缀 `location` 为 `/` 相匹配，然后是正则表达式 `\.(php)$`。因此，它由后一个 `location` 处理，请求将被传递给在 `localhost:9000` 上监听的 FastCGI 服务器。[fastcgi_param](http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_param) 指令将 FastCGI 参数 `SCRPT_FILENAME` 设置为 `/data/www/index.php`，FastCGI 服务器执行该文件。变量 `$document_root` 与 [root](http://nginx.org/en/docs/http/ngx_http_core_module.html#root) 指令的值是一样的，变量 `$fastcgi_script_name` 的值为请求URI，即 `/index.php`。
 - `/about.html` 请求仅与前缀 `location` 为 `/` 相匹配，因此由此 `location` 处理。使用指令 `root /data/www` 将请求映射到 `/data/www/about.html` 文件，并将文件发送给客户端。
-- 处理请求 `/` 更复杂。它与前缀 `location` 为 `/` 相匹配。因此由该 `location` 处理。然后，[index](http://nginx.org/en/docs/http/ngx_http_index_module.html#index) 指令根据其参数和 `root /data/www` 指令检验索引文件是否存在。如果文件 `/data/www/index.html` 不存在，并且文件 `/data/www/index.php` 存在，则该指令执行内部重定向到 `/index.php`，如果请求是由客户端发起的，nginx 将再次搜索 `location`。如之前所述，重定向请求最终由 FastCGI 服务器处理。
+- 处理请求 `/` 更复杂。它与前缀 `location` 为 `/` 相匹配。因此由该 `location` 处理。然后，[index](http://nginx.org/en/docs/http/ngx_http_index_module.html#index) 指令根据其参数和 `root /data/www` 指令检验索引文件是否存在。如果文件 `/data/www/index.html` 不存在，并且文件 `/data/www/index.php` 存在，则该指令执行内部重定向到 `/index.php`，就像请求是由客户端发起的，nginx 将再次搜索 `location`。如之前所述，重定向请求最终由 FastCGI 服务器处理。
 
 由 Igor Sysoev 撰写
 由 Brian Mercer 编辑

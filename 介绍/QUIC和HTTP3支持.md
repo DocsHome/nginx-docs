@@ -15,7 +15,7 @@
 
 当配置nginx时，可以使用 [`--with-http_v3_module`](../How-To/从源码构建nginx.md#http_v3_module) 配置参数来启用 QUIC 和 HTTP/3。
 
-构建nginx时建议使用支持 QUIC 的 SSL 库，例如 [BoringSSL](https://boringssl.googlesource.com/boringssl)，[LibreSSL](https://www.libressl.org/)，或者 [QuicTLS](https://github.com/quictls/openssl)。否则，将使用不支持[早期数据](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_early_data)的[OpenSSL](https://openssl.org/)兼容层。
+构建nginx时建议使用支持 QUIC 的 SSL 库，例如 [BoringSSL](https://boringssl.googlesource.com/boringssl)，[LibreSSL](https://www.libressl.org/)，或者 [QuicTLS](https://github.com/quictls/openssl)。否则，将使用不支持[早期数据](../模块参考/http/ngx_http_ssl_module.md#ssl_early_data)的[OpenSSL](https://openssl.org/)兼容层。
 
 使用以下命令为 nginx 配置 [BoringSSL](https://boringssl.googlesource.com/boringssl)：
 
@@ -52,7 +52,7 @@
 
 ## 配置
 
-[ngx_http_core_module](../模块参考/http/ngx_http_core_module.md) 模块中的 `listen` 指令获得了一个新参数 [`quic`](https://nginx.org/en/docs/http/ngx_http_core_module.html#quic)，它在指定端口上通过启用 HTTP/3 over QUIC。
+[ngx_http_core_module](../模块参考/http/ngx_http_core_module.md) 模块中的 `listen` 指令获得了一个新参数 [`quic`](../模块参考/http/ngx_http_core_module.md#quic)，它在指定端口上通过启用 HTTP/3 over QUIC。
 
 除了 `quic` 参数外，还可以指定 [`reuseport`](../模块参考/http/ngx_http_core_module.md#reuseport) 参数，使其在多个工作线程中正常工作。
 
@@ -82,7 +82,7 @@ quic_gso on;
 quic_host_key <filename>;
 ```
 
-QUIC 需要 TLSv1.3 协议版本，该版本在 [`ssl_protocols`](../模块参考/http/ngx_http_ssl_module.html#ssl_protocols) 指令中默认启用。
+QUIC 需要 TLSv1.3 协议版本，该版本在 [`ssl_protocols`](../模块参考/http/ngx_http_ssl_module.md#ssl_protocols) 指令中默认启用。
 
 默认情况下，[GSO Linux 特定优化](http://vger.kernel.org/lpc_net2018_talks/willemdebruijn-lpc2018-udpgso-paper-DRAFT-1.pdf)处于禁用状态。如果相应的网络接口配置为支持 GSO，请启用它。
 

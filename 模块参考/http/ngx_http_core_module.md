@@ -1479,6 +1479,35 @@ location @wordpress {
 }
 ```
 
+### types
+
+|\-|说明|
+|:------|:------|
+|**语法**|**types** `{ ... }`; |
+|**默认**| <div>types { <br/>&nbsp;&nbsp;&nbsp;&nbsp;text/html  html; <br/>&nbsp;&nbsp;&nbsp;&nbsp;image/gif  gif; <br/> &nbsp;&nbsp;&nbsp;&nbsp;image/jpeg jpg; <br/>}</div> |
+|**上下文**|http、server、location|
+
+将文件扩展名映射到响应的 MIME 类型。扩展名不区分大小写。多个扩展名可以映射到同个类型，例如： 
+
+```nginx
+types {
+    application/octet-stream bin exe dll;
+    application/octet-stream deb;
+    application/octet-stream dmg;
+}
+```
+
+`conf/mime.types` 是随 nginx 分发的一个较完整的映射配置文件。
+
+要指定一个 location 的所有请求都返回 `application/octet-stream` MIME 类型，可以使用以下配置： 
+
+```nginx
+location /download/ {
+    types        { }
+    default_type application/octet-stream;
+}
+```
+
 ### types_hash_bucket_size
 
 |\-|说明|

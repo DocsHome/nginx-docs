@@ -1,37 +1,48 @@
 # 从源码构建 nginx
 
-编译时使用 `configure` 命令进行配置。它定义了系统的各个方面，包括了 nginx 进行连接处理使用的方法。最终它会创建出一个 `Makefile`。`configure` 命令支持以下参数：
+编译时使用 `configure` 命令进行配置。它定义了系统的各个方面，包括了 nginx 进行连接处理使用的方法。最终它会创建出一个 `Makefile`。
 
+`configure` 命令支持以下参数：
+
+- **--help**
+
+    打印帮助信息
 - **--prefix=path**
 
     定义一个用于保留服务器文件的目录。此目录也将用于所有通过 `configure` 设置的相对路径（除了库源码路径外）和 `nginx.conf` 配置文件。默认设置为 `/usr/local/nginx` 目录。
 - **--sbin-path=path**
 
     设置 nginx 可执行文件的名称。此名称仅在安装过程中使用。默认情况下，文件名为 `prefix/sbin/nginx`。
+- **--modules-path=path**
+
+    定义将安装 nginx 动态模块的目录。默认情况下，使用 `prefix/modules` 目录。
 - **--conf-path=path**
 
     设置 `nginx.conf` 配置文件的名称。如果需要，nginx 可以使用不同的配置文件启动，方法是使用命令行参数 `-c` 指定文件。默认情况下，文件名为 `prefix/conf/nginx.conf`。
+- **--error-log-path=path**
+
+    设置主要错误、警告和诊断文件的名称。安装后，可以在 `nginx.conf` 配置文件中使用 [error_log](http://nginx.org/en/docs/ngx_core_module.html#error_log) 指令更改文件名。默认情况下，文件名为 `prefix/logs/error.log`。
 - **--pid-path=path**
 
     设置存储主进程的进程 ID 的 nginx.pid 文件名称。安装后，可以在 `nginx.conf` 配置文件中使用 [pid](http://nginx.org/en/docs/ngx_core_module.html#pid) 指令更改文件名。默认文件名为 `prefix/logs/nginx.pid`。
 - **--lock-path=path**
 
     设置锁文件的名称前缀。安装后，可以在 `nginx.conf` 配置文件中使用 [lock_file](http://nginx.org/en/docs/ngx_core_module.html#lock_file) 指令更改对应的值。默认值为 `prefix/logs/nginx.lock`。
-- **--error-log-path=path**
-
-    设置主要错误、警告和诊断文件的名称。安装后，可以在 `nginx.conf` 配置文件中使用 [error_log](http://nginx.org/en/docs/ngx_core_module.html#error_log) 指令更改文件名。默认情况下，文件名为 `prefix/logs/error.log`。
-- **--http-log-path=path**
-
-    设置 HTTP 服务器主请求日志文件名称。安装后，可以在 `nginx.conf` 配置文件中使用 [access_log](http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log) 指令更改文件名。默认情况下，文件名为 `prefix/logs/access.log`。
-- **--build=name**
-
-    设置一个可选的 nginx 构建名称
 - **--user=name**
 
     设置一个非特权用户名称，其凭据将由工作进程使用。安装后，可以在 `nginx.conf` 配置文件中使用 [user](http://nginx.org/en/docs/ngx_core_module.html#user) 指令更改名称。默认的用户名为 `nobody`。
 - **--group=name**
 
     设置一个组的名称，其凭据将由工作进程使用。安装后，可以在 `nginx.conf` 配置文件中使用 [user](http://nginx.org/en/docs/ngx_core_module.html#user) 指令更改名称。默认情况下，组名称设置为一个非特权用户的名称。
+- **--build=name**
+
+    设置一个可选的 nginx 构建名称
+- **--builddir=path**
+
+    设置构建文件夹
+- **--http-log-path=path**
+
+    设置 HTTP 服务器主请求日志文件名称。安装后，可以在 `nginx.conf` 配置文件中使用 [access_log](http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log) 指令更改文件名。默认情况下，文件名为 `prefix/logs/access.log`。
 - **--with-select_module 和 --without-select_module**
 
     启用或禁用构建允许服务器使用 `select()` 方法的模块。如果平台不支持其他更合适的方法（如 kqueue、epoll 或 /dev/poll），则将自动构建该模块。

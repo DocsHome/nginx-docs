@@ -12,6 +12,7 @@
   - [配置文件度量单位](介绍/配置文件度量单位.md)
   - [命令行参数](介绍/命令行参数.md)
   - [Windows 下的 nginx](介绍/Windows下的Nginx.md)
+  - [QUIC 和 HTTP/3 支持](介绍/QUIC和HTTP3支持.md)
   - [nginx 如何处理请求](介绍/Nginx如何处理请求.md)
   - [服务器名称](介绍/服务器名称.md)
   - [使用 nginx 作为 HTTP 负载均衡器](介绍/使用Nginx作为HTTP负载均衡器.md)
